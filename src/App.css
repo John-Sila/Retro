@@ -10,6 +10,11 @@
   background-color: var(--whiteColor);
   align-items: center;
   padding: 12.5px;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  box-shadow: 5px 5px 20px 2px rgb(237, 237, 237);
 }
 .topNav {
   display: flex;
@@ -51,7 +56,7 @@
   border: none;
   outline: none;
   padding: 15px;
-  box-shadow: 5px 5px 5px 2px rgb(237, 237, 237);
+  box-shadow: 5px 5px 20px 2px rgb(237, 237, 237);
   border-radius: 7.5px;
 }
 .hugePanel .hasSearch .icon{
@@ -63,4 +68,50 @@
 }
 .hugePanel .hasSearch .icon:hover{
   transform: rotate(90deg);
+}
+
+.homeContent{
+  display: flex;
+  flex-direction: row;
+}
+.homeContent aside{
+  width: max-content;
+  padding: 20px;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 3px;
+}
+.homeContent aside ul{
+  list-style: none;
+}
+.homeContent aside ul li{
+  margin: 25px 0;
+}
+.homeContent aside ul .links{
+  text-decoration: none;
+  color: var(--darkColor);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.homeContent aside ul .links:hover{
+  text-decoration: underline;
+}
+.homeContent .homeRight{
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.homeContent .homeRight .imageDiv{
+  position: relative;
+  width: 20%;
+  overflow: hidden;
+  margin: 2.5%;
+}
+.homeContent .homeRight .imageDiv img{
+  position: relative;
+  width: 100%;
 }

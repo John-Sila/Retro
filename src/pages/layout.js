@@ -4,7 +4,7 @@ import logo from "../logo/rc.jpg"
 const Layout = () => {
     return (
         <>
-            <nav className="topNav">
+            <nav className="topNav" id="topNav">
                 <div className="topLeft">
                     <img src={ logo } alt="Company Logo" />
                     <Link to="/" className="links">Retro Classics</Link>
