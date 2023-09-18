@@ -1,15 +1,20 @@
 import { Link } from "react-router-dom";
+import ReactDOMServer from "react-dom/server"
 import { FaTimes } from "react-icons/fa"
+import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
+import { RiShoppingCart2Line, RiShoppingCart2Fill } from "react-icons/ri";
 import { useEffect } from "react";
 
 const Home = () => {
 
     useEffect( () => {
+        document.getElementById("loading").style.display = "grid";
         // when the homepage loads, let's get data from the API
         fetch( "https://fakestoreapi.com/products").then(
             response => response.json()
-        ).then(
-            json => {
+            ).then(
+                json => {
+                document.getElementById("loading").style.display = "";
                 // visualize data to console
                 console.log(json);
 
@@ -24,11 +29,37 @@ const Home = () => {
                         const image = document.createElement("img");
                         image.src = element.image;
     
-                        const price = document.createElement("span");
-                        price.innerHTML = element.price;
+                        let price = document.createElement("span");
+                        const priceConstant = Number(146.95);
+                        let productPrice = element.price;
+                        productPrice *= priceConstant;
+
+                        productPrice = Math.round(productPrice);
+                        productPrice = `Ksh. ${productPrice}`;
+                        price.innerHTML = productPrice;
+
+                        const productReactions = document.createElement("div");
+                        productReactions.classList += "productReactions";
+                        const heartIcon = document.createElement('span');
+                        heartIcon.id = "heartSpan";
+                        const basketIcon = document.createElement('span');
+                        basketIcon.id = "basketSpan";
+                        const heartElement = ReactDOMServer.renderToString(<AiOutlineHeart />);
+                        const cartElement = ReactDOMServer.renderToString(<RiShoppingCart2Line />);
+                        const heartElementFill = ReactDOMServer.renderToString(<AiFillHeart />);
+                        const cartElementFill = ReactDOMServer.renderToString(<RiShoppingCart2Fill />);
+                        heartIcon.innerHTML = heartElement;
+                        basketIcon.innerHTML = cartElement;
+                        productReactions.appendChild(heartIcon);
+                        productReactions.appendChild(basketIcon);
+
+                        productReactions.addEventListener( "click", event => {
+                            reactToProduct(event.target.id);
+                        })
     
                         imageDiv.appendChild( image ); 
                         imageDiv.appendChild( price );
+                        imageDiv.appendChild( productReactions );
     
                         homeRight.appendChild( imageDiv );
                     });
@@ -46,6 +77,11 @@ const Home = () => {
         }
 
     }, [])
+
+    // React to product
+    function reactToProduct( identityArgument ){
+        alert(identityArgument);
+    }
 
     return (
         <>

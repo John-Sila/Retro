@@ -16,6 +16,22 @@ const Layout = () => {
                 </div>
             </nav>
 
+
+            <div className="loading" id="loading">
+                <div class="dot-spinner">
+                    <div class="dot-spinner__dot"></div>
+                    <div class="dot-spinner__dot"></div>
+                    <div class="dot-spinner__dot"></div>
+                    <div class="dot-spinner__dot"></div>
+                    <div class="dot-spinner__dot"></div>
+                    <div class="dot-spinner__dot"></div>
+                    <div class="dot-spinner__dot"></div>
+                    <div class="dot-spinner__dot"></div>
+
+                </div>
+                    <span>Please wait...</span>
+            </div>
+
             <Outlet />
         </>
     )
