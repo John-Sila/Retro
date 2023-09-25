@@ -1,6 +1,11 @@
 :root{
   --darkColor: rgb(32, 32, 32);
+  --darkColor2: rgb(59, 59, 59);
   --whiteColor: rgb(255, 255, 255);
+  --whiteColor2: rgb(233, 233, 233);
+  --redColor: rgb(228, 0, 0);
+  --redColor2:rgb(217, 0, 0);
+  --standardShadow: 2px 2px 10px 2px rgb(237, 237, 237);
   --accentColor: rgb(71, 165, 37);
 }
 
@@ -129,6 +134,8 @@
 }
 .homeContent .homeRight .imageDiv .productReactions span{
   cursor: pointer;
+  background-color: inherit;
+  padding: 5px;
 }
 
 .homeContent .homeRight .imageDiv:hover{
@@ -149,8 +156,8 @@
   width: 100dvw;
   background-color: var(--whiteColor);
   z-index: 2;
-  place-items: center;
   display: none;
+  place-items: center;
 }
 .loading .dot-spinner {
   --uib-size: 2.8rem;
@@ -256,3 +263,80 @@
   }
 }
 
+.loginModal{
+  position: relative;
+  height: max-content;
+  width: 100dvw;
+  display: grid;
+  place-items: center;
+  overflow: auto;
+  padding: 50px 0;
+}
+.loginModal form{
+  box-sizing: border-box;
+  box-shadow: var(--standardShadow);
+  padding: 25px;
+  border-radius: 10px;
+}
+.loginModal form label{
+  position: relative;
+  background-color: red;
+  width: 100%;
+  margin: 25px 0;
+  display: grid;
+  place-items: center;
+}
+.loginModal form label input{
+  position: relative;
+  width: 27.5vw;
+  padding: 15px;
+  border: none;
+  border-bottom: 1px solid var(--darkColor);
+  outline: none;
+}
+.loginModal form label span{
+  position: absolute;
+  top: 8.75px;
+  left: 15px;
+  pointer-events: none;
+  transition: .25s ease-out;
+}
+.loginModal form label input:focus~span,
+.loginModal form label input:valid~span{
+  transform: translate(20vw, -40px);
+  background-color: var(--darkColor);
+  color: var(--whiteColor);
+  padding: 10px;
+  border-radius: 10px;
+}
+.loginModal form .loginSubmissionDiv{
+  padding: 15px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+.loginModal form .loginSubmissionDiv button[type="submit"]{
+  padding: 15px;
+  background-color: var(--darkColor);
+  color: var(--whiteColor);
+  border: none;
+  outline: none;
+  border-radius: 15px;
+}
+.loginModal form .loginSubmissionDiv button[type="button"]{
+  padding: 15px;
+  background-color: var(--redColor);
+  color: var(--darkColor);
+  border: none;
+  outline: none;
+  border-radius: 15px;
+}
+.loginModal form p{
+  display: grid;
+  place-items: center;
+}
+.loginModal form p .noAcc{
+  text-decoration: underline;
+  color: var(--darkColor);
+  cursor: pointer;
+}
