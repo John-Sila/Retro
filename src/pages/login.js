@@ -6,7 +6,7 @@ const Login = () => {
             <div className="loginModal" id="loginModal">
                 <form action="" method="post">
                     <label for="email">
-                        <input type="email" name="email" id="loginEmail" required />
+                        <input type="text" name="email" id="loginEmail" min={2} required aria-required />
                         <span>Email</span>
                     </label> <br />
                     <label for="password">
