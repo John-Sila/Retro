@@ -168,6 +168,12 @@ const moreGoods = [
         category: "vehicles",
     },
     {
+        link: "https://images.pexels.com/photos/2095597/pexels-photo-2095597.jpeg?auto=compress&cs=tinysrgb&w=600",
+        price: "Ksh. 2,300,000",
+        name: "SONY GEN3 Rolleiflex Editions",
+        category: "cameras",
+    },
+    {
         link: "https://images.pexels.com/photos/821738/pexels-photo-821738.jpeg?auto=compress&cs=tinysrgb&w=600",
         price: "Ksh. 870,000",
         name: "Antique Rolleiflex 1966",

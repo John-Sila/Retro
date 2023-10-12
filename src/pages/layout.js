@@ -3,6 +3,8 @@ import logo from "../logo/rc.jpg"
 import { RiMenu4Line } from "react-icons/ri";
 import { BiSolidUserCircle } from "react-icons/bi"
 import { windowOnclick } from "../external_functions";
+import { BsFillCartPlusFill } from "react-icons/bs";
+import { FaTimes } from "react-icons/fa";
 
 const Layout = () => {
 
@@ -32,19 +34,39 @@ const Layout = () => {
             </nav>
 
 
-            <div className="loading" id="loading">
-                <div class="dot-spinner">
-                    <div class="dot-spinner__dot"></div>
-                    <div class="dot-spinner__dot"></div>
-                    <div class="dot-spinner__dot"></div>
-                    <div class="dot-spinner__dot"></div>
-                    <div class="dot-spinner__dot"></div>
-                    <div class="dot-spinner__dot"></div>
-                    <div class="dot-spinner__dot"></div>
-                    <div class="dot-spinner__dot"></div>
+            <div className="loadingModal" id="loadingModal">
+                <div className="loading" id="loading">
+                    <div class="dot-spinner">
+                        <div class="dot-spinner__dot"></div>
+                        <div class="dot-spinner__dot"></div>
+                        <div class="dot-spinner__dot"></div>
+                        <div class="dot-spinner__dot"></div>
+                        <div class="dot-spinner__dot"></div>
+                        <div class="dot-spinner__dot"></div>
+                        <div class="dot-spinner__dot"></div>
+                        <div class="dot-spinner__dot"></div>
 
+                    </div>
+                        <span>Please wait...</span>
                 </div>
-                    <span>Please wait...</span>
+            </div>
+
+            <div className="imageDivModal zoomClass" id="imageDivModal">
+                <div className="imageDivModalInner">
+                    <div className="modalleft" id="modalLeft" /**onClick={() => alert("left")} */>
+                        <img src="https://images.pexels.com/photos/1612846/pexels-photo-1612846.jpeg?auto=compress&cs=tinysrgb&w=600" alt="" />
+                    </div>
+                    <div className="modalright" id="modalRight" /** onClick={() => alert("right")} */>
+
+                        <span id="cancel" onClick={() => document.getElementById("imageDivModal").style.display = ""}><FaTimes /></span>
+
+                        <span id="itemName">Blajasndfajk</span>
+                        <span id="itemPrice">Ksh. 89999</span>
+                        <button type="button" className="addToCart">Add to Cart <span><BsFillCartPlusFill /></span></button>
+                        <button type="button" className="sendMessage">Send Message</button>
+
+                    </div>
+                </div>
             </div>
 
             <Outlet />
