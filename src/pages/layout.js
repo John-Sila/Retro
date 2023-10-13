@@ -1,10 +1,11 @@
 import { Outlet, Link } from "react-router-dom";
 import logo from "../logo/rc.jpg"
-import { RiMenu4Line } from "react-icons/ri";
+import { RiMenu4Line, RiAccountCircleFill } from "react-icons/ri";
 import { BiSolidUserCircle } from "react-icons/bi"
 import { windowOnclick } from "../external_functions";
 import { BsFillCartPlusFill } from "react-icons/bs";
 import { FaTimes } from "react-icons/fa";
+import { FiPhoneCall } from "react-icons/fi";
 
 const Layout = () => {
 
@@ -28,8 +29,8 @@ const Layout = () => {
                 </div>
                 
                 <div className="topRight">
-                    <li><Link to="/login" className="links guest">Login</Link></li>
-                    <li><Link to="/profile" className="links customer">< BiSolidUserCircle /></Link></li>
+                    <Link to="/login" className="links guest login"><RiAccountCircleFill /></Link>
+                    <Link to="/profile" className="links customer">< BiSolidUserCircle /></Link>
                 </div>
             </nav>
 
@@ -63,7 +64,7 @@ const Layout = () => {
                         <span id="itemName">Blajasndfajk</span>
                         <span id="itemPrice">Ksh. 89999</span>
                         <button type="button" className="addToCart">Add to Cart <span><BsFillCartPlusFill /></span></button>
-                        <button type="button" className="sendMessage">Send Message</button>
+                        <button type="button" className="sendMessage"><FiPhoneCall /></button>
 
                     </div>
                 </div>

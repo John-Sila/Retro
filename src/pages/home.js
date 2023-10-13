@@ -3,7 +3,7 @@ import { FaTimes } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import { windowOnclick, windowResized } from "../external_functions";
 import moreGoods from "./moregoods";
-import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
+import { AiOutlineArrowLeft, AiOutlineArrowRight, AiFillStar } from "react-icons/ai";
 import PanelImages from "./panelimages";
 
 const Home = () => {
@@ -35,8 +35,8 @@ const Home = () => {
         
         // the slideshow
         const intervalId = setInterval(styleHugePanel, 10000);
-        window.addEventListener( "resize", windowResized);
         // listen for page resize
+        window.addEventListener( "resize", windowResized);
         
         return () => clearInterval(intervalId);
     }, [])
@@ -112,27 +112,26 @@ const Home = () => {
                     <span className="closeMenu" id="closeMenu" onClick={closeMenu}><FaTimes /></span>
 
                     <div>
-                        <ul>
-                            <li><Link to="" className="links">Vehicles</Link></li>
-                            <li><Link to="" className="links">Mobile Phones</Link></li>
-                            <li><Link to="" className="links">Computer, PC & Camera</Link></li>
-                            <li><Link to="" className="links">Services</Link></li>
-                            <li><Link to="" className="links">Pets</Link></li>
-                            <li><Link to="" className="links">Agriculture & Food</Link></li>
-                            <li><Link to="" className="links">Fashion</Link></li>
-                            <li><Link to="" className="links">Health & Beauty</Link></li>
-                            <li><Link to="" className="links">Children & Babies</Link></li>
-                            <li><Link to="" className="links">Cyber Services</Link></li>
-                            <li><Link to="" className="links">Sports & Extra Curricular</Link></li>
-                            <li><Link to="" className="links">Furniture</Link></li>
-                            <li><Link to="" className="links">Kitchenware</Link></li>
-                        </ul>
-
-                        <ul className="snapOne">
-                            <li><Link to="/login" className="links guest">Login</Link></li>
-                            <li><Link to="/profile" className="links customer">Profile</Link></li>
-                        </ul>
-                        
+                        <div>
+                            <button type="button">Vehicles</button>
+                            <button type="button">Mobile Phones</button>
+                            <button type="button">Computer, PC & Camera</button>
+                            <button type="button">Services</button>
+                            <button type="button">Pets</button>
+                            <button type="button">Agriculture & Food</button>
+                            <button type="button">Fashion & Interior</button>
+                            <button type="button">Health & Beauty</button>
+                            <button type="button">Children & Babies</button>
+                            <button type="button">Sports & Extra Curricular</button>
+                            <button type="button">Furniture</button>
+                            <button type="button">Kitchenware</button>
+                            
+                            <div className="snapOne">
+                                <Link to="/login" className="links guest">Login</Link>
+                                <Link ti="/my_profile" className="links customer">My Profile</Link>
+                            </div>
+                            
+                        </div>
                     </div>
 
                 </aside>
@@ -142,10 +141,17 @@ const Home = () => {
                     {/* from our JSON */}
                     {
                         moreGoods.map((singleItem, index) => (
-                            <div className="imageDiv" key={index} onClick={() => imageDivModal(index, "internal", singleItem.name, singleItem.link, singleItem.price)}>
+                            <div className="imageDiv internal" key={index} onClick={() => imageDivModal(index, "internal", singleItem.name, singleItem.link, singleItem.price)}>
                                 <img src={singleItem.link} alt={singleItem.name} />
                                 <span className="itemName"> {singleItem.name} </span>
-                                <span className="singleItem">{singleItem.price}</span>
+                                <span className="price">{singleItem.price}</span>
+                                <div className="stars">
+                                    <span><AiFillStar/></span>
+                                    <span><AiFillStar/></span>
+                                    <span><AiFillStar/></span>
+                                    <span><AiFillStar/></span>
+                                    <span><AiFillStar/></span>
+                                </div>
                             </div>
                         ))
                     }

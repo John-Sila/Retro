@@ -37,14 +37,7 @@
   top: 0;
   z-index: 1;
   box-shadow: 5px 5px 20px 2px rgb(237, 237, 237);
-}
-.topNav {
-  display: flex;
-  flex-direction: row;
-  list-style-type: none;
-  align-items: center;
   justify-content: space-between;
-  font-size: .875em;
 }
 .topNav .links{
   text-decoration: none;
@@ -78,7 +71,14 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: 5px;
+  /* padding: 5px; */
+}
+.topNav .topRight .login{
+  text-align: right;
+  font-size: 30px;
+}
+.topNav .topRight .login:is(:hover, :active){
+  color: var(--anotherAccent);
 }
 .topNav .topRight .customer{
   font-size: 30px;
@@ -156,8 +156,8 @@
   /* overflow-y: hidden; */
 }
 .homeContent aside{
-  width: 20%;
-  padding: 20px;
+  width: 25%;
+  padding: 0;
   position: -webkit-sticky;
   position: sticky;
   top: 75px;
@@ -166,35 +166,30 @@
   transition: .25s all ease;
   overflow-y: auto;
   overflow-x: hidden;
-  /* display: flex;
-  flex-direction: column;
-  justify-content: center; */
   box-shadow: var(--standardShadow);
 }
-.homeContent aside ul{
-  list-style: none;
-  margin-top: 50px;
-  width: max-content;
-  padding: 5px;
+.homeContent aside > div{
+  background-color: inherit;
+  width: 100%;
+  height: max-content;
+  margin-top: 25%;
+}
+.homeContent aside div div button{
   position: relative;
+  width: 100%;
+  padding: 15px;
+  border: none;
+  outline: none;
+  background-color: inherit;
+}
+.homeContent aside div div button:hover{
+  background-color: var(--anotherAccent);
 }
 .homeContent aside .closeMenu{
   transition: .1s ease-in-out;
   display: none;
 }
-.homeContent aside ul li{
-  margin: 25px 0;
-}
-.homeContent aside ul .links{
-  text-decoration: none;
-  color: var(--darkColor);
-  cursor: pointer;
-  white-space: nowrap;
-}
-.homeContent aside ul .links:hover{
-  text-decoration: underline;
-}
-.homeContent aside ul.snapOne{
+.homeContent aside > div > div div.snapOne{
   display: none;
 }
 .homeContent .homeRight{
@@ -211,9 +206,7 @@
   position: relative;
   width: 20%;
   overflow: hidden;
-  /* margin: 1%; */
   display: grid;
-  place-items: center;
   height: max-content;
   box-shadow: 2px 2px 10px 2px rgb(237, 237, 237);
   border-radius: 10px;
@@ -238,7 +231,21 @@
   font-size: .875em;
 }
 .homeContent .homeRight .imageDiv :where(.price){
-  font-size: .875em;
+  font-size: .8875em;
+  padding: 0 5px;
+}
+.homeContent .homeRight .imageDiv .stars{
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  margin-top: 10%;
+  width: 70%;
+  left: 15%;
+  color: rgb(163, 163, 163);
+}
+.homeContent .homeRight .imageDiv .stars span{
+  cursor: pointer;
 }
 
 .homeContent .homeRight .imageDiv:hover{
@@ -303,6 +310,7 @@
 }
 .imageDivModal .imageDivModalInner .modalleft{
   position: relative;
+  /* width: auto; */
   width: 100%;
 }
 .imageDivModal .imageDivModalInner .modalleft img{
@@ -383,7 +391,7 @@
 
  .imageDivModal .imageDivModalInner .modalright button.sendMessage {
   font-size: 16px;
-  padding: 1em 2.25em;
+  padding: 1em 4em;
   transform: perspective(200px) rotateX(15deg);
   color: var(--whiteColor);
   font-weight: 900;
@@ -600,6 +608,9 @@
   outline: none;
   border-radius: 15px;
 }
+.loginModal form .loginSubmissionDiv button[type="submit"]:hover{
+  color: var(--anotherAccent);
+}
 .loginModal form .loginSubmissionDiv button[type="button"]{
   padding: 15px;
   background-color: var(--redColor);
@@ -607,6 +618,9 @@
   border: none;
   outline: none;
   border-radius: 15px;
+}
+.loginModal form .loginSubmissionDiv button[type="button"]:hover{
+  background-color: var(--redColor2);
 }
 .loginModal form p{
   display: grid;
@@ -616,6 +630,9 @@
   text-decoration: underline;
   color: var(--darkColor);
   cursor: pointer;
+}
+.loginModal form p .noAcc:hover{
+  color: var(--accentColor);
 }
 .signup{
   position: relative;
@@ -714,6 +731,11 @@
 
 
 /* media query */
+@media screen and (max-width: 1056px) {
+  .homeContent aside{
+    width: 35%;
+  }
+}
 @media screen and (max-width: 792px) {
   .topNav .topLeft .menuButton{
     display: grid;
@@ -723,35 +745,48 @@
     float: left;
     left: -200vw;
     top: 10px;
-    background-color: var(--darkColor);
+    background-color: var(--whiteColor);
     z-index: 2;
-    border-radius: 10% 1%;
-    opacity: .95;
+    border-radius: 15px;
     height: 90vh;
-    overflow-y: hidden;
-    width: 25%;
+    width: 35%;
+    /* overflow: hidden; */
   }
-  .homeContent aside div{
-    position: relative;
-    height: 90%;
-    padding: 3rem calc((var(--gridGap)/4));
-    overflow-y: auto;
-  }
-  .homeContent aside .closeMenu{
-    display: block !important;
-    position: absolute;
+  .homeContent aside span.closeMenu{
+    display: grid !important;
+    place-items: center;
+    position: -webkit-sticky;
+    position: sticky;
     float: right;
-    right: 17.5%;
+    right: 5%;
     font-size: 25px;
     color: var(--redColor);
     cursor: pointer;
     z-index: 3;
+    top: 5%;
+    transition: .375s all ease;
+    background-color: var(--whiteColor);
+    padding: 5px;
+    border-radius: 50%;
+    box-shadow: inset 0 0 5px 0 rgb(210, 210, 210);
   }
-  .homeContent aside ul li .links{
-    color: var(--whiteColor2);
+  .homeContent aside span.closeMenu:hover{
+    transform: rotate(90deg);
   }
-  .homeContent aside ul li .links:active{
-    color: var(--anotherAccent);
+  .homeContent aside > div{
+    position: relative;
+    top: 2.5%;
+    height: max-content;
+    overflow: auto;
+  }
+  .homeContent aside > div div:first-child{
+    position: relative;
+    /* height: 50%; */
+    overflow-y: auto;
+  }
+  .homeContent aside > div div:last-child{
+    position: relative;
+    margin-top: 10%;
   }
   .homeContent .homeRight .imageDiv{
     margin: 2px;
@@ -774,16 +809,18 @@
 @media screen and (max-width: 620px){
   .imageDivModal .imageDivModalInner{
     outline: 3px groove var(--darkColor);
+    width: 75%;
+    padding: .25em;
   }
   .imageDivModal .imageDivModalInner .modalleft{
-    width: 50vw;
-    overflow: hidden;
+    display: none;
   }
   .imageDivModal .imageDivModalInner .modalright{
     background-image: url(https://images.pexels.com/photos/1612846/pexels-photo-1612846.jpeg?auto=compress&cs=tinysrgb&w=600);
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center center;
+    background-color: rgba(32, 32, 32, 0.733);
   }
   .imageDivModal .imageDivModalInner .modalright #itemName{
    display: none;
@@ -834,16 +871,21 @@
   .homeContent .homeRight .imageDiv .itemName{
     font-size: .825em;
   }
-  .homeContent aside div .snapOne{
+  .homeContent aside{
+    width: 50%;
+  }
+  .homeContent aside > div > div div.snapOne{
     display: flex;
     flex-direction: column;
     align-items: center;
     position: relative;
   }
-  .homeContent aside div .snapOne .links{
+  .homeContent aside div > div > .snapOne .links{
     color: var(--anotherAccent);
+    text-decoration: none;
+    margin: 12.5%;
   }
-  .homeContent aside ul .customer{
+  .homeContent aside div > div > .snapOne .links.customer{
     display: none;
   }
 }
@@ -877,22 +919,12 @@
   .signup form label .eye{
     transform: translate(60vw, -37.5px);
   }
-  .homeContent aside{
-    width: 50%;
-  }
 
 }
 
-@media screen and (max-width: 350px) {
+@media screen and (max-width: 380px) {
   .homeContent aside{
     width: 80%;
-  }
-  /* .imageDivModal{
-    width: 90vw;
-    left: 5vw;
-  } */
-  .imageDivModal .imageDivModalInner .modalleft{
-    display: none;
   }
 }
 
