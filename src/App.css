@@ -7,7 +7,7 @@
   --redColor2:rgb(217, 0, 0);
   --standardShadow: 2px 2px 10px 2px rgb(237, 237, 237);
   --accentColor: rgb(71, 165, 37);
-  --anotherAccent: rgb(229,182,31);
+  --anotherAccent: #FFD401;
   overflow-x: hidden;
 }
 
@@ -62,6 +62,9 @@
   display: none;
   font-size: 1.2em;
 }
+
+
+
 .topNav .topLeft img{
   width: 40px;
   height: 40px;
@@ -234,6 +237,7 @@
   font-size: .8875em;
   padding: 0 5px;
 }
+
 .homeContent .homeRight .imageDiv .stars{
   position: relative;
   display: flex;
@@ -260,18 +264,7 @@
   object-fit: cover;
   border-radius: 10px;
 }
-.imageDivModal{
-  position: fixed;
-  z-index: 2;
-  height: 110vh;
-  width: 100vw;
-  border-radius: 0;
-  top: 0;
-  left: 0;
-  background-color: rgba(0, 0, 0, 0.689);
-  place-items: center;
-  display: none;
-}
+
 .zoomClass{
   -webkit-animation: zoom .3s;
   animation: zoom .3s;
@@ -292,130 +285,6 @@
     -webkit-transform: scale(1);
   }
 }
-
-
-.imageDivModal .imageDivModalInner{
-  display: flex;
-  flex-direction: row;
-  outline: 5px groove var(--darkColor);
-  width: 100%;
-  position: relative;
-
-  height: 80vh;
-  width: 90vw;
-  top: -10vh;
-  border-radius: 10px;
-  overflow: hidden;
-  background-color: var(--darkColor);
-}
-.imageDivModal .imageDivModalInner .modalleft{
-  position: relative;
-  /* width: auto; */
-  width: 100%;
-}
-.imageDivModal .imageDivModalInner .modalleft img{
-  position: relative;
-  height: 100%;
-  border-radius: 0;
-  border-top-left-radius: 10px;
-  border-bottom-left-radius: 10px;
-  width: 100%;
-  object-fit: contain;
-}
-.imageDivModal .imageDivModalInner .modalright{
-  position: relative;
-  background-color: var(--whiteColor);
-  width: 100%;
-  border-radius: 0;
-  border-top-right-radius: 10px;
-  border-bottom-right-radius: 10px;
-  display: grid;
-  place-items: center;
-  overflow-y: auto;
-}
-.imageDivModal .imageDivModalInner .modalright #cancel{
-  position: absolute;
-  top: 10px;
-  float: right;
-  right: 20px;
-  font-size: 20px;
-  background-color: rgba(32, 32, 32, 0.769);
-  color: var(--anotherAccent);
-  border-radius: 5px;
-  padding: 7.5px;
-  cursor: pointer;
-  display: grid;
-  place-items: center;
-}
-
-.imageDivModal .imageDivModalInner .modalright button.addToCart  {
-  padding: 15px 25px;
-  border: unset;
-  border-radius: 15px;
-  color: #212121;
-  z-index: 1;
-  background: #e8e8e8;
-  position: relative;
-  font-weight: 1000;
-  font-size: 17px;
-  -webkit-box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
-  box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
-  transition: all 250ms;
-  overflow: hidden;
- }
- 
- .imageDivModal .imageDivModalInner .modalright button.addToCart::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 0;
-  border-radius: 15px;
-  background-color: #212121;
-  z-index: -1;
-  -webkit-box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
-  box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
-  transition: all 250ms
- }
- 
- .imageDivModal .imageDivModalInner .modalright button.addToCart:is(:hover, :active) {
-  color: #e8e8e8;
- }
- 
- .imageDivModal .imageDivModalInner .modalright button.addToCart:is(:hover, :active)::before {
-  width: 100%;
- }
-
-
-
- .imageDivModal .imageDivModalInner .modalright button.sendMessage {
-  font-size: 16px;
-  padding: 1em 4em;
-  transform: perspective(200px) rotateX(15deg);
-  color: var(--whiteColor);
-  font-weight: 900;
-  border: none;
-  border-radius: 5px;
-  background: linear-gradient(0deg, var(--darkColor) 0%, var(--darkColor2) 100%);
-  box-shadow: rgba(63,94,251,0.2) 0px 40px 29px 0px;
-  will-change: transform;
-  transition: all 0.3s;
-  border-bottom: 2px solid var(--anotherAccent);
-}
-
-.imageDivModal .imageDivModalInner .modalright button.sendMessage:hover {
-  transform: perspective(180px) rotateX(30deg) translateY(2px);
-}
-
-.imageDivModal .imageDivModalInner .modalright button.sendMessage:active {
-  transform: perspective(170px) rotateX(36deg) translateY(5px);
-}
-
-
-
-
-
 
 .loadingModal{
   position: fixed;
@@ -600,17 +469,65 @@
   flex-direction: row;
   justify-content: space-around;
 }
-.loginModal form .loginSubmissionDiv button[type="submit"]{
-  padding: 15px;
-  background-color: var(--darkColor);
+
+.loginModal form .loginSubmissionDiv button[type="submit"] {
+  position: relative;
+  height: 50px;
+  width: 150px;
   color: var(--whiteColor);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  background-color: var(--darkColor);
+  transition: all 0.5s;
   border: none;
-  outline: none;
+  white-space: nowrap;
+  padding: auto 10px;
   border-radius: 15px;
 }
+
+.loginModal form .loginSubmissionDiv button[type="submit"]::before {
+  position: absolute;
+  content: '';
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(29, 255, 86, 0.281);
+  border-radius: 15px;
+  transition: all 0.3s;
+  z-index: 1;
+}
+
+.loginModal form .loginSubmissionDiv button[type="submit"]:hover::before {
+  opacity: 0;
+  transform: scale(0.7,0.7);
+}
+
+.loginModal form .loginSubmissionDiv button[type="submit"]::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transition: all 0.4s;
+  border: 1px solid rgba(29, 255, 86, 0.281);
+  border-radius: 5px;
+  transform: scale(1.5,1.5);
+  opacity: 0;
+  z-index: 1;
+}
+
+.loginModal form .loginSubmissionDiv button[type="submit"]:hover::after {
+  opacity: 1;
+  transform: scale(1,1);
+}
+
 .loginModal form .loginSubmissionDiv button[type="submit"]:hover{
   color: var(--anotherAccent);
 }
+
 .loginModal form .loginSubmissionDiv button[type="button"]{
   padding: 15px;
   background-color: var(--redColor);
@@ -696,18 +613,66 @@
   place-items: center;
   margin: 25px auto;
 }
-.signup form .submissionButtons > button{
-  background-color: var(--accentColor);
-  color: var(--darkColor);
+
+
+
+.signup form .submissionButtons > button {
+  position: relative;
+  height: 50px;
+  width: 150px;
+  color: var(--whiteColor);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  background-color: var(--darkColor);
+  transition: all 0.5s;
   border: none;
-  padding: 10px 60px;
-  border-radius: 10px;
-  transition: background .25s;
+  white-space: nowrap;
+  padding: auto 10px;
+  border-radius: 15px;
+}
+
+.signup form .submissionButtons > button::before {
+  position: absolute;
+  content: '';
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(29, 255, 86, 0.281);
+  border-radius: 15px;
+  transition: all 0.3s;
+  z-index: 1;
+}
+
+.signup form .submissionButtons > button:hover::before {
+  opacity: 0;
+  transform: scale(0.7,0.7);
+}
+
+.signup form .submissionButtons > button::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transition: all 0.4s;
+  border: 1px solid rgba(29, 255, 86, 0.281);
+  border-radius: 5px;
+  transform: scale(1.5,1.5);
+  opacity: 0;
+  z-index: 1;
+}
+
+.signup form .submissionButtons > button:hover::after {
+  opacity: 1;
+  transform: scale(1,1);
 }
 .signup form .submissionButtons > button:hover{
-  background-color: var(--darkColor);
   color: var(--anotherAccent);
 }
+
 .signup form .signupFinale{
   display: grid;
   place-items: center;
@@ -718,6 +683,307 @@
 .signup form .signupFinale .links:hover{
   color: var(--anotherAccent);
 }
+
+
+
+
+/* item div */
+.productDiv{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  padding: 15px;
+  gap: 20px;
+  color: var(--darkColor);
+}
+.productDiv .firstDiv{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.productDiv .firstDiv img{
+  max-width: 350px;
+  position: relative;
+  width: 100%;
+  object-fit: cover;
+  height: max-content;
+  border-top: 3px solid var(--anotherAccent);
+  border-radius: 10px;
+}
+.productDiv .firstDiv div{
+  margin: 5% auto;
+  width: 90%;
+}
+.productDiv .firstDiv div:first-of-type{
+  position: relative;
+}
+.productDiv .firstDiv div:nth-of-type(2){
+  position: relative;
+  box-shadow: 0 0 10px 5px rgb(222, 222, 222);
+  padding: 20px;
+  border-radius: 10px;
+}
+.productDiv .firstDiv div:first-of-type p{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+
+
+.productDiv .firstDiv button.cartBtn {
+  width: 155px;
+  height: 50px;
+  border: none;
+  border-radius: 0px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  color: white;
+  font-weight: 500;
+  position: relative;
+  background-color: rgb(29, 29, 29);
+  box-shadow: 0 20px 30px -7px rgba(27, 27, 27, 0.219);
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.productDiv .firstDiv button.cartBtn .cart {
+  z-index: 2;
+}
+
+.productDiv .firstDiv button.cartBtn:active {
+  transform: scale(0.96);
+}
+
+.productDiv .firstDiv button.cartBtn .product {
+  position: absolute;
+  width: 12px;
+  border-radius: 3px;
+  content: "";
+  left: 23px;
+  bottom: 23px;
+  opacity: 0;
+  z-index: 1;
+  fill: rgb(211, 211, 211);
+}
+
+.productDiv .firstDiv button.cartBtn:hover .product {
+  animation: slide-in-top 1.2s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+}
+
+@keyframes slide-in-top {
+  0% {
+    transform: translateY(-30px);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(0) rotate(-90deg);
+    opacity: 1;
+  }
+}
+
+.productDiv .firstDiv button.cartBtn:hover .cart {
+  animation: slide-in-left 1s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+}
+
+@keyframes slide-in-left {
+  0% {
+    transform: translateX(-10px);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.productDiv .firstDiv button.sendMessage {
+  appearance: none;
+  background-color: transparent;
+  border: 0.125em solid #1A1A1A;
+  /* border-radius: 0.9375em; */
+  border-radius: 0;
+  box-sizing: border-box;
+  color: #3B3B3B;
+  cursor: pointer;
+  display: inline-block;
+  font-family: Roobert,-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+  font-size: 16px;
+  font-weight: 600;
+  line-height: normal;
+  margin: 25px 0;
+  min-height: 3.75em;
+  min-width: 0;
+  outline: none;
+  padding: 1em 2.3em;
+  text-align: center;
+  text-decoration: none;
+  transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
+  -webkit-user-select: none;
+  user-select: none;
+  touch-action: manipulation;
+  will-change: transform;
+ }
+ 
+ .productDiv .firstDiv button.sendMessage:disabled {
+  pointer-events: none;
+ }
+ 
+ .productDiv .firstDiv button.sendMessage:hover {
+  color: var(--whiteColor);
+  background-color: #1A1A1A;
+  box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+  transform: translateY(-2px);
+ }
+ 
+ .productDiv .firstDiv button.sendMessage:active {
+  box-shadow: none;
+  transform: translateY(0);
+ }
+
+
+
+
+
+.productDiv .secondDiv{
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+.productDiv .secondDiv div{
+  margin: 5% auto;
+}
+.productDiv .secondDiv div:first-child{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: max-content;
+  box-shadow: 0 0 10px 5px rgb(222, 222, 222);
+  padding: 20px;
+  width: 90%;
+  border-radius: 10px;
+}
+
+.productDiv .secondDiv div:first-child .profile{
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background-color: inherit;
+  box-shadow: 0 0 20px 1px rgb(215, 215, 215);
+  display: grid;
+  place-items: center;
+  font-size: 30px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: .375s ease;
+}
+.productDiv .secondDiv div:first-child .profile:hover{
+  transform: scale(.97);
+  box-shadow: 0 0 5px 1px rgb(215, 215, 215);
+}
+
+.productDiv .secondDiv div:first-child button.callSeller {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0;
+  background: var(--darkColor);
+  font-family: "Montserrat", sans-serif;
+  box-shadow: 0px 6px 24px 0px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  border: none;
+}
+
+.productDiv .secondDiv button.callSeller:after {
+  content: " ";
+  width: 0%;
+  height: 100%;
+  background: var(--anotherAccent);
+  position: absolute;
+  transition: all 0.4s ease-in-out;
+  right: auto;
+  left: auto;
+}
+
+.productDiv .secondDiv button.callSeller:hover::after {
+  right: auto;
+  left: auto;
+  width: 100%;
+}
+
+.productDiv .secondDiv button.callSeller > span {
+  text-align: center;
+  text-decoration: none;
+  width: 100%;
+  padding: 18px 25px;
+  color: #fff;
+  font-size: 1.125em;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  z-index: 20;
+  transition: all 0.3s ease-in-out;
+}
+
+.productDiv .secondDiv button.callSeller:hover > span {
+  color: #183153;
+  animation: scaleUp 0.3s ease-in-out;
+}
+
+@keyframes scaleUp {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(0.95);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+.productDiv .secondDiv div:nth-child(2){
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: max-content;
+  box-shadow: 0 0 10px 5px rgb(222, 222, 222);
+  padding: 20px;
+  width: 90%;
+  border-radius: 10px;
+  height: max-content;
+}
+
+.productDiv .secondDiv div:nth-child(2) ul .r_abuse {
+  text-decoration: none;
+  color: var(--redColor);
+  line-height: 2;
+  position: relative;
+}
+
+.productDiv .secondDiv div:nth-child(2) ul .r_abuse::before {
+  content: '';
+  width: 0;
+  height: 2px;
+  border-radius: 2px;
+  background-color: var(--redColor);
+  position: absolute;
+  bottom: -.25rem;
+  right: 0;
+  transition: right .4s, width .4s, left .4s;
+}
+
+.productDiv .secondDiv div:nth-child(2) ul .r_abuse:hover::before {
+  width: 100%;
+  left: 0;
+}
+
 
 
 
@@ -887,6 +1153,26 @@
   }
   .homeContent aside div > div > .snapOne .links.customer{
     display: none;
+  }
+  .loginModal form .loginSubmissionDiv button[type="button"]{
+    display: none;
+  }
+
+
+  .productDiv{
+    padding: 1.25px;
+  }
+  .productDiv .firstDiv img{
+    max-width: 87.5vw;
+  }
+  .productDiv :where(.firstDiv, .secondDiv){
+    width: calc(100vw - 5px);
+    margin: 0;
+    position: relative;
+  }
+  .productDiv .secondDiv > div, .productDiv .firstDiv > div{
+    position: relative;
+    max-width: 80%;
   }
 }
 

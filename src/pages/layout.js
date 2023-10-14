@@ -52,24 +52,6 @@ const Layout = () => {
                 </div>
             </div>
 
-            <div className="imageDivModal zoomClass" id="imageDivModal">
-                <div className="imageDivModalInner">
-                    <div className="modalleft" id="modalLeft" /**onClick={() => alert("left")} */>
-                        <img src="https://images.pexels.com/photos/1612846/pexels-photo-1612846.jpeg?auto=compress&cs=tinysrgb&w=600" alt="" />
-                    </div>
-                    <div className="modalright" id="modalRight" /** onClick={() => alert("right")} */>
-
-                        <span id="cancel" onClick={() => document.getElementById("imageDivModal").style.display = ""}><FaTimes /></span>
-
-                        <span id="itemName">Blajasndfajk</span>
-                        <span id="itemPrice">Ksh. 89999</span>
-                        <button type="button" className="addToCart">Add to Cart <span><BsFillCartPlusFill /></span></button>
-                        <button type="button" className="sendMessage"><FiPhoneCall /></button>
-
-                    </div>
-                </div>
-            </div>
-
             <Outlet />
         </>
     )

@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { FaTimes } from "react-icons/fa";
 import { useEffect, useState } from "react";
-import { windowOnclick, windowResized } from "../external_functions";
+import { windowOnclick } from "../external_functions";
 import moreGoods from "./moregoods";
 import { AiOutlineArrowLeft, AiOutlineArrowRight, AiFillStar } from "react-icons/ai";
 import PanelImages from "./panelimages";
@@ -35,8 +35,6 @@ const Home = () => {
         
         // the slideshow
         const intervalId = setInterval(styleHugePanel, 10000);
-        // listen for page resize
-        window.addEventListener( "resize", windowResized);
         
         return () => clearInterval(intervalId);
     }, [])
@@ -66,26 +64,10 @@ const Home = () => {
         window.removeEventListener( "click", windowOnclick)
     }
 
-    // display the modal when an image is clicked
-    const imageDivModal = (index, source, name, url, cost) => {
-        // for internal
-        const imageDivModal = document.getElementById("imageDivModal");
-        if (imageDivModal) {
-            const imageDiv = imageDivModal.querySelectorAll("img")[0]
-            imageDiv.src = url;
-            imageDivModal.style.display = "grid";
-            const rightDiv = imageDivModal.querySelector("#modalRight");
-            rightDiv.querySelector("#itemName").innerHTML = name;
-            rightDiv.querySelector("#itemPrice").innerHTML = cost;
-            const x = getComputedStyle(rightDiv).backgroundImage
-            if (x.toString().toLowerCase() !== "none" ) {
-                // then this is a smaller screen and a media query has already been engaged
-                rightDiv.style.backgroundImage = `url(${url})`;
-            }
-
-            windowResized()
-        }
-        // else return null;
+    // image clicking
+    const imageClicked = (link, srcSet, price, name, category, location, mobile, priceNegotiable, used, seller, additionalSpecs, keyInformation) => {
+        setLoading(true);
+        console.log("Writing Document.");
     }
 
     return (
@@ -141,8 +123,22 @@ const Home = () => {
                     {/* from our JSON */}
                     {
                         moreGoods.map((singleItem, index) => (
-                            <div className="imageDiv internal" key={index} onClick={() => imageDivModal(index, "internal", singleItem.name, singleItem.link, singleItem.price)}>
-                                <img src={singleItem.link} alt={singleItem.name} />
+                            <div className="imageDiv internal" key={index} >
+
+                                <img src={singleItem.link} alt={singleItem.name} onClick={() => imageClicked(
+                                    singleItem.link, 
+                                    singleItem.srcSet,
+                                    singleItem.price,
+                                    singleItem.name,
+                                    singleItem.category,
+                                    singleItem.location,
+                                    singleItem.mobile,
+                                    singleItem.priceNegotiable,
+                                    singleItem.used,
+                                    singleItem.seller,
+                                    singleItem.additionalSpecs,
+                                    singleItem.keyInformation
+                                    )} />
                                 <span className="itemName"> {singleItem.name} </span>
                                 <span className="price">{singleItem.price}</span>
                                 <div className="stars">
@@ -159,7 +155,7 @@ const Home = () => {
                     {/* from the API */}
                     {
                         products.map((product, index) => (
-                            <div className="imageDiv" key={index} onClick={() => imageDivModal(index, "api")}>
+                            <div className="imageDiv" key={index} >
                                 <img src={product.image} alt={product.title} />
                                 <span className="itemName"> {product.title} </span>
                                 <span className="price">Ksh. {Math.round(product.price * 146.95)}</span>
