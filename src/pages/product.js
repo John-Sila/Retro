@@ -1,20 +1,20 @@
 import { Link } from "react-router-dom";
 import  { ImLocation2 } from "react-icons/im";
-import { useState } from "react";
 
 const Product = () => {
 
     return (
         <>
-            <div className="productDiv">
+            <div className="productDiv" id="productDiv">
                 {/* <img src="" alt="" /> */}
-                <div className="firstDiv">
-                    <h3 className="itemName">Name</h3>
-                    <img src="https://images.pexels.com/photos/1008692/pexels-photo-1008692.jpeg?auto=compress&cs=tinysrgb&w=600" alt="" />
+                <div className="firstDiv" id="firstDiv">
+                    <h3 id="productItemName">Name</h3>
+                    <img id="productImg" src="https://images.pexels.com/photos/1008692/pexels-photo-1008692.jpeg?auto=compress&cs=tinysrgb&w=600" alt="" />
                     <div>
-                        <p><ImLocation2 /><span id="sellerLocation">Kilimani</span></p>
+                        <p><ImLocation2 /><span id="productSellerLocation">Kilimani</span></p>
+                        <p id="productMoreImages">No more images for this product were provided.</p>
                     </div>
-                    <div>
+                    <div id="features">
                         <h3>Features:</h3>
                         <ul>
                             <li>It's a red car</li>
@@ -37,12 +37,12 @@ const Product = () => {
 
                 </div>
                 
-                <div className="secondDiv">
+                <div className="secondDiv" id="secondDiv">
                     <div>
-                        <div className="profile"><span>JS</span></div>
-                        <h3 className="itemPrice">Ksh 90,000,<span> Negotiable</span></h3>
+                        <div id="sellerProfile" className="profile"><span>JS</span></div>
+                        <h3 id="productItemPrice">Ksh 90,000,<span id="productPriceNegotiable"> Negotiable</span></h3>
 
-                        <button type="button" className="callSeller"><span>Call <span id="sellerName">John Sila</span></span></button>
+                        <button type="button" className="callSeller"><span>Call <span id="productSellerName">John Sila</span></span></button>
                     </div>
                     <div>
                         <h3>Precaution</h3>

@@ -11,7 +11,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/6476595/pexels-photo-6476595.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -25,7 +25,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://5.imimg.com/data5/SELLER/Default/2022/4/IB/CK/KH/55920930/goods-transport-service.jpg",
@@ -39,7 +39,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://pbs.twimg.com/media/DfWoRyZWAAALvR8.jpg",
@@ -53,7 +53,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://cdn.corporatefinanceinstitute.com/assets/accounting.jpeg",
@@ -67,7 +67,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://cdn.jdpower.com/Average%20Weight%20Of%20A%20Car.jpg",
@@ -81,7 +81,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/2179865/pexels-photo-2179865.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -95,7 +95,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/6294104/pexels-photo-6294104.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -109,7 +109,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/6280436/pexels-photo-6280436.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -123,7 +123,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://cdn-images.farfetch-contents.com/19/08/44/83/19084483_42150059_600.jpg",
@@ -137,7 +137,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/5625110/pexels-photo-5625110.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -151,7 +151,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/2252541/pexels-photo-2252541.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -165,7 +165,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://cdn.24.co.za/files/Cms/General/d/6150/d2bd910b7e504f3ab3e9c7fbc82c96bb.jpg",
@@ -179,7 +179,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/52518/jeans-pants-blue-shop-52518.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -193,7 +193,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/7319324/pexels-photo-7319324.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -207,7 +207,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/2920064/pexels-photo-2920064.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -221,7 +221,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/2403391/pexels-photo-2403391.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -235,7 +235,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/2912108/pexels-photo-2912108.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -249,7 +249,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/952264/pexels-photo-952264.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -263,7 +263,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/5709648/pexels-photo-5709648.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -277,7 +277,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/6126310/pexels-photo-6126310.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -291,7 +291,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/2995012/pexels-photo-2995012.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -305,7 +305,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/5230908/pexels-photo-5230908.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -319,7 +319,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/2002717/pexels-photo-2002717.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -333,7 +333,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/5709655/pexels-photo-5709655.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -347,7 +347,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/2129654/pexels-photo-2129654.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -361,7 +361,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/6294166/pexels-photo-6294166.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -375,7 +375,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/5945657/pexels-photo-5945657.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -389,7 +389,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/5699068/pexels-photo-5699068.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -403,7 +403,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/7832983/pexels-photo-7832983.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -417,7 +417,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/11568799/pexels-photo-11568799.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -431,7 +431,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/6280388/pexels-photo-6280388.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -445,7 +445,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://media.istockphoto.com/id/1158134822/photo/kfc-style-fried-chicken-nuggets-takeaway-in-black-container.jpg?b=1&s=612x612&w=0&k=20&c=86DcrfP_oV4GO5BXeYanj5dj0t64EqOld1fMC_6f34U=",
@@ -459,7 +459,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/1841120/pexels-photo-1841120.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -473,7 +473,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/794435/pexels-photo-794435.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -487,7 +487,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/5905486/pexels-photo-5905486.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -501,7 +501,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/2023384/pexels-photo-2023384.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -515,7 +515,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/12753820/pexels-photo-12753820.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -529,7 +529,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/2623968/pexels-photo-2623968.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -543,7 +543,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/977003/pexels-photo-977003.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -557,7 +557,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/66134/pexels-photo-66134.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -571,7 +571,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/5273012/pexels-photo-5273012.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -585,7 +585,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/102061/pexels-photo-102061.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -599,7 +599,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/3353621/pexels-photo-3353621.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -613,7 +613,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/51383/photo-camera-subject-photographer-51383.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -627,7 +627,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/2318990/pexels-photo-2318990.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -641,7 +641,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/1413412/pexels-photo-1413412.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -655,7 +655,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/1833306/pexels-photo-1833306.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -669,7 +669,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/241316/pexels-photo-241316.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -683,7 +683,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/2095597/pexels-photo-2095597.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -697,7 +697,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/821738/pexels-photo-821738.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -711,7 +711,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/4005569/pexels-photo-4005569.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -725,7 +725,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/1394641/pexels-photo-1394641.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -739,7 +739,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/1447264/pexels-photo-1447264.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -753,7 +753,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/5793953/pexels-photo-5793953.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -767,7 +767,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/1738637/pexels-photo-1738637.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -781,7 +781,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/4787588/pexels-photo-4787588.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -795,7 +795,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/1787234/pexels-photo-1787234.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -809,7 +809,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/7129180/pexels-photo-7129180.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -823,7 +823,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/1178337/pexels-photo-1178337.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -837,7 +837,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/3707744/pexels-photo-3707744.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -851,7 +851,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/7319172/pexels-photo-7319172.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -865,7 +865,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/4195325/pexels-photo-4195325.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -879,7 +879,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/5947548/pexels-photo-5947548.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -893,7 +893,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/2873486/pexels-photo-2873486.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -907,7 +907,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/50614/pexels-photo-50614.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -921,7 +921,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/1595243/pexels-photo-1595243.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -935,7 +935,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/788946/pexels-photo-788946.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -949,7 +949,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/1787220/pexels-photo-1787220.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -963,7 +963,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/5529596/pexels-photo-5529596.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -977,7 +977,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/2095594/pexels-photo-2095594.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -991,7 +991,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/2386429/pexels-photo-2386429.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -1005,7 +1005,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/7125435/pexels-photo-7125435.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -1019,7 +1019,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/248526/pexels-photo-248526.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -1033,7 +1033,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/2100075/pexels-photo-2100075.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -1047,7 +1047,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/7129145/pexels-photo-7129145.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -1061,7 +1061,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/2072060/pexels-photo-2072060.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -1075,7 +1075,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/4022090/pexels-photo-4022090.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -1089,7 +1089,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/1710481/pexels-photo-1710481.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -1103,7 +1103,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/2481177/pexels-photo-2481177.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -1117,7 +1117,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/1181269/pexels-photo-1181269.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -1131,7 +1131,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/7125434/pexels-photo-7125434.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -1145,7 +1145,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/3756879/pexels-photo-3756879.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -1159,7 +1159,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/205421/pexels-photo-205421.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -1173,7 +1173,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/821749/pexels-photo-821749.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -1187,7 +1187,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/837268/pexels-photo-837268.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -1201,7 +1201,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/1082663/pexels-photo-1082663.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -1215,7 +1215,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/3586249/pexels-photo-3586249.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -1229,7 +1229,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
     {
         link: "https://images.pexels.com/photos/249597/pexels-photo-249597.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -1243,7 +1243,7 @@ const moreGoods = [
         used: false,
         seller: "John Sila",
         features: [],
-        additionalSpecs: [],
+        additionalInfo: [],
     },
 ]
 

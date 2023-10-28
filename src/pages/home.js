@@ -12,22 +12,22 @@ const Home = () => {
     const [loading, setLoading] = useState(true);
 
     // AS AT NOW, THE API IS DOWN 12-10-2023
-    useEffect(() => {
-        setLoading(true);
-        fetch('https://fakestoreapi.com/products')
-          .then((response) => response.json())
-          .then((json) => {
-            console.log(json);
-            setProducts(json);
-            setLoading(false);
-          })
-      }, []);
+    // useEffect(() => {
+    //     setLoading(true);
+    //     fetch('https://fakestoreapi.com/products')
+    //       .then((response) => response.json())
+    //       .then((json) => {
+    //         // console.log(json);
+    //         setProducts(json);
+    //         setLoading(false);
+    //       })
+    //   }, []);
 
-    useEffect(() => {
-        // Conditionally render the loading div when 'loading' is true
-        document.getElementById("loadingModal").style.display = loading ? "flex" : "";
+    // useEffect(() => {
+    //     // Conditionally render the loading div when 'loading' is true
+    //     document.getElementById("loadingModal").style.display = loading ? "flex" : "";
 
-    }, [loading]);
+    // }, [loading]);
 
 
     // when our page loads
@@ -65,9 +65,41 @@ const Home = () => {
     }
 
     // image clicking
-    const imageClicked = (link, srcSet, price, name, category, location, mobile, priceNegotiable, used, seller, additionalSpecs, keyInformation) => {
+    const imageClicked = (link, srcSet, price, name, category, location, mobile, priceNegotiable, used, seller, features, additionalInfo) => {
         setLoading(true);
         console.log("Writing Document.");
+        // set image
+        const productDiv = document.getElementById("productDiv");
+        const productImg = document.getElementById("productImg");
+        if (productImg) {
+            productImg.setAttribute("src", link);
+        } else alert(false)
+
+        if (srcSet.length === 0) {
+            document.getElementById("productMoreImages").style.display = "none";
+        }
+        // alert(true)
+
+
+        document.getElementById("productItemPrice").innerHTML = price;
+        document.getElementById("productItemName").innerHTML = name;
+        document.getElementById("productSellerLocation").innerHTML = location;
+        document.getElementById("productPriceNegotiable").innerHTML = priceNegotiable === Boolean(true)? "Negotiable" : "Not negotiable";
+        document.getElementById("productSellerName").innerHTML = seller;
+        
+        // features
+        for (let i = 0; i < features.length; i++) {
+            const element = features[i];
+            const unorderedList = productDiv.querySelector("#firstDiv").querySelector("#features").getElementsByTagName("ul")[0];
+            const li = document.createElement("li");
+            const thisText = element;
+            li.textContent = thisText;
+            unorderedList.appendChild( li );
+        }
+
+        console.log("Product writing completed.");
+        setLoading(false);
+        window.location.pathname = "/this_item";
     }
 
     return (
@@ -108,10 +140,10 @@ const Home = () => {
                             <button type="button">Furniture</button>
                             <button type="button">Kitchenware</button>
                             
-                            <div className="snapOne">
+                            {/* <div className="snapOne">
                                 <Link to="/login" className="links guest">Login</Link>
-                                <Link ti="/my_profile" className="links customer">My Profile</Link>
-                            </div>
+                                <Link to="/my_profile" className="links customer">Log out</Link>
+                            </div> */}
                             
                         </div>
                     </div>
@@ -136,8 +168,8 @@ const Home = () => {
                                     singleItem.priceNegotiable,
                                     singleItem.used,
                                     singleItem.seller,
-                                    singleItem.additionalSpecs,
-                                    singleItem.keyInformation
+                                    singleItem.features,
+                                    singleItem.additionalInfo,
                                     )} />
                                 <span className="itemName"> {singleItem.name} </span>
                                 <span className="price">{singleItem.price}</span>
@@ -153,7 +185,7 @@ const Home = () => {
                     }
 
                     {/* from the API */}
-                    {
+                    {/* {
                         products.map((product, index) => (
                             <div className="imageDiv" key={index} >
                                 <img src={product.image} alt={product.title} />
@@ -161,7 +193,7 @@ const Home = () => {
                                 <span className="price">Ksh. {Math.round(product.price * 146.95)}</span>
                             </div>
                         ))
-                    }
+                    } */}
 
                 </div>
             </div>
