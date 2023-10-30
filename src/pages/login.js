@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import store from "./redux";
 
 
 const Login = () => {
@@ -42,13 +41,10 @@ const Login = () => {
                 console.log(user);
                 window.location.pathname = "/";
 
-                window.localStorage.setItem("Username", Username)
-
-                // manage that state
-                store.dispatch( {
-                    type: "LOGIN",
-                    payload: user,
-                } )
+                // set username after login...it should be less than 12 characters long
+                // it auto deleted when the user logs out
+                // meaning after a logout, a logged in session cannot be accessed through window.history()
+                window.localStorage.setItem("Username", Username.length > 12 ? Username.toLowerCase().slice(0, 12) + "..." : Username.toLowerCase())
 
             })
             .catch((error) => {
@@ -57,8 +53,18 @@ const Login = () => {
                 const errorMessage = error.message;
                 console.log(errorCode);
                 if (errorCode === "auth/invalid-login-credentials") {
+                    document.getElementById("invalidEmail").style.display = "";
                     document.getElementById("accountDoesNotExist").style.display = "block";
+                    document.getElementById("loginPassword").value = "";
+                    document.getElementById("loginPassword").focus();
                 }
+                if (errorCode === "auth/invalid-email") {
+                    document.getElementById("invalidEmail").style.display = "block";
+                    document.getElementById("accountDoesNotExist").style.display = "";
+                }
+                // if (errorCode === "auth/network-request-failed") {
+                    // this is a network issue
+                // }
                 // Display an error message to the user
             });
 
@@ -69,28 +75,40 @@ const Login = () => {
     return (
         <>
             <div className="loginModal" id="loginModal">
-                <form action="" method="post">
-                    <h2>Login</h2>
-                    <span id="accountDoesNotExist">Account does not exist.</span>
-                    <label htmlFor="email">
-                        <input type="text" name="email" id="loginEmail" min={2} required aria-required />
-                        <span className="labelText">Email</span>
-                    </label> <br />
-                    <label htmlFor="password">
-                        <input type="password" name="password" id="loginPassword" required />
-                        <span className="labelText">Password</span>
-                    </label>
 
-                    <div className="loginSubmissionDiv">
-                        <button type="button" onClick={handleLogin}>Submit</button>
-                        <button type="button" onClick={() => window.location.pathname = "/"}>Cancel</button>
+            <form className="card-container" action="" method="post">
+                <div className="circle1"></div>
+                <div className="circle2"></div>
+                <div className="container">
+                    <div className="log-card">
+                        <p className="heading">Welcome Back</p>
+
+                        <div className="input-group">
+                            <label htmlFor="loginEmail" className="text">Email</label>
+                            <input className="input" type="email" name="loginEmail" id="loginEmail" placeholder="For Ex: jd411@gmail.com" autoFocus />
+                            <span id="invalidEmail">Provide a valid email.</span>
+                            <span id="accountDoesNotExist">This account does not exist.</span>
+                            <label htmlFor="loginPassword" className="text">Password</label>
+                            <input className="input" type="password" name="loginPassword" id="loginPassword" placeholder="Enter Password" />
+                        </div>
+
+                        <div className="password-group">
+                            <div className="checkbox-group">
+                                <input type="checkbox" name="rememberMe" id="rememberMe" />
+                                <label className="label" htmlFor="rememberMe" >Remember Me</label>
+                            </div>
+                                <Link to="/forgot_password" className="forget-password">Forget Password</Link>
+                        </div>
+
+                        <button type="button" onClick={handleLogin} className="btn">Sign In</button>
+
+                        <p className="no-account">Don't Have an Account?<Link to="/signup" className="link"> Sign Up</Link></p>
                     </div>
+                </div>
+            </form>
 
-                    <p>
-                        <span>Don't have an account?</span><br />
-                        <Link to="/signup" className="noAcc">Create Account.</Link>
-                    </p>
-                </form>
+
+
             </div>
         </>
     )

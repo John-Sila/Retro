@@ -1,13 +1,14 @@
 :root{
-  --darkColor: rgb(32, 32, 32);
+  --darkColor: #202020;
   --darkColor2: rgb(59, 59, 59);
   --whiteColor: rgb(255, 255, 255);
   --whiteColor2: rgb(233, 233, 233);
   --redColor: rgb(228, 0, 0);
   --redColor2:rgb(217, 0, 0);
   --standardShadow: 2px 2px 10px 2px rgb(237, 237, 237);
-  --accentColor: rgb(71, 165, 37);
-  --anotherAccent: #FFD401;
+  --accentColor: #47a525;
+  --anotherAccent: #f37e10;
+  --blue: #2879f3;
   overflow-x: hidden;
 }
 
@@ -66,9 +67,9 @@
 
 
 .topNav .topLeft img{
-  width: 40px;
-  height: 40px;
   border-radius: 5px;
+  height: 40px;
+  aspect-ratio: 1500 / 935;
 }
 .topNav .topRight{
   display: flex;
@@ -92,7 +93,7 @@
   font-size: .875em;
   position: relative;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  border: 1px solid var(--accentColor);
+  border: 2px solid var(--anotherAccent);
   border-radius: 15px;
 }
 
@@ -118,8 +119,9 @@
   z-index: 1;
   width: max-content;
   background-color: #212121;
-  border: 2px solid var(--anotherAccent);
-  border-radius: 15px 0 0 15px;
+  /* outline: 2px var(--anotherAccent); */
+  border: none;
+  border-radius: 15px;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
 }
 
@@ -127,8 +129,9 @@
   color: var(--anotherAccent);
   padding: 8px 10px;
   text-decoration: none;
-  display: block;
+  display: list-item;
   transition: 0.1s;
+  border-radius: 10px;
 }
 
 .topNav .topRight .paste-button .dropdown-content .links:is(:hover, :focus, :active) {
@@ -136,9 +139,9 @@
   color: var(--darkColor);
 }
 
-.topNav .topRight .paste-button:is(:hover, :active) button {
+/* .topNav .topRight .paste-button:is(:hover, :active) button {
   border-radius: 15px 15px 0px 0px;
-}
+} */
 
 .topNav .topRight .paste-button:is(:hover, :active) .dropdown-content {
   display: block;
@@ -307,6 +310,9 @@
   left: 15%;
   color: rgb(163, 163, 163);
 }
+.checked{
+  color: var(--anotherAccent);
+}
 .homeContent .homeRight .imageDiv .stars span{
   cursor: pointer;
 }
@@ -323,6 +329,16 @@
   object-fit: cover;
   border-radius: 10px;
 }
+.homeContent .homeRight .adDiv1{
+  position: relative;
+  top: -600px;
+  width: 100%;
+  height: 50px;
+  background-color: red;
+}
+
+
+
 
 .zoomClass{
   -webkit-animation: zoom .3s;
@@ -356,7 +372,7 @@
   flex-direction: column;
   align-items: center;
   padding: 0;
-  z-index: 2;
+  z-index: 3;
 }
 
 .loadingModal .loading{
@@ -473,6 +489,203 @@
   }
 }
 
+
+
+
+/* cookie card */
+.cookieCard {
+  width: 300px;
+  height: max-content;
+  background-color: rgb(255, 255, 255);
+  border-radius: 8px;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 30px;
+  gap: 13px;
+  position: fixed;
+  bottom: 0px;
+  float: left;
+  left: calc(50vw - 150px);
+  box-sizing: border-box;
+  overflow: hidden;
+  box-shadow: 2px 2px 20px rgba(0, 0, 0, 0.062);
+  z-index: 2;
+}
+
+.cookieCard #cookieSvg {
+  width: 50px;
+}
+
+.cookieCard #cookieSvg g path {
+  fill: rgb(97, 81, 81);
+}
+
+.cookieCard .cookieHeading {
+  font-size: 1.2em;
+  font-weight: 800;
+  color: rgb(26, 26, 26);
+}
+
+.cookieCard .cookieDescription {
+  text-align: center;
+  font-size: 0.7em;
+  font-weight: 600;
+  color: rgb(99, 99, 99);
+}
+
+.cookieCard .cookieDescription a {
+  --tw-text-opacity: 1;
+  color: rgb(59 130 246);
+}
+
+.cookieCard .cookieDescription a:hover {
+  -webkit-text-decoration-line: underline;
+  text-decoration-line: underline;
+}
+
+.cookieCard .abolishCookieCard{
+  background-color: var(--whiteColor);
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 5%;
+}
+.cookieCard .abolishCookieCard span{
+  text-align: center;
+  font-size: 0.7em;
+  font-weight: 600;
+  color: rgb(99, 99, 99);
+}
+.clear {
+  clear: both;
+}
+
+.cookieCard .abolishCookieCard .checkBox {
+  display: block;
+  cursor: pointer;
+  width: 10px;
+  height: 10px;
+  border: 3px solid rgba(255, 255, 255, 0);
+  border-radius: 10px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0px 0px 0px 2px var(--darkColor);
+}
+
+.cookieCard .abolishCookieCard .checkBox div {
+  width: 60px;
+  height: 60px;
+  background-color: var(--darkColor);
+  top: -52px;
+  left: -52px;
+  position: absolute;
+  transform: rotateZ(45deg);
+  z-index: 100;
+}
+
+.cookieCard .abolishCookieCard .checkBox input[type=checkbox]:checked + div {
+  left: -10px;
+  top: -10px;
+}
+
+.cookieCard .abolishCookieCard .checkBox input[type=checkbox] {
+  position: absolute;
+  left: 50px;
+  visibility: hidden;
+}
+
+.cookieCard .abolishCookieCard .transition {
+  transition: 300ms ease;
+}
+
+
+
+
+
+
+.cookieCard .buttonContainer {
+  display: flex;
+  gap: 20px;
+  flex-direction: row;
+}
+
+.cookieCard .buttonContainer .acceptButton {
+  width: 80px;
+  height: 30px;
+  background-color: #7b57ff;
+  transition-duration: .2s;
+  border: none;
+  color: rgb(241, 241, 241);
+  cursor: pointer;
+  font-weight: 600;
+  border-radius: 20px;
+  box-shadow: 0 4px 6px -1px #977ef3, 0 2px 4px -1px #977ef3;
+  transition: all .6s ease;
+}
+
+.cookieCard .buttonContainer .declineButton {
+  width: 80px;
+  height: 30px;
+  background-color: #dadada;
+  transition-duration: .2s;
+  color: rgb(46, 46, 46);
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  border-radius: 20px;
+  box-shadow: 0 4px 6px -1px #bebdbd, 0 2px 4px -1px #bebdbd;
+  transition: all .6s ease;
+}
+
+.cookieCard .buttonContainer .declineButton:hover {
+  background-color: #ebebeb;
+  box-shadow: 0 10px 15px -3px #bebdbd, 0 4px 6px -2px #bebdbd;
+  transition-duration: .2s;
+}
+
+.cookieCard .buttonContainer .acceptButton:hover {
+  background-color: #9173ff;
+  box-shadow: 0 10px 15px -3px #977ef3, 0 4px 6px -2px #977ef3;
+  transition-duration: .2s;
+}
+
+.cookieZoom{
+  -webkit-animation: zoomIn .625s ease-in;
+  animation: zoomIn .625s ease-in;
+}
+@keyframes zoomIn {
+  0% {
+    transform: scale(0);
+  }
+  75% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@-webkit-keyframes zoomIn {
+  0% {
+    -webkit-transform: scale(0);
+  }
+  75% {
+    -webkit-transform: scale(1.2);
+  }
+  100% {
+    -webkit-transform: scale(1);
+  }
+}
+
+
+
+
+
+
 .loginModal{
   position: relative;
   height: max-content;
@@ -483,142 +696,186 @@
   overflow: auto;
   padding: 50px 0;
 }
-.loginModal form{
-  width: 350px;
-  box-shadow: var(--standardShadow);
+
+.loginModal .card-container {
   padding: 25px;
-  border-radius: 10px;
+  width: 350px;
+  height: 440px;
+  background: transparent;
+  position: relative;
+  top: 40px;
+  margin-bottom: 50px;
 }
-.loginModal form h2{
-  margin-bottom: 20px;
+
+.loginModal .container {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
 }
-.loginModal form > span{
-  color: red;
-  font-size: .8em;
-  font-weight: bold;
+
+.loginModal .circle1 {
+  height: 80px;
+  width: 80px;
+  border-radius: 50%;
+  background-color: #2879f3;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.loginModal .circle2 {
+  height: 80px;
+  width: 80px;
+  border-radius: 50%;
+  background-color: #f37e10;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
+
+.loginModal .log-card {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  position: absolute;
+  width: 300px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+  padding: 20px;
+}
+
+.loginModal .heading {
+  font-size: 28px;
+  font-weight: 800;
+}
+
+.loginModal .para {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.loginModal .text{
+  margin-top: 15px;
+  margin-bottom: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: lightslategray;
+  display: flex;
+  margin: 20px auto;
+}
+.loginModal #invalidEmail{
+  margin-bottom: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: rgb(255, 0, 0);
+  display: flex;
+  margin: auto;
   display: none;
 }
-.loginModal form label{
-  position: relative;
-  /* background-color: red; */
+.loginModal #accountDoesNotExist{
+  margin-bottom: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: rgb(255, 0, 0);
+  display: flex;
+  margin: auto;
+  display: none;
+}
+
+.loginModal .input-group {
+  margin-top: 10px;
+  margin-bottom: 4px;
+}
+
+.loginModal .input {
+  box-sizing: border-box;
+  margin-bottom: 5px;
   width: 100%;
-  margin: 35px 0;
-  display: grid;
-  place-items: center;
-  /* overflow-x: hidden; */
-}
-.loginModal form label input{
-  position: relative;
-  width: 300px;
-  padding: 15px;
   border: none;
-  border-bottom: 1px solid var(--darkColor);
-  outline: none;
-  background-color: transparent;
-}
-.loginModal form label .labelText{
-  position: absolute;
-  top: 8.75px;
-  left: 15px;
-  pointer-events: none;
-  transition: .25s ease-out;
-}
-.loginModal form label input:focus~.labelText,
-.loginModal form label input:valid~.labelText{
-  transform: translate(200px, -40px);
-  background-color: var(--darkColor);
-  color: var(--anotherAccent);
-  padding: 10px;
-  border-radius: 10px;
-}
-.loginModal form .loginSubmissionDiv{
   padding: 15px;
+  background-color: transparent;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+  border-radius: 8px;
+  font-weight: 600;
+  color: #2879f3;
+}
+
+.loginModal .input:hover {
+  color: #2879f3;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+}
+
+.loginModal .password-group {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 5px;
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  align-items: center;
 }
 
-.loginModal form .loginSubmissionDiv button[type="button"]:first-child {
-  position: relative;
-  height: 50px;
-  width: 150px;
-  color: var(--whiteColor);
-  font-size: 15px;
-  font-weight: 600;
-  letter-spacing: 2px;
-  background-color: var(--darkColor);
-  transition: all 0.5s;
-  border: none;
-  white-space: nowrap;
-  padding: auto 10px;
-  border-radius: 15px;
+.loginModal .checkbox-group {
+  color: black;
+  font-size: 14px;
+  font-weight: 500;
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+  align-items: center;
 }
 
-.loginModal form .loginSubmissionDiv button[type="button"]:first-child::before {
-  position: absolute;
-  content: '';
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(29, 255, 86, 0.281);
-  border-radius: 15px;
-  transition: all 0.3s;
-  z-index: 1;
+.loginModal .forget-password {
+  font-size: 14px;
+  font-weight: 500;
+  color: #2879f3;
+  text-decoration: none;
 }
 
-.loginModal form .loginSubmissionDiv button[type="button"]:first-child:hover::before {
-  opacity: 0;
-  transform: scale(0.7,0.7);
-}
-
-.loginModal form .loginSubmissionDiv button[type="button"]:first-child::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  transition: all 0.4s;
-  border: 1px solid rgba(29, 255, 86, 0.281);
-  border-radius: 5px;
-  transform: scale(1.5,1.5);
-  opacity: 0;
-  z-index: 1;
-}
-
-.loginModal form .loginSubmissionDiv button[type="button"]:first-child:hover::after {
-  opacity: 1;
-  transform: scale(1,1);
-}
-
-.loginModal form .loginSubmissionDiv button[type="button"]:first-child:hover{
-  color: var(--anotherAccent);
-}
-
-.loginModal form .loginSubmissionDiv button[type="button"]:last-child{
-  padding: 15px;
-  background-color: var(--redColor);
-  color: var(--darkColor);
-  border: none;
-  outline: none;
-  border-radius: 15px;
-}
-.loginModal form .loginSubmissionDiv button[type="button"]:last-child{
-  background-color: var(--redColor2);
-}
-.loginModal form p{
-  display: grid;
-  place-items: center;
-}
-.loginModal form p .noAcc{
+.loginModal .forget-password:hover {
   text-decoration: underline;
-  color: var(--darkColor);
-  cursor: pointer;
+  color: #f37e10;
 }
-.loginModal form p .noAcc:hover{
-  color: var(--accentColor);
+
+.loginModal .btn {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  padding: 8px 16px;
+  border: none;
+  background-color: #2879f3;
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+  border-radius: 8px;
 }
+
+.loginModal .btn:hover {
+  background-color: #0653c7;
+}
+
+.loginModal .no-account {
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.loginModal .link {
+  font-weight: 800;
+  color: #2879f3;
+}
+
+.loginModal .link:hover {
+  color: #f37e10;
+  text-decoration: underline;
+}
+
+
+
+
+
+
 .signup{
   position: relative;
   display: grid;
@@ -627,146 +884,168 @@
   box-sizing: border-box;
   place-items: center;
 }
-.signup form{
+
+.signup .form {
   display: flex;
-  flex-flow: column nowrap;
-  margin: 75px auto;
-  position: relative;
-  /* background-color: red; */
-  width: 300px;
-  box-shadow: var(--standardShadow);
+  flex-direction: column;
+  gap: 10px;
+  max-width: 350px;
+  background-color: var(--whiteColor);
   padding: 20px;
-  border-radius: 10px;
-}
-.signup form label{
-  margin: 25px 0;
+  border-radius: 20px;
   position: relative;
-}
-.signup form label span#checkEmail{
-  color: red;
-  font-size: .8em;
-  font-weight: bold;
-  display: none;
-}
-.signup form label #emailAlreadyInUse{
-  color: red;
-  font-size: .8em;
-  font-weight: bold;
-  display: none;
-}
-.signup form label input{
-  position: relative;
-  width: 90%;
-  padding: 15px;
-  border: none;
-  border-bottom: 1px solid var(--darkColor);
-  outline: none;
-  background-color: transparent;
-}
-.signup form label span.labelText{
-  position: absolute;
-  top: 10px;
-  left: 15px;
-  pointer-events: none;
-  transition: .25s all ease;
-}
-.signup form label input:focus~.labelText,
-.signup form label input:valid~.labelText{
-  transform: translateY(-42.5px);
-  background-color: var(--darkColor);
-  border-radius: 10px;
-  padding: 5px;
-  color: var(--anotherAccent);
-}
-.signup form label .eye{
-  float: right;
-  position: absolute;
-  transform: translate(-30px, 7.5px);
-  font-size: 25px;
-  cursor: pointer;
-  background-color: transparent;
-}
-.signup form label .eye:hover{
-  color: var(--anotherAccent);
-}
-.signup form .submissionButtons{
-  display: grid;
-  place-items: center;
-  margin: 25px auto;
+  box-sizing: border-box;
+  top: 40px;
 }
 
-
-
-.signup form .submissionButtons > button {
-  position: relative;
-  height: 50px;
-  width: 150px;
-  color: var(--whiteColor);
-  font-size: 15px;
+.signup .title {
+  font-size: 28px;
+  color: var(--blue);
   font-weight: 600;
-  letter-spacing: 2px;
-  background-color: var(--darkColor);
-  transition: all 0.5s;
+  letter-spacing: -1px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding-left: 30px;
+}
+
+.signup .title::before,.title::after {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  left: 0px;
+  background-color: var(--blue);
+}
+
+.signup .title::before {
+  width: 18px;
+  height: 18px;
+  background-color: var(--blue);
+}
+
+.signup .title::after {
+  width: 18px;
+  height: 18px;
+  animation: pulse 1s linear infinite;
+}
+
+.signup .message, .signin {
+  color: rgba(88, 87, 87, 0.822);
+  font-size: 14px;
+}
+
+.signup .signin {
+  text-align: center;
+}
+
+.signup .signin a {
+  color: var(--blue);
+}
+
+.signup .signin a:hover {
+  text-decoration: underline var(--blue);
+}
+
+.signup .flex {
+  display: flex;
+  width: 100%;
+  gap: 6px;
+}
+
+.signup .form label {
+  position: relative;
+}
+
+.signup .form label .input {
+  position: relative;
+  width: 100%;
+  padding: 15px;
+  outline: 0;
+  border: 1px solid rgba(105, 105, 105, 0.397);
+  border-radius: 10px;
+  margin: 10px 0;
+  box-sizing: border-box;
+}
+.signup .form label input[type="password"]{
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.signup .form label .input + span {
+  position: absolute;
+  left: 10px;
+  margin-top: 10px;
+  color: rgb(85, 85, 85);
+  font-size: 0.9em;
+  pointer-events: none;
+  transition: 0.3s ease;
+}
+
+.signup .form label .input:placeholder-shown + span {
+  top: 15px;
+  font-size: 0.9em;
+}
+
+.signup .form label .input:focus + span,.form label .input:valid + span {
+  top: -20px;
+  font-size: 0.85em;
+  font-weight: 600;
+  color: var(--anotherAccent);
+}
+
+.signup .form label .input:valid + span {
+  color: green;
+}
+.signup .form p a {
+  color: var(--anotherAccent);
+  text-decoration: none;
+}
+
+.signup form #emailAlreadyInUse,
+.signup form #checkEmail,
+.signup form #shortPassword,
+.signup form #passwordMismatch{
+  font-weight: bold;
+  color: red;
+  font-size: .875em;
+  display: none;
+  margin-bottom: 15px;
+}
+
+.signup .submit {
   border: none;
-  white-space: nowrap;
-  padding: auto 10px;
-  border-radius: 15px;
-}
-
-.signup form .submissionButtons > button::before {
-  position: absolute;
-  content: '';
-  top: 0;
-  left: 0;
+  outline: none;
+  background-color: var(--blue);
+  padding: 10px;
+  border-radius: 10px;
+  color: var(--whiteColor);
+  font-size: 16px;
+  transform: .3s ease;
   width: 100%;
-  height: 100%;
-  background-color: rgba(29, 255, 86, 0.281);
-  border-radius: 15px;
-  transition: all 0.3s;
-  z-index: 1;
+  /* left: 2.5%; */
+  position: relative;
 }
 
-.signup form .submissionButtons > button:hover::before {
-  opacity: 0;
-  transform: scale(0.7,0.7);
+.signup .submit:hover {
+  background-color: var(--anotherAccent);
+  cursor: pointer;
 }
 
-.signup form .submissionButtons > button::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  transition: all 0.4s;
-  border: 1px solid rgba(29, 255, 86, 0.281);
-  border-radius: 5px;
-  transform: scale(1.5,1.5);
-  opacity: 0;
-  z-index: 1;
-}
+@keyframes pulse {
+  from {
+    transform: scale(0.9);
+    opacity: 1;
+  }
 
-.signup form .submissionButtons > button:hover::after {
-  opacity: 1;
-  transform: scale(1,1);
+  to {
+    transform: scale(1.8);
+    opacity: 0;
+  }
 }
-.signup form .submissionButtons > button:hover{
-  color: var(--anotherAccent);
-}
-
-.signup form .signupFinale{
-  display: grid;
-  place-items: center;
-}
-.signup form .signupFinale .links{
-  color: var(--accentColor);
-}
-.signup form .signupFinale .links:hover{
-  color: var(--anotherAccent);
-}
-
-
-
 
 /* item div */
 .productDiv{
@@ -781,6 +1060,51 @@
   flex-direction: column;
   align-items: center;
 }
+
+.productDiv .firstDiv .scroll-snap-card .red {
+  background-color: #f43f5e;
+}
+
+.productDiv .firstDiv .scroll-snap-card .blue {
+  background-color: #3b82f6;
+}
+
+.productDiv .firstDiv .scroll-snap-card .green {
+  background-color: #22c55e;
+}
+
+.productDiv .firstDiv .scroll-snap-card {
+  height: 250px;
+  width: 80%;
+  scroll-snap-type: x mandatory; /* Change this to 'x' for horizontal scrolling */
+  overflow: auto;
+  /* overflow-y: hidden; */
+  white-space: nowrap; /* Prevent line breaks */
+  border-radius: 10px;
+  box-sizing: content-box;
+}
+
+.productDiv .firstDiv .scroll-snap-card .slide {
+  position: relative;
+  width: 100%; /* Adjust the width to match the card's width */
+  height: 100%; /* Keep the height at 100% to fill the container vertically */
+  scroll-snap-align: start;
+  display: inline-block; /* Make the cards inline for horizontal layout */
+  align-items: center;
+  justify-content: center;
+}
+
+.productDiv .firstDiv .scroll-snap-card .slide p {
+  font-size: 1em;
+  color: white;
+  font-weight: 700;
+}
+
+
+
+
+
+
 .productDiv .firstDiv img{
   max-width: 350px;
   position: relative;
@@ -966,7 +1290,14 @@
   transform: scale(.97);
   box-shadow: 0 0 5px 1px rgb(215, 215, 215);
 }
-
+.productDiv .secondDiv div:first-child #itemIsService{
+  position: relative;
+  display: none;
+  padding: 10px;
+}
+.productDiv .secondDiv div:first-child .linkToSeller{
+  text-decoration: none;
+}
 .productDiv .secondDiv div:first-child button.callSeller {
   position: relative;
   display: flex;
@@ -1194,7 +1525,7 @@
 
 
 @media screen and (max-width: 450px) {
-  .topNav .topLeft img{
+  .topNav .topLeft .companyName{
     display: none;
   }
   .topNav .topLeft .menuButton{

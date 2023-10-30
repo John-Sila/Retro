@@ -1,7 +1,56 @@
 import { Link } from "react-router-dom";
 import  { ImLocation2 } from "react-icons/im";
+import { useEffect, useState } from "react";
 
 const Product = () => {
+
+    const [mobileNumber, setMobileNumber] = useState("");
+    
+    useEffect( () => {
+        setPage();
+        // let there be no available pressLinks
+    }, [])
+    
+    const setPage = async => {
+        const storedProductParameterJSON = localStorage.getItem("productParameters");
+        const parsedParams = JSON.parse(storedProductParameterJSON);
+        if (parsedParams) {
+            document.getElementById("productImg").setAttribute("src", parsedParams.link);
+            document.getElementById("productSellerLocation").innerHTML = parsedParams.location;
+            document.getElementById("productItemName").innerHTML = parsedParams.name;
+            document.getElementById("productSellerName").innerHTML = parsedParams.seller;
+            document.getElementById("productPriceNegotiable").innerHTML = parsedParams.priceNegotiable === true ? " Negotiable" : " Not negotiable";
+            setMobileNumber(parsedParams.mobile);
+            document.getElementById("linkToSeller").setAttribute("href", `https://api.whatsapp.com/send?phone=${mobileNumber}+254717405109&text=Hello%2C%20this%20is%20concerning%20your%20product%20at%20JS%26S%2E`)
+            document.getElementById("productItemPrice").innerHTML = parsedParams.price;
+
+            var seller = parsedParams.seller;
+            seller = seller.split(" ");
+            const sellerAbbr = seller[0].split("")[0] + seller[1].split("")[0];
+            document.getElementById("productSellerName").innerHTML = sellerAbbr;
+
+            if (parsedParams.features.length !== 0) {
+                const featuresDiv = document.getElementById("features");
+                const unorderedList = featuresDiv.querySelectorAll("ul")[0];
+                for (let i = 0; i < parsedParams.features.length; i++) {
+                    const element = parsedParams.features[i];
+                    const li = document.createElement("li");
+                    li.textContent = element;
+                    unorderedList.appendChild( li );
+                }
+            }
+
+            if (parsedParams.category.toLowerCase() === "services") {
+                document.getElementById("productItemPrice").style.display = "none";
+                document.getElementById("itemIsService").style.display = "block";
+            }
+            localStorage.removeItem("productParameters");
+        }
+    }
+    
+    useEffect( () => {
+        setMobileNumber(mobileNumber);
+    }, [mobileNumber])
 
     return (
         <>
@@ -9,26 +58,37 @@ const Product = () => {
                 {/* <img src="" alt="" /> */}
                 <div className="firstDiv" id="firstDiv">
                     <h3 id="productItemName">Name</h3>
-                    <img id="productImg" src="https://images.pexels.com/photos/1008692/pexels-photo-1008692.jpeg?auto=compress&cs=tinysrgb&w=600" alt="" />
+                    <img id="productImg" src="" alt="" />
                     <div>
                         <p><ImLocation2 /><span id="productSellerLocation">Kilimani</span></p>
-                        <p id="productMoreImages">No more images for this product were provided.</p>
+                        <p id="productMoreImages">No more images for this item were provided.</p>
                     </div>
+
+                    <div class="scroll-snap-card">
+                        <div class="slide red">
+                            <p class="tip">Scroll On Me</p>
+                        </div>
+                        <div class="slide blue">
+                            <p class="tip">Scroll On Me</p>
+                        </div>
+                        <div class="slide green">
+                            <p class="tip">Scroll On Me</p>
+                        </div>
+                    </div>
+                    
                     <div id="features">
                         <h3>Features:</h3>
                         <ul>
-                            <li>It's a red car</li>
-                            <li>It's a red car</li>
-                            <li>It's a red car</li>
+                            {/* --- */}
                         </ul>
                     </div>
 
-                    <button class="cartBtn">
-                        <svg class="cart" fill="white" viewBox="0 0 576 512" height="1em" xmlns="http://www.w3.org/2000/svg">
+                    <button className="cartBtn">
+                        <svg className="cart" fill="white" viewBox="0 0 576 512" height="1em" xmlns="http://www.w3.org/2000/svg">
                             <path d="M0 24C0 10.7 10.7 0 24 0H69.5c22 0 41.5 12.8 50.6 32h411c26.3 0 45.5 25 38.6 50.4l-41 152.3c-8.5 31.4-37 53.3-69.5 53.3H170.7l5.4 28.5c2.2 11.3 12.1 19.5 23.6 19.5H488c13.3 0 24 10.7 24 24s-10.7 24-24 24H199.7c-34.6 0-64.3-24.6-70.7-58.5L77.4 54.5c-.7-3.8-4-6.5-7.9-6.5H24C10.7 48 0 37.3 0 24zM128 464a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm336-48a48 48 0 1 1 0 96 48 48 0 1 1 0-96z"></path>
                         </svg>
                         ADD TO CART
-                        <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 640 512" class="product">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 640 512" className="product">
                             <path d="M211.8 0c7.8 0 14.3 5.7 16.7 13.2C240.8 51.9 277.1 80 320 80s79.2-28.1 91.5-66.8C413.9 5.7 420.4 0 428.2 0h12.6c22.5 0 44.2 7.9 61.5 22.3L628.5 127.4c6.6 5.5 10.7 13.5 11.4 22.1s-2.1 17.1-7.8 23.6l-56 64c-11.4 13.1-31.2 14.6-44.6 3.5L480 197.7V448c0 35.3-28.7 64-64 64H224c-35.3 0-64-28.7-64-64V197.7l-51.5 42.9c-13.3 11.1-33.1 9.6-44.6-3.5l-56-64c-5.7-6.5-8.5-15-7.8-23.6s4.8-16.6 11.4-22.1L137.7 22.3C155 7.9 176.7 0 199.2 0h12.6z"></path>
                             </svg>
                     </button>
@@ -39,10 +99,12 @@ const Product = () => {
                 
                 <div className="secondDiv" id="secondDiv">
                     <div>
-                        <div id="sellerProfile" className="profile"><span>JS</span></div>
-                        <h3 id="productItemPrice">Ksh 90,000,<span id="productPriceNegotiable"> Negotiable</span></h3>
+                        <div id="sellerProfile" className="profile"><span id="productSellerName"></span></div>
+                        <h3 id="productItemPrice"><span id="productPriceNegotiable"></span></h3>
 
-                        <button type="button" className="callSeller"><span>Call <span id="productSellerName">John Sila</span></span></button>
+                        <p id="itemIsService">Since this is a service, the prices are not fixed and you might need to contact the service provider for prices.</p>
+
+                        <Link to="" target="_blank" id="linkToSeller" className="linkToSeller"> <button type="button" className="callSeller"><span>Call <span id="productSellerName">John Sila</span></span></button></Link>
                     </div>
                     <div>
                         <h3>Precaution</h3>

@@ -1,6 +1,6 @@
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import { FaTimes } from "react-icons/fa";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { windowOnclick } from "../external_functions";
 import moreGoods from "./moregoods";
 import { AiOutlineArrowLeft, AiOutlineArrowRight, AiFillStar } from "react-icons/ai";
@@ -8,45 +8,20 @@ import PanelImages from "./panelimages";
 
 const Home = () => {
 
-    const [products, setProducts] = useState([]);
-    const [loading, setLoading] = useState(true);
-
-    // AS AT NOW, THE API IS DOWN 12-10-2023
-    // useEffect(() => {
-    //     setLoading(true);
-    //     fetch('https://fakestoreapi.com/products')
-    //       .then((response) => response.json())
-    //       .then((json) => {
-    //         // console.log(json);
-    //         setProducts(json);
-    //         setLoading(false);
-    //       })
-    //   }, []);
-
-    // useEffect(() => {
-    //     // Conditionally render the loading div when 'loading' is true
-    //     document.getElementById("loadingModal").style.display = loading ? "flex" : "";
-
-    // }, [loading]);
-
-
     // when our page loads
     useEffect( () => {
-        
         // the slideshow
         const intervalId = setInterval(styleHugePanel, 10000);
         
         return () => clearInterval(intervalId);
     }, [])
 
+
     const styleHugePanel = () => {
-
         const hugePanel = document.querySelector("#hugePanel");
-
         // get a random index
         const index = Math.floor(Math.random() * (PanelImages.length - 1));
         hugePanel.style.backgroundImage = `url(${PanelImages[index].src})`
-
     }
 
     const engageSearch = () => {
@@ -66,40 +41,20 @@ const Home = () => {
 
     // image clicking
     const imageClicked = (link, srcSet, price, name, category, location, mobile, priceNegotiable, used, seller, features, additionalInfo) => {
-        setLoading(true);
-        console.log("Writing Document.");
-        // set image
-        const productDiv = document.getElementById("productDiv");
-        const productImg = document.getElementById("productImg");
-        if (productImg) {
-            productImg.setAttribute("src", link);
-        } else alert(false)
-
-        if (srcSet.length === 0) {
-            document.getElementById("productMoreImages").style.display = "none";
-        }
-        // alert(true)
-
-
-        document.getElementById("productItemPrice").innerHTML = price;
-        document.getElementById("productItemName").innerHTML = name;
-        document.getElementById("productSellerLocation").innerHTML = location;
-        document.getElementById("productPriceNegotiable").innerHTML = priceNegotiable === Boolean(true)? "Negotiable" : "Not negotiable";
-        document.getElementById("productSellerName").innerHTML = seller;
-        
-        // features
-        for (let i = 0; i < features.length; i++) {
-            const element = features[i];
-            const unorderedList = productDiv.querySelector("#firstDiv").querySelector("#features").getElementsByTagName("ul")[0];
-            const li = document.createElement("li");
-            const thisText = element;
-            li.textContent = thisText;
-            unorderedList.appendChild( li );
-        }
-
-        console.log("Product writing completed.");
-        setLoading(false);
+        const productParameters = { link, srcSet, price, name, category, location, mobile, priceNegotiable, used, seller, features, additionalInfo };
+        const stringifiedProductParameters = JSON.stringify(productParameters);
+        localStorage.setItem("productParameters", stringifiedProductParameters);
         window.location.pathname = "/this_item";
+    }
+
+    // rate product
+    const RateProduct = ( index, starNumber ) => {
+        const subjectDiv = document.getElementsByClassName("imageDiv")[index];
+        const stars = subjectDiv.querySelectorAll(".rateStars");
+        stars.forEach( star => {star.classList.remove("checked")}); // remove any current checkings
+        for (let i = 0; i < starNumber; i++) {
+            stars[i].classList.add("checked");
+        }
     }
 
     return (
@@ -151,7 +106,6 @@ const Home = () => {
                 </aside>
 
                 <div className="homeRight" id="homeRight">
-
                     {/* from our JSON */}
                     {
                         moreGoods.map((singleItem, index) => (
@@ -171,29 +125,21 @@ const Home = () => {
                                     singleItem.features,
                                     singleItem.additionalInfo,
                                     )} />
-                                <span className="itemName"> {singleItem.name} </span>
+                                <span className="itemName">{singleItem.name}</span>
                                 <span className="price">{singleItem.price}</span>
                                 <div className="stars">
-                                    <span><AiFillStar/></span>
-                                    <span><AiFillStar/></span>
-                                    <span><AiFillStar/></span>
-                                    <span><AiFillStar/></span>
-                                    <span><AiFillStar/></span>
+                                    <span className="rateStars" onClick={() => RateProduct(index, 1)}><AiFillStar/></span>
+                                    <span className="rateStars" onClick={() => RateProduct(index, 2)}><AiFillStar/></span>
+                                    <span className="rateStars" onClick={() => RateProduct(index, 3)}><AiFillStar/></span>
+                                    <span className="rateStars" onClick={() => RateProduct(index, 4)}><AiFillStar/></span>
+                                    <span className="rateStars" onClick={() => RateProduct(index, 5)}><AiFillStar/></span>
                                 </div>
                             </div>
                         ))
                     }
 
-                    {/* from the API */}
-                    {/* {
-                        products.map((product, index) => (
-                            <div className="imageDiv" key={index} >
-                                <img src={product.image} alt={product.title} />
-                                <span className="itemName"> {product.title} </span>
-                                <span className="price">Ksh. {Math.round(product.price * 146.95)}</span>
-                            </div>
-                        ))
-                    } */}
+                    {/* adsDivs */}
+                    {/* <div className="adDiv1">this</div> */}
 
                 </div>
             </div>

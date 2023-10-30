@@ -29,10 +29,9 @@ const SignUp = () => {
     const analytics = getAnalytics(app);
     const auth = getAuth();
 
-    const HandleSubmission = (userEmail, userPassword) => {
-
-        const email = userEmail // Get the email input value
-        const password = userPassword // Get the password input value
+    const HandleSubmission = () => {
+        const email = document.getElementById("signupEmail").value.toString(); // Get the email input value
+        const password = document.getElementById("signupPassword").value.toString(); // Get the password input value
         
         createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
@@ -41,8 +40,7 @@ const SignUp = () => {
             console.log(user);
             window.location.pathname = "/login";
             // Perform further front-end operations (e.g., redirect, show success message)
-            })
-            .catch((error) => {
+        }).catch((error) => {
             // Handle registration errors (e.g., invalid password, weak password, etc.)
             const errorCode = error.code;
             const errorMessage = error.message;
@@ -50,67 +48,77 @@ const SignUp = () => {
                 console.log("This email already exists.");
                 document.getElementById("emailAlreadyInUse").style.display = "block";
                 document.getElementById("checkEmail").style.display = "";
+                document.getElementById("shortPassword").style.display = "";
+                document.getElementById("passwordMismatch").style.display = "";
+                document.getElementById("signupEmail").focus();
             }
-            });
-        }
-
-
-
-        const checkCred = () => {
-            try {
-                const email = document.getElementById("email").value.toString(); // Get the email input value
-                const password = document.getElementById("password").value.toString(); // Get the password input value
-                
-                const atIndex = email.lastIndexOf("@");
-                const dotIndex = email.lastIndexOf(".");
-                const arrangement = email.lastIndexOf(".") > email.toString().lastIndexOf("@");
-                const Ats = () => { // Get the email input value
-                    return email.lastIndexOf("@") === email.indexOf("@");
+            if (errorCode === "auth/invalid-email"){
+                document.getElementById("checkEmail").style.display = "block";
+                document.getElementById("emailAlreadyInUse").style.display = "";
+                document.getElementById("shortPassword").style.display = "";
+                document.getElementById("passwordMismatch").style.display = "";
+                document.getElementById("signupEmail").focus();
                 }
+        });
+    }
     
-                if (atIndex === -1 || dotIndex === -1 || !arrangement || !Ats()) {
-                    document.getElementById("checkEmail").style.display = "block";
-                    document.getElementById("email").focus();
-                    document.getElementById("emailAlreadyInUse").style.display = "";
-                    return false;
-                }
-    
-                // submit
-                HandleSubmission(email, password);
-
-            } catch (error) {
-                console.log("An error occured trying to parse form.");
-            }
-        }
-
-
+    const checkPassword = () => {
+        // this determines whether we will submit the document or not.
+        const password = document.getElementById("signupPassword").value.toString(); // Get the password input value
+        const confirmationPassword = document.getElementById("confirmSignupPassword").value.toString(); // Get the password input value
+        if (password.length < 7) {
+            document.getElementById("shortPassword").style.display = "block";
+            document.getElementById("checkEmail").style.display = "";
+            document.getElementById("emailAlreadyInUse").style.display = "";
+            document.getElementById("passwordMismatch").style.display = "";
+            document.getElementById("signupPassword").focus();
+            return false;
+        } else if (password !== confirmationPassword) {
+            document.getElementById("passwordMismatch").style.display = "block";
+            document.getElementById("shortPassword").style.display = "";
+            document.getElementById("checkEmail").style.display = "";
+            document.getElementById("emailAlreadyInUse").style.display = "";
+            document.getElementById("confirmSignupPassword").focus();
+            return false;
+        } else HandleSubmission();
+    }
 
     return (
 
         <>
             <div className="signup" id="signup">
-                <form action="#" method="post">
-                    <h2>Sign up</h2>
-                    <label htmlFor="email">
-                        <input type="text" name="email" id="email" required aria-required />
-                        <span className="labelText">Email</span>
-                        <span id="emailAlreadyInUse">Email already exists.</span>
-                        <span id="checkEmail">Provide a valid Email.</span>
+
+                <form className="form" action="" method="post">
+                    <p className="title">Register</p>
+                    <p className="message">Create account and become a member of <b>JS&S</b>.</p>
+                        <div className="flex"></div>  
+
+                    <label>
+                        <input className="input" type="text" name="signupEmail" id="signupEmail" placeholder="" required aria-required autoFocus />
+                        <span>Email</span>
+                        <span id="emailAlreadyInUse">This email is already in use.</span>
+                        <span id="checkEmail">Email is invalid.</span>
+                    </label> 
+                        
+                    <label>
+                        <input className="input" type="password" name="signupPassword" id="signupPassword" placeholder="" required />
+                        <span>Password</span>
+                        <span id="shortPassword">Lengthen password to 7 characters or more.</span>
                     </label>
-                    <label htmlFor="password">
-                        <input type="password" name="password" id="password" required aria-required />
-                        <span className="eye"><AiFillEye /></span>
-                        <span className="labelText">Password</span>
+                    <label>
+                        <input className="input" type="password" name="confirmSignupPassword" id="confirmSignupPassword" placeholder="" required />
+                        <span>Confirm password</span>
+                        <span id="passwordMismatch">Passwords don't match.</span>
                     </label>
-                    <div className="submissionButtons">
-                        <button type="button" onClick={checkCred}>Create Account</button>
-                    </div>
-                    <div className="signupFinale">
-                    <hr />
-                        <span>Already have an account? <Link to="/login" className="links">Login</Link></span><br />
-                        <span>Go to <Link to="/" className="links">homepage.</Link></span>
-                    </div>
+                    <button type="button" className="submit" onClick={checkPassword}>Submit</button>
+                    <p className="signin">Already have an acount? <Link to="/login">Login.</Link> </p>
                 </form>
+
+
+
+
+
+
             </div>
         </>
     )

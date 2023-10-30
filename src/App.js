@@ -14,9 +14,9 @@ import { useEffect } from "react";
 function App() {
 
   useEffect( () => {
-    Post();
-
+    
     // check is the user is logged in
+    // AUTO LOG THEM IN --- if possible
     const parameterType = typeof(localStorage.getItem("Username"));
     if (parameterType === "string") {
       const customer = document.getElementsByClassName("customer");
@@ -32,6 +32,16 @@ function App() {
         
       }
       document.getElementById("userName").innerHTML = localStorage.getItem("Username");
+
+      // set cookies...these will only be set when we know the user's identity
+      // if user is logged and has not accepted cookies
+      const cookiePresence = localStorage.getItem("cookiesPresent");
+      if (cookiePresence === null){
+          setTimeout(() => {
+            document.getElementById("cookieCard").style.display = "flex";
+          }, 3000);
+        }
+
     } else {
       // this is of type object
       const customer = document.getElementsByClassName("customer");
@@ -47,6 +57,8 @@ function App() {
         
       }
     }
+
+
   })
 
 

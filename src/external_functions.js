@@ -1,3 +1,4 @@
+// an onclick event that is only active when the aside menu is on...in mobile devices, hide it
 export function windowOnclick(event) {
     const menuModal = document.getElementsByTagName("aside")[0];
     if (menuModal) {
@@ -13,4 +14,23 @@ export function windowOnclick(event) {
         return;
     }
     return false;
+}
+
+// create cookies
+export function createCookie(name, value, daysToExpire) {
+    let cookie = name + '=' + value;
+  
+    if (daysToExpire) {
+      const expirationDate = new Date();
+      expirationDate.setDate(expirationDate.getDate() + daysToExpire);
+      cookie += '; expires=' + expirationDate.toUTCString();
+    }
+  
+    document.cookie = cookie;
+  }
+
+// delete cookies
+export function deleteCookie(name) {
+const expirationDate = new Date('Thu, 01 Jan 1970 00:00:00 UTC');
+document.cookie = name + '=; expires=' + expirationDate.toUTCString();
 }
