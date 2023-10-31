@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
+import { getDatabase, get, ref, query, equalTo } from "firebase/database";
 
 
 const Login = () => {
@@ -22,6 +23,8 @@ const Login = () => {
     const app = initializeApp(firebaseConfig);
     const analytics = getAnalytics(app);
     const auth = getAuth();
+    const db = getDatabase(app);
+    const dbReference = ref(db)
 
 
 
@@ -31,15 +34,20 @@ const Login = () => {
         const email = document.getElementById("loginEmail").value;
         const password = document.getElementById("loginPassword").value;
 
-        const Username = email.toString().slice(0, email.indexOf("@"))
+        const Username = email.toString().slice(0, email.indexOf("@"));
     
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
+
+                // return
+
                 // User successfully logged in
                 const user = userCredential.user;
-                // Perform further front-end operations (e.g., redirect, show a success message)
                 console.log(user);
+                
+                // go home
                 window.location.pathname = "/";
+
 
                 // set username after login...it should be less than 12 characters long
                 // it auto deleted when the user logs out

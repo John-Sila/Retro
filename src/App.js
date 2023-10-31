@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import './App.css';
-import Post from "./pages/dbdata";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 // pages
 import Layout from "./pages/layout";

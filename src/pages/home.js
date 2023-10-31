@@ -1,17 +1,66 @@
 // import { Link } from "react-router-dom";
 import { FaTimes } from "react-icons/fa";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { windowOnclick } from "../external_functions";
 import moreGoods from "./moregoods";
 import { AiOutlineArrowLeft, AiOutlineArrowRight, AiFillStar } from "react-icons/ai";
 import PanelImages from "./panelimages";
 
+// firebase
+import { initializeApp } from "firebase/app";
+import { getDatabase, get, ref } from "firebase/database";
+
 const Home = () => {
+
+    const [loading, setLoading] = useState(false);
+
+    const [products, setProducts] = useState([]);
+    const getProducts = () => {
+        const auth = {
+            apiKey: "AIzaSyB-opll1P-81cOoc7oQUQ7G5QUSK5FhfrA",
+            authDomain: "retro-bf312.firebaseapp.com",
+            databaseURL: "https://retro-bf312-default-rtdb.firebaseio.com",
+            projectId: "retro-bf312",
+            storageBucket: "retro-bf312.appspot.com",
+            messagingSenderId: "319056909364",
+            appId: "1:319056909364:web:f2215ade4b825b8fe56661",
+            measurementId: "G-NT5D2WTQ8T" 
+        }
+
+        const app = initializeApp(auth);
+        const db = getDatabase(app);
+        const reference = ref(db, "Products");
+        get(reference).then((snapShot) => {
+            const data = snapShot.val();
+            // console.log(data[1].link);
+            setProducts(data);
+            setLoading(false);
+        }).catch((err) => {
+            console.log("An error occurred: ", err);
+        });
+    }
+
+
+
+
+    useEffect( () => {
+        if (loading) {
+            document.getElementById("loadingModal").style.display = "flex";
+        } else {
+            document.getElementById("loadingModal").style.display = "";
+        }
+    }, [loading])
+
+
+
+
 
     // when our page loads
     useEffect( () => {
         // the slideshow
         const intervalId = setInterval(styleHugePanel, 10000);
+        getProducts();
+        setLoading(true);
         
         return () => clearInterval(intervalId);
     }, [])
@@ -108,7 +157,7 @@ const Home = () => {
                 <div className="homeRight" id="homeRight">
                     {/* from our JSON */}
                     {
-                        moreGoods.map((singleItem, index) => (
+                        products.map((singleItem, index) => (
                             <div className="imageDiv internal" key={index} >
 
                                 <img src={singleItem.link} alt={singleItem.name} onClick={() => imageClicked(

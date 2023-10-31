@@ -5,6 +5,7 @@ import { AiFillEye } from "react-icons/ai";
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth, createUserWithEmailAndPassword, fetchSignInMethodsForEmail } from "firebase/auth";
+import { set, get, getDatabase, ref } from "firebase/database";
 
 const SignUp = () => {
 
@@ -28,11 +29,42 @@ const SignUp = () => {
     const app = initializeApp(firebaseConfig);
     const analytics = getAnalytics(app);
     const auth = getAuth();
-
+    const db = getDatabase(app);
+    const dbReference = ref(db, "Customers")
+    
     const HandleSubmission = () => {
+
         const email = document.getElementById("signupEmail").value.toString(); // Get the email input value
         const password = document.getElementById("signupPassword").value.toString(); // Get the password input value
+        const fullName = document.getElementById("fullName").value.toString().trim();
+
+        const JSONdata = {
+            stars: {
+                unrealIdentity: 0,
+            },
+            basket: 0,
+            email: email,
+            password: password,
+            userName: fullName,
+            trimmedEmail: email.slice(0, email.indexOf("@")),
+        }
         
+        // add their details to databse
+        // get to know how far the database is
+        get(dbReference)
+        .then( snapShot => {
+            const data = snapShot.val();
+            const dataLength = Object.keys(data).length + 1;
+            // get another reference
+            const referenceTwo = ref(db, "Customers/" + dataLength)
+            set(referenceTwo, JSONdata)
+            .then(() => {
+                console.log("Information written successfully");
+            }).catch((err) => {
+                console.log("writingDatabaseError()");
+            });
+        }).catch( err => console.log("getInfoFromDatabaseError()"))
+
         createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
             // User account created successfully
@@ -66,7 +98,18 @@ const SignUp = () => {
         // this determines whether we will submit the document or not.
         const password = document.getElementById("signupPassword").value.toString(); // Get the password input value
         const confirmationPassword = document.getElementById("confirmSignupPassword").value.toString(); // Get the password input value
-        if (password.length < 7) {
+        const fullName = document.getElementById("fullName").value.toString().trim();
+        const User = fullName.split(" ");
+        if (User.length !== 2) {
+            document.getElementById("badName").style.display = "block"
+            document.getElementById("shortPassword").style.display = "";
+            document.getElementById("checkEmail").style.display = "";
+            document.getElementById("emailAlreadyInUse").style.display = "";
+            document.getElementById("passwordMismatch").style.display = "";
+            document.getElementById("fullName").focus();
+            return false;
+        } else if (password.length < 7) {
+            document.getElementById("badName").style.display = ""
             document.getElementById("shortPassword").style.display = "block";
             document.getElementById("checkEmail").style.display = "";
             document.getElementById("emailAlreadyInUse").style.display = "";
@@ -74,13 +117,14 @@ const SignUp = () => {
             document.getElementById("signupPassword").focus();
             return false;
         } else if (password !== confirmationPassword) {
+            document.getElementById("badName").style.display = ""
             document.getElementById("passwordMismatch").style.display = "block";
             document.getElementById("shortPassword").style.display = "";
             document.getElementById("checkEmail").style.display = "";
             document.getElementById("emailAlreadyInUse").style.display = "";
             document.getElementById("confirmSignupPassword").focus();
             return false;
-        } else HandleSubmission();
+        } else HandleSubmission(User);
     }
 
     return (
@@ -92,9 +136,14 @@ const SignUp = () => {
                     <p className="title">Register</p>
                     <p className="message">Create account and become a member of <b>JS&S</b>.</p>
                         <div className="flex"></div>  
+                    <label>
+                        <input className="input" type="text" name="fullName" id="fullName" placeholder="" required aria-required autoFocus />
+                        <span>Full Name</span>
+                        <span id="badName">Please provide 2 names.</span>
+                    </label>
 
                     <label>
-                        <input className="input" type="text" name="signupEmail" id="signupEmail" placeholder="" required aria-required autoFocus />
+                        <input className="input" type="text" name="signupEmail" id="signupEmail" placeholder="" required aria-required />
                         <span>Email</span>
                         <span id="emailAlreadyInUse">This email is already in use.</span>
                         <span id="checkEmail">Email is invalid.</span>

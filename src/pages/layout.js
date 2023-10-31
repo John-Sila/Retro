@@ -6,6 +6,7 @@ import { Outlet, Link } from "react-router-dom";
 import logo from "../logo/js&s.png";
 import { RiMenu4Line, RiAccountCircleFill } from "react-icons/ri";
 import { windowOnclick, createCookie, deleteCookie } from "../external_functions";
+import Post from "./dbdata";
 
 const Layout = () => {
 
@@ -47,14 +48,15 @@ const Layout = () => {
         .then(() => {
             // Sign-out successful.
             console.log("User signed out");
+            window.location.pathname = "/";
         })
         .catch((error) => {
             // An error happened.
             console.error("Error signing out:", error);
+            alert("Couldn't log you out at the moment. Please try again in a few minutes.")
         });
 
         // go home
-        window.location.pathname = "/";
 
     }
 
@@ -66,12 +68,14 @@ const Layout = () => {
         document.getElementById("cookieCard").style.display = "";
     }
 
+    // delete cookies
     const deleteCookies = () => {
         deleteCookie("User:");
         localStorage.removeItem("cookiesPresent");
         window.location.reload();
     }
 
+    // when a user declines acceptinf cookies
     const DeclineCookie = () => {
         const checkbox = document.getElementById("ch1");
         if (checkbox.checked === false){
@@ -82,14 +86,21 @@ const Layout = () => {
         }
     }
 
+    // delete user account
+    const DeleteAccount = () => {}
+
     return (
         <>
+            {/* the topNav */}
             <nav className="topNav" id="topNav">
                 <div className="topLeft">
                     <button type="button" className="menuButton" onClick={bringMenu}><RiMenu4Line /></button>
                     <Link to="/"><img src={ logo } alt="Company Logo" className="companyLogo" id="companyLogo" /></Link>
                     <Link to="/" className="links companyName">JS&Siblings</Link>
                 </div>
+
+
+                <button type="button" onClick={Post}>Post</button>
                 
                 <div className="topRight">
                     <Link to="/login" className="links guest login"><RiAccountCircleFill /></Link>
@@ -100,6 +111,7 @@ const Layout = () => {
                             <Link className="links" id="top" href="#">About JS&Siblings</Link>
                             <Link className="links" id="middle" href="#" onClick={deleteCookies}>Delete cookies</Link>
                             <Link className="links" id="bottom" href="#" onClick={LogOut}>Log out</Link>
+                            <Link className="links" id="bottom" href="#" onClick={DeleteAccount}>Delete account</Link>
                         </div>
                     </div>
 
@@ -107,6 +119,7 @@ const Layout = () => {
             </nav>
 
 
+            {/* loading state */}
             <div className="loadingModal" id="loadingModal">
                 <div className="loading" id="loading">
                     <div className="dot-spinner">

@@ -19,7 +19,7 @@ const Product = () => {
             document.getElementById("productSellerLocation").innerHTML = parsedParams.location;
             document.getElementById("productItemName").innerHTML = parsedParams.name;
             document.getElementById("productSellerName").innerHTML = parsedParams.seller;
-            document.getElementById("productPriceNegotiable").innerHTML = parsedParams.priceNegotiable === true ? " Negotiable" : " Not negotiable";
+            // document.getElementById("productPriceNegotiable").innerHTML = parsedParams.priceNegotiable === true ? " Negotiable" : " Not negotiable";
             setMobileNumber(parsedParams.mobile);
             document.getElementById("linkToSeller").setAttribute("href", `https://api.whatsapp.com/send?phone=${mobileNumber}+254717405109&text=Hello%2C%20this%20is%20concerning%20your%20product%20at%20JS%26S%2E`)
             document.getElementById("productItemPrice").innerHTML = parsedParams.price;
@@ -64,15 +64,15 @@ const Product = () => {
                         <p id="productMoreImages">No more images for this item were provided.</p>
                     </div>
 
-                    <div class="scroll-snap-card">
-                        <div class="slide red">
-                            <p class="tip">Scroll On Me</p>
+                    <div className="scroll-snap-card">
+                        <div className="slide red">
+                            <p className="tip">Scroll On Me</p>
                         </div>
-                        <div class="slide blue">
-                            <p class="tip">Scroll On Me</p>
+                        <div className="slide blue">
+                            <p className="tip">Scroll On Me</p>
                         </div>
-                        <div class="slide green">
-                            <p class="tip">Scroll On Me</p>
+                        <div className="slide green">
+                            <p className="tip">Scroll On Me</p>
                         </div>
                     </div>
                     
@@ -100,7 +100,7 @@ const Product = () => {
                 <div className="secondDiv" id="secondDiv">
                     <div>
                         <div id="sellerProfile" className="profile"><span id="productSellerName"></span></div>
-                        <h3 id="productItemPrice"><span id="productPriceNegotiable"></span></h3>
+                        <h3 id="productItemPrice"><span id="productPriceNegotiable">Yes</span></h3>
 
                         <p id="itemIsService">Since this is a service, the prices are not fixed and you might need to contact the service provider for prices.</p>
 

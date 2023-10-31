@@ -69,7 +69,8 @@
 .topNav .topLeft img{
   border-radius: 5px;
   height: 40px;
-  aspect-ratio: 1500 / 935;
+  /* aspect-ratio: 1500 / 935; */
+  aspect-ratio: 1242 / 644;
 }
 .topNav .topRight{
   display: flex;
@@ -265,11 +266,12 @@
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
+  margin-bottom: 100px;
 }
 
 .homeContent .homeRight .imageDiv{
   position: relative;
-  width: 20%;
+  width: 15em;
   overflow: hidden;
   display: grid;
   height: max-content;
@@ -305,7 +307,7 @@
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
-  margin-top: 10%;
+  margin-top: 0;
   width: 70%;
   left: 15%;
   color: rgb(163, 163, 163);
@@ -325,9 +327,11 @@
   position: relative;
   width: 100%;
   margin-bottom: 10px;
-  aspect-ratio: 3/4;
+  aspect-ratio: 4/3;
   object-fit: cover;
   border-radius: 10px;
+  cursor: pointer;
+  height: max-content;
 }
 .homeContent .homeRight .adDiv1{
   position: relative;
@@ -766,6 +770,8 @@
   color: lightslategray;
   display: flex;
   margin: 20px auto;
+  justify-content: left;
+  width: 100%;
 }
 .loginModal #invalidEmail{
   margin-bottom: 0;
@@ -896,6 +902,7 @@
   position: relative;
   box-sizing: border-box;
   top: 40px;
+  margin-bottom: 100px;
 }
 
 .signup .title {
@@ -978,7 +985,7 @@
 .signup .form label .input + span {
   position: absolute;
   left: 10px;
-  margin-top: 10px;
+  margin-top: 8.625px;
   color: rgb(85, 85, 85);
   font-size: 0.9em;
   pointer-events: none;
@@ -1008,6 +1015,7 @@
 .signup form #emailAlreadyInUse,
 .signup form #checkEmail,
 .signup form #shortPassword,
+.signup form #badName,
 .signup form #passwordMismatch{
   font-weight: bold;
   color: red;
@@ -1484,27 +1492,6 @@
 }
 
 @media screen and (max-width: 620px){
-  .imageDivModal .imageDivModalInner{
-    outline: 3px groove var(--darkColor);
-    width: 75%;
-    padding: .25em;
-  }
-  .imageDivModal .imageDivModalInner .modalleft{
-    display: none;
-  }
-  .imageDivModal .imageDivModalInner .modalright{
-    background-image: url(https://images.pexels.com/photos/1612846/pexels-photo-1612846.jpeg?auto=compress&cs=tinysrgb&w=600);
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-color: rgba(32, 32, 32, 0.733);
-  }
-  .imageDivModal .imageDivModalInner .modalright #itemName{
-   display: none;
- }
- .imageDivModal .imageDivModalInner .modalright #itemPrice{
-  display: none;
- }
 }
 
 @media screen and (max-width: 570px){
@@ -1565,9 +1552,6 @@
     text-decoration: none;
     margin: 12.5%;
   }
-  .loginModal form .loginSubmissionDiv button[type="button"]:last-child{
-    display: none;
-  }
 
 
   .productDiv{
@@ -1588,35 +1572,6 @@
 }
 
 @media screen and (max-width: 413px) {
-  .loginModal, .signup{
-    position: absolute;
-    width: 100vw;
-  }
-  .loginModal form, .signup form{
-    position: relative;
-    width: 70vw;
-  }
-  .loginModal form label input{
-    position: relative;
-    width: 100%;
-  }
-  .loginModal form label span{
-    left: -10px;
-  }
-  .loginModal form label{
-    position: relative;
-    width: 90%;
-  }
-  .loginModal form label input:focus~.labelText,
-  .loginModal form label input:valid~.labelText{
-    transform: translateY(-40px);
-    padding: 5px;
-  }
-
-  .signup form label .eye{
-    transform: translate(60vw, -37.5px);
-  }
-
 }
 
 @media screen and (max-width: 380px) {
