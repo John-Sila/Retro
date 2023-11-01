@@ -5,11 +5,17 @@ import { useEffect, useState } from "react";
 const Product = () => {
 
     const [mobileNumber, setMobileNumber] = useState("");
+    const [features, setFeatures] = useState([]);
+    const [srcset, setSrcset] = useState([]);
     
     useEffect( () => {
         setPage();
         // let there be no available pressLinks
     }, [])
+
+    useEffect( () => {
+        setMobileNumber(mobileNumber);
+    }, [mobileNumber])
     
     const setPage = async => {
         const storedProductParameterJSON = localStorage.getItem("productParameters");
@@ -19,10 +25,15 @@ const Product = () => {
             document.getElementById("productSellerLocation").innerHTML = parsedParams.location;
             document.getElementById("productItemName").innerHTML = parsedParams.name;
             document.getElementById("productSellerName").innerHTML = parsedParams.seller;
-            // document.getElementById("productPriceNegotiable").innerHTML = parsedParams.priceNegotiable === true ? " Negotiable" : " Not negotiable";
+            document.getElementById("productItemPrice").innerHTML = parsedParams.price;
             setMobileNumber(parsedParams.mobile);
             document.getElementById("linkToSeller").setAttribute("href", `https://api.whatsapp.com/send?phone=${mobileNumber}+254717405109&text=Hello%2C%20this%20is%20concerning%20your%20product%20at%20JS%26S%2E`)
-            document.getElementById("productItemPrice").innerHTML = parsedParams.price;
+
+            if (parsedParams.srcSet.length > 0) {
+                document.getElementById("productMoreImages").style.display = "none"; // srcSet
+                setSrcset(parsedParams.srcSet)
+            }
+            // document.getElementById("productPriceNegotiable").innerHTML = parsedParams.priceNegotiable === true ? " Negotiable" : " Not negotiable";
 
             var seller = parsedParams.seller;
             seller = seller.split(" ");
@@ -30,27 +41,18 @@ const Product = () => {
             document.getElementById("productSellerName").innerHTML = sellerAbbr;
 
             if (parsedParams.features.length !== 0) {
-                const featuresDiv = document.getElementById("features");
-                const unorderedList = featuresDiv.querySelectorAll("ul")[0];
-                for (let i = 0; i < parsedParams.features.length; i++) {
-                    const element = parsedParams.features[i];
-                    const li = document.createElement("li");
-                    li.textContent = element;
-                    unorderedList.appendChild( li );
-                }
+                setFeatures(parsedParams.features)
             }
 
+            // is this product a service or not?
             if (parsedParams.category.toLowerCase() === "services") {
                 document.getElementById("productItemPrice").style.display = "none";
                 document.getElementById("itemIsService").style.display = "block";
             }
-            localStorage.removeItem("productParameters");
+            // localStorage.removeItem("productParameters");
         }
     }
     
-    useEffect( () => {
-        setMobileNumber(mobileNumber);
-    }, [mobileNumber])
 
     return (
         <>
@@ -64,22 +66,23 @@ const Product = () => {
                         <p id="productMoreImages">No more images for this item were provided.</p>
                     </div>
 
-                    <div className="scroll-snap-card">
-                        <div className="slide red">
-                            <p className="tip">Scroll On Me</p>
-                        </div>
-                        <div className="slide blue">
-                            <p className="tip">Scroll On Me</p>
-                        </div>
-                        <div className="slide green">
-                            <p className="tip">Scroll On Me</p>
-                        </div>
+                    <div className="additionalImages" id="additionalImages">
+                        {
+                            srcset.map( (imgurl, index) => (
+                                <img src={imgurl} key={index} alt="img.png" />
+                            ))
+                        }
                     </div>
                     
                     <div id="features">
                         <h3>Features:</h3>
                         <ul>
                             {/* --- */}
+                            {
+                                features.map( (feature, index) => (
+                                    <li key={index}>{feature}</li>
+                                ))
+                            }
                         </ul>
                     </div>
 

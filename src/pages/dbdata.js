@@ -1,39 +1,37 @@
 import { initializeApp } from "firebase/app";
-import { getDatabase, ref, query, equalTo, get } from "firebase/database";
-import moreGoods from "./moregoods";
+import { getDatabase, ref, query, orderByChild, equalTo, limitToFirst, onValue, get } from "firebase/database";
+import { firebaseConfigurationDetails } from "../external_functions";
 
 export default function Post() {
-  const firebaseConfigurationKeys = {
-    apiKey: "AIzaSyB-opll1P-81cOoc7oQUQ7G5QUSK5FhfrA",
-    authDomain: "retro-bf312.firebaseapp.com",
-    databaseURL: "https://retro-bf312-default-rtdb.firebaseio.com",
-    projectId: "retro-bf312",
-    storageBucket: "retro-bf312.appspot.com",
-    messagingSenderId: "319056909364",
-    appId: "1:319056909364:web:f2215ade4b825b8fe56661",
-    measurementId: "G-NT5D2WTQ8T"
-  };
 
-  const app = initializeApp(firebaseConfigurationKeys);
+  const app = initializeApp(firebaseConfigurationDetails);
   const db = getDatabase(app);
 
-  // query
-  const Query = query(ref(db, "Customers"), equalTo("trimmedEmail", "jsila3000"));
-  get(Query)
-    .then((snapshot) => {
-      const data = snapshot.val();
-      if (data) {
-        const userKeys = Object.keys(data);
-        const userKey = userKeys[0];
-        const user = data[userKey];
-        const Username = user.userName; // Assuming you store the name under the "name" property
-        alert(Username);
-      } else {
-        alert("No user found with that email.");
-      }
-    })
-    .catch((err) => {
-      alert("Error getting data.");
+  // Reference to "Customers" node
+  const reference = ref(db, "Customers");
+
+  // Query for users with trimmedEmail equal to "jsila3000"
+  const theQuery = query(
+    reference,
+    orderByChild("trimmedEmail"),
+    equalTo("jsila3000"),
+    limitToFirst(1)
+  );
+
+  // Attach a listener to the query
+  onValue(theQuery, (snapshot) => {
+    // Handle the snapshot data here
+    const data = snapshot.val();
+    const parsed = Object.keys(data)[0];
+
+    // get
+    const ref2 = ref(db, `Customers/${parsed}`);
+    get(ref2).then((snapShot) => {
+      const data = snapShot.val();
+      alert(data.username);
+    }).catch((err) => {
+      console.log("An error occurred while trying to get your username: ", err)
     });
 
+  });
 }

@@ -2,29 +2,15 @@ import { Link } from "react-router-dom";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { getDatabase, get, ref, query, equalTo } from "firebase/database";
+import { firebaseConfigurationDetails } from "../external_functions";
 
 
 const Login = () => {
     
-    // configurations
-    const firebaseConfig = {
-        apiKey: "AIzaSyB-opll1P-81cOoc7oQUQ7G5QUSK5FhfrA",
-        authDomain: "retro-bf312.firebaseapp.com",
-        databaseURL: "https://retro-bf312-default-rtdb.firebaseio.com",
-        projectId: "retro-bf312",
-        storageBucket: "retro-bf312.appspot.com",
-        messagingSenderId: "319056909364",
-        appId: "1:319056909364:web:f2215ade4b825b8fe56661",
-        measurementId: "G-NT5D2WTQ8T"
-    };
-    
     // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
+    const app = initializeApp(firebaseConfigurationDetails);
     const analytics = getAnalytics(app);
     const auth = getAuth();
-    const db = getDatabase(app);
-    const dbReference = ref(db)
 
 
 
@@ -33,26 +19,18 @@ const Login = () => {
       
         const email = document.getElementById("loginEmail").value;
         const password = document.getElementById("loginPassword").value;
-
-        const Username = email.toString().slice(0, email.indexOf("@"));
     
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
-
-                // return
-
                 // User successfully logged in
                 const user = userCredential.user;
                 console.log(user);
-                
+
+                // set a username here
+                window.localStorage.setItem("trimmedEmail", email.toString().slice(0, email.indexOf("@")));
+
                 // go home
                 window.location.pathname = "/";
-
-
-                // set username after login...it should be less than 12 characters long
-                // it auto deleted when the user logs out
-                // meaning after a logout, a logged in session cannot be accessed through window.history()
-                window.localStorage.setItem("Username", Username.length > 12 ? Username.toLowerCase().slice(0, 12) + "..." : Username.toLowerCase())
 
             })
             .catch((error) => {

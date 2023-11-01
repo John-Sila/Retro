@@ -5,8 +5,8 @@ import { getAnalytics } from "firebase/analytics";
 import { Outlet, Link } from "react-router-dom";
 import logo from "../logo/js&s.png";
 import { RiMenu4Line, RiAccountCircleFill } from "react-icons/ri";
-import { windowOnclick, createCookie, deleteCookie } from "../external_functions";
-import Post from "./dbdata";
+import { windowOnclick, createCookie, deleteCookie, firebaseConfigurationDetails } from "../external_functions";
+import Post from "./dbdata"
 
 const Layout = () => {
 
@@ -25,21 +25,9 @@ const Layout = () => {
     const LogOut = () => {
         // unset item
         localStorage.removeItem("Username");
-
-            // configurations
-        const firebaseConfig = {
-            apiKey: "AIzaSyB-opll1P-81cOoc7oQUQ7G5QUSK5FhfrA",
-            authDomain: "retro-bf312.firebaseapp.com",
-            databaseURL: "https://retro-bf312-default-rtdb.firebaseio.com",
-            projectId: "retro-bf312",
-            storageBucket: "retro-bf312.appspot.com",
-            messagingSenderId: "319056909364",
-            appId: "1:319056909364:web:f2215ade4b825b8fe56661",
-            measurementId: "G-NT5D2WTQ8T"
-        };
         
         // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
+        const app = initializeApp(firebaseConfigurationDetails);
         const analytics = getAnalytics(app);
         const auth = getAuth();
 
@@ -100,11 +88,11 @@ const Layout = () => {
                 </div>
 
 
-                <button type="button" onClick={Post}>Post</button>
+                {/* <button type="button" onClick={Post}>Post</button> */}
                 
                 <div className="topRight">
+                    <Link to="/sell"><button type="button" className="sellButton">Sell</button></Link>
                     <Link to="/login" className="links guest login"><RiAccountCircleFill /></Link>
-
                     <div className="paste-button customer">
                         <button className="button"><span id="userName"></span> &nbsp; ▼</button>
                         <div className="dropdown-content">
@@ -121,20 +109,8 @@ const Layout = () => {
 
             {/* loading state */}
             <div className="loadingModal" id="loadingModal">
-                <div className="loading" id="loading">
-                    <div className="dot-spinner">
-                        <div className="dot-spinner__dot"></div>
-                        <div className="dot-spinner__dot"></div>
-                        <div className="dot-spinner__dot"></div>
-                        <div className="dot-spinner__dot"></div>
-                        <div className="dot-spinner__dot"></div>
-                        <div className="dot-spinner__dot"></div>
-                        <div className="dot-spinner__dot"></div>
-                        <div className="dot-spinner__dot"></div>
-
-                    </div>
-                        <span>Please wait...</span>
-                </div>
+                <div className="loader"></div>
+                <div className="zeroOpacity"></div>
             </div>
 
 

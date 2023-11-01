@@ -34,3 +34,16 @@ export function deleteCookie(name) {
 const expirationDate = new Date('Thu, 01 Jan 1970 00:00:00 UTC');
 document.cookie = name + '=; expires=' + expirationDate.toUTCString();
 }
+
+// configure firebase
+export const firebaseConfigurationDetails = {
+    apiKey: "AIzaSyB-opll1P-81cOoc7oQUQ7G5QUSK5FhfrA",
+    authDomain: "retro-bf312.firebaseapp.com",
+    databaseURL: "https://retro-bf312-default-rtdb.firebaseio.com",
+    projectId: "retro-bf312",
+    storageBucket: "retro-bf312.appspot.com",
+    messagingSenderId: "319056909364",
+    appId: "1:319056909364:web:f2215ade4b825b8fe56661",
+    measurementId: "G-NT5D2WTQ8T"
+}
+

@@ -1,42 +1,32 @@
 import { Link } from "react-router-dom";
-import { AiFillEye } from "react-icons/ai";
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { getAuth, createUserWithEmailAndPassword, fetchSignInMethodsForEmail } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { set, get, getDatabase, ref } from "firebase/database";
+import { firebaseConfigurationDetails } from "../external_functions";
 
 const SignUp = () => {
 
     // TODO: Add SDKs for Firebase products that you want to use
     // https://firebase.google.com/docs/web/setup#available-libraries
-
-    // Your web app's Firebase configuration
-    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-    const firebaseConfig = {
-        apiKey: "AIzaSyB-opll1P-81cOoc7oQUQ7G5QUSK5FhfrA",
-        authDomain: "retro-bf312.firebaseapp.com",
-        databaseURL: "https://retro-bf312-default-rtdb.firebaseio.com",
-        projectId: "retro-bf312",
-        storageBucket: "retro-bf312.appspot.com",
-        messagingSenderId: "319056909364",
-        appId: "1:319056909364:web:f2215ade4b825b8fe56661",
-        measurementId: "G-NT5D2WTQ8T"
-    };
     
     // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
+    const app = initializeApp(firebaseConfigurationDetails);
     const analytics = getAnalytics(app);
     const auth = getAuth();
     const db = getDatabase(app);
-    const dbReference = ref(db, "Customers")
+    const dbReference = ref(db, "Customers");
     
     const HandleSubmission = () => {
 
         const email = document.getElementById("signupEmail").value.toString(); // Get the email input value
         const password = document.getElementById("signupPassword").value.toString(); // Get the password input value
-        const fullName = document.getElementById("fullName").value.toString().trim();
+        let fullName = document.getElementById("fullName").value.toString().trim();
+        const firstNameFragment = fullName.split(" ")[0].split("");
+        const secondNameFragment = fullName.split(" ")[0].split("");
+
 
         const JSONdata = {
             stars: {
@@ -47,31 +37,50 @@ const SignUp = () => {
             password: password,
             userName: fullName,
             trimmedEmail: email.slice(0, email.indexOf("@")),
+            adminPrivilege: false,
         }
         
-        // add their details to databse
-        // get to know how far the database is
-        get(dbReference)
-        .then( snapShot => {
-            const data = snapShot.val();
-            const dataLength = Object.keys(data).length + 1;
-            // get another reference
-            const referenceTwo = ref(db, "Customers/" + dataLength)
-            set(referenceTwo, JSONdata)
-            .then(() => {
-                console.log("Information written successfully");
-            }).catch((err) => {
-                console.log("writingDatabaseError()");
-            });
-        }).catch( err => console.log("getInfoFromDatabaseError()"))
-
+        
         createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
             // User account created successfully
-            const user = userCredential.user;
-            console.log(user);
-            window.location.pathname = "/login";
-            // Perform further front-end operations (e.g., redirect, show success message)
+            // add their details to databse
+            // get to know how far the database is
+            get(dbReference)
+            .then( snapShot => {
+                const data = snapShot.val();
+                const dataLength = Object.keys(data).length;
+                const objKeys = Object.keys(data);
+                let lastUser = objKeys[dataLength - 1];
+                lastUser = lastUser.toString().split("");
+                let userInt = "", index = lastUser.length - 1;
+                do {
+                    userInt += lastUser[index];
+                    index--;
+                } while (!isNaN(parseInt(lastUser[index])));
+
+                userInt = userInt.split("").reverse().join("");
+                userInt = parseInt(userInt) + 1;
+
+                // get another reference
+                const referenceTwo = ref(db, "Customers/user" + userInt)
+                set(referenceTwo, JSONdata)
+                .then(() => {
+                    console.log("Information written successfully");
+
+                    // set username in localstorage/// this also happens in login
+                    window.localStorage.setItem("trimmedEmail", email.toString().slice(0, email.indexOf("@")));
+
+                    // we are in, account created and data written
+                    // const user = userCredential.user;
+                    // console.log(user);
+                    window.location.pathname = "/";
+                }).catch((err) => {
+                    console.log("writingDatabaseError()");
+                });
+            }).catch( err => console.log("couldn't access database."))
+
+
         }).catch((error) => {
             // Handle registration errors (e.g., invalid password, weak password, etc.)
             const errorCode = error.code;
@@ -100,12 +109,31 @@ const SignUp = () => {
         const confirmationPassword = document.getElementById("confirmSignupPassword").value.toString(); // Get the password input value
         const fullName = document.getElementById("fullName").value.toString().trim();
         const User = fullName.split(" ");
+        const unInclusive = ",./?;:'\"-_!`$%^&*)(][}{\\+@~".split("");
+        const splitName = fullName.split("");
+        for (let a = 0; a < splitName.length; a++) {
+            for (let b = 0; b < unInclusive.length; b++) {
+                if (splitName[a] === unInclusive[b]) {
+                    document.getElementById("noSymbols").style.display = "block";
+                    document.getElementById("badName").style.display = "";
+                    document.getElementById("shortPassword").style.display = "";
+                    document.getElementById("checkEmail").style.display = "";
+                    document.getElementById("emailAlreadyInUse").style.display = "";
+                    document.getElementById("passwordMismatch").style.display = "";
+                    document.getElementById("fullName").focus();
+                    return false;
+                }
+            }
+            
+        }
+        
         if (User.length !== 2) {
             document.getElementById("badName").style.display = "block"
             document.getElementById("shortPassword").style.display = "";
             document.getElementById("checkEmail").style.display = "";
             document.getElementById("emailAlreadyInUse").style.display = "";
             document.getElementById("passwordMismatch").style.display = "";
+            document.getElementById("noSymbols").style.display = "";
             document.getElementById("fullName").focus();
             return false;
         } else if (password.length < 7) {
@@ -114,6 +142,7 @@ const SignUp = () => {
             document.getElementById("checkEmail").style.display = "";
             document.getElementById("emailAlreadyInUse").style.display = "";
             document.getElementById("passwordMismatch").style.display = "";
+            document.getElementById("noSymbols").style.display = "";
             document.getElementById("signupPassword").focus();
             return false;
         } else if (password !== confirmationPassword) {
@@ -122,11 +151,12 @@ const SignUp = () => {
             document.getElementById("shortPassword").style.display = "";
             document.getElementById("checkEmail").style.display = "";
             document.getElementById("emailAlreadyInUse").style.display = "";
+            document.getElementById("noSymbols").style.display = "";
             document.getElementById("confirmSignupPassword").focus();
             return false;
-        } else HandleSubmission(User);
+        } else HandleSubmission();
     }
-
+    
     return (
 
         <>
@@ -139,7 +169,8 @@ const SignUp = () => {
                     <label>
                         <input className="input" type="text" name="fullName" id="fullName" placeholder="" required aria-required autoFocus />
                         <span>Full Name</span>
-                        <span id="badName">Please provide 2 names.</span>
+                        <span id="badName">Full Name can only contain 2 names.</span>
+                        <span id="noSymbols">You can't use symbols in your name.</span>
                     </label>
 
                     <label>
