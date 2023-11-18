@@ -24,8 +24,8 @@ const SignUp = () => {
         const email = document.getElementById("signupEmail").value.toString(); // Get the email input value
         const password = document.getElementById("signupPassword").value.toString(); // Get the password input value
         let fullName = document.getElementById("fullName").value.toString().trim();
-        const firstNameFragment = fullName.split(" ")[0].split("");
-        const secondNameFragment = fullName.split(" ")[0].split("");
+        // const firstNameFragment = fullName.split(" ")[0].split("");
+        // const secondNameFragment = fullName.split(" ")[0].split("");
 
 
         const JSONdata = {
@@ -63,7 +63,7 @@ const SignUp = () => {
                 userInt = parseInt(userInt) + 1;
 
                 // get another reference
-                const referenceTwo = ref(db, "Customers/user" + userInt)
+                const referenceTwo = ref(db, "Customers/user" + userInt);
                 set(referenceTwo, JSONdata)
                 .then(() => {
                     console.log("Information written successfully");

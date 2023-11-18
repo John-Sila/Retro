@@ -5,23 +5,33 @@ import { getAnalytics } from "firebase/analytics";
 import { Outlet, Link } from "react-router-dom";
 import logo from "../logo/js&s.png";
 import { RiMenu4Line, RiAccountCircleFill } from "react-icons/ri";
+import { GrDescend } from "react-icons/gr";
 import { windowOnclick, createCookie, deleteCookie, firebaseConfigurationDetails } from "../external_functions";
-import Post from "./dbdata"
+import { useEffect } from "react";
 
 const Layout = () => {
 
+    useEffect( () => {
+        const topNav = document.getElementById("topNav");
+        if (topNav) {
+            let navHeight = topNav.clientHeight;
+            document.getElementById("loadingModal").style.top = `${navHeight}px`;
+        }
+        
+    }, [])
 
-
+    // menu
     const bringMenu = () => {
         const aside = document.getElementsByTagName("aside")[0]
         if (aside) {
-            aside.style.left = "10px";
+            aside.style.left = "0px";
             window.addEventListener("click", windowOnclick)
             return
         }
         return false
     }
 
+    // log user out
     const LogOut = () => {
         // unset item
         localStorage.removeItem("Username");
@@ -94,12 +104,14 @@ const Layout = () => {
                     <Link to="/sell"><button type="button" className="sellButton">Sell</button></Link>
                     <Link to="/login" className="links guest login"><RiAccountCircleFill /></Link>
                     <div className="paste-button customer">
-                        <button className="button"><span id="userName"></span> &nbsp; ▼</button>
-                        <div className="dropdown-content">
-                            <Link className="links" id="top" href="#">About JS&Siblings</Link>
-                            <Link className="links" id="middle" href="#" onClick={deleteCookies}>Delete cookies</Link>
-                            <Link className="links" id="bottom" href="#" onClick={LogOut}>Log out</Link>
-                            <Link className="links" id="bottom" href="#" onClick={DeleteAccount}>Delete account</Link>
+                        <button className="button"><GrDescend /></button>
+                        <div className="dropdown-content zoomClass">
+                            <Link className="links" id="top" to="#">About JS&Siblings</Link>
+                            <Link className="links" id="cookiesDeleteLink" to="#" onClick={deleteCookies}>Delete cookies</Link>
+                            <Link className="links" id="accountLogoutLink" to="#" onClick={LogOut}>Log out</Link>
+                            <Link className="links" id="accountDeleteLink" to="#" onClick={DeleteAccount}>Delete account</Link>
+                            <Link className="links" id="accountLink" to="" ><span id="userName"></span> (Me)</Link>
+                            
                         </div>
                     </div>
 

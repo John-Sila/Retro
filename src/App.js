@@ -60,9 +60,9 @@ function App() {
         }, 500);
         return false;
       } else {
-        // for this code to get here, the details are already entered query is not null
+        // for this code to get here, the details are already entered and the query is not null
         // we do this because the parent useEffect() here is called just immediately when
-            // the user creates the account and information might not have been entered to database yet.
+        // the user creates the account and information might not have been entered to database yet.
         const parsed = Object.keys(data)[0];
   
         // get
@@ -123,7 +123,14 @@ function App() {
       }
     });
 
-  })
+    // check cookies
+    if (localStorage.getItem("cookiesPresent") === null) {
+      setTimeout(() => {
+        document.getElementById("cookieCard").style.display = "flex";
+      }, 3000);
+    }
+
+  }, [])
 
 
   return (

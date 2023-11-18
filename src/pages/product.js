@@ -9,7 +9,9 @@ const Product = () => {
     const [srcset, setSrcset] = useState([]);
     
     useEffect( () => {
-        setPage();
+        const Subject = localStorage.getItem("productParameters") === null ? "useFirebase" : "useDefault";
+        console.log(Subject);
+        setPage(Subject);
         // let there be no available pressLinks
     }, [])
 
@@ -17,35 +19,76 @@ const Product = () => {
         setMobileNumber(mobileNumber);
     }, [mobileNumber])
     
-    const setPage = async => {
-        const storedProductParameterJSON = localStorage.getItem("productParameters");
-        const parsedParams = JSON.parse(storedProductParameterJSON);
-        if (parsedParams) {
-            document.getElementById("productImg").setAttribute("src", parsedParams.link);
-            document.getElementById("productSellerLocation").innerHTML = parsedParams.location;
-            document.getElementById("productItemName").innerHTML = parsedParams.name;
+    const setPage = (param) => {
+        if (param === "useDefault") {
+            // default
+            const storedProductParameterJSON = localStorage.getItem("productParameters");
+            const parsedParams = JSON.parse(storedProductParameterJSON);
+            if (parsedParams) {
+                document.getElementById("productImg").setAttribute("src", parsedParams.link);
+                document.getElementById("productSellerLocation").innerHTML = parsedParams.location;
+                document.getElementById("productItemName").innerHTML = parsedParams.name;
+                document.getElementById("productSellerName").innerHTML = parsedParams.seller;
+                document.getElementById("productItemPrice").innerHTML = parsedParams.price;
+                setMobileNumber(parsedParams.mobile);
+                document.getElementById("linkToSeller").setAttribute("href", `https://api.whatsapp.com/send?phone=${mobileNumber}+254717405109&text=Hello%2C%20this%20is%20concerning%20your%20product%20at%20JS%26S%2E`)
+
+                if (parsedParams.srcSet.length > 0) {
+                    document.getElementById("productMoreImages").style.display = "none"; // srcSet
+                    setSrcset(parsedParams.srcSet)
+                }
+                // document.getElementById("productPriceNegotiable").innerHTML = parsedParams.priceNegotiable === true ? " Negotiable" : " Not negotiable";
+
+                var seller = parsedParams.seller;
+                seller = seller.split(" ");
+                const sellerAbbr = seller[0].split("")[0] + seller[1].split("")[0];
+                document.getElementById("productSellerName").innerHTML = sellerAbbr;
+
+                if (parsedParams.features.length !== 0) {
+                    setFeatures(parsedParams.features)
+                }
+
+                // is this product a service or not?
+                if (parsedParams.category.toLowerCase() === "services") {
+                    document.getElementById("productItemPrice").style.display = "none";
+                    document.getElementById("itemIsService").style.display = "block";
+                }
+                // localStorage.removeItem("productParameters");
+            } 
+        } else if (param === "useFirebase") {
+            // firebase
+            const storedProductParameterJSON = localStorage.getItem("fireBaseIncomingImage");
+            const parsedParams = JSON.parse(storedProductParameterJSON);
+            // return
+            document.getElementById("productImg").setAttribute("src", parsedParams.singleURL);
+            document.getElementById("productSellerLocation").innerHTML = parsedParams.country;
+            document.getElementById("productItemName").innerHTML = parsedParams.itemName;
             document.getElementById("productSellerName").innerHTML = parsedParams.seller;
-            document.getElementById("productItemPrice").innerHTML = parsedParams.price;
-            setMobileNumber(parsedParams.mobile);
+            document.getElementById("productSellerNameButton").innerHTML = parsedParams.seller;
+            document.getElementById("productItemPrice").innerHTML = `KSh ${parsedParams.itemPrice}`;
+            document.getElementById("region").innerHTML = parsedParams.region;
+            setMobileNumber(parsedParams.phoneNumber);
             document.getElementById("linkToSeller").setAttribute("href", `https://api.whatsapp.com/send?phone=${mobileNumber}+254717405109&text=Hello%2C%20this%20is%20concerning%20your%20product%20at%20JS%26S%2E`)
 
-            if (parsedParams.srcSet.length > 0) {
-                document.getElementById("productMoreImages").style.display = "none"; // srcSet
-                setSrcset(parsedParams.srcSet)
+            if (parsedParams.srcSet.length) {
+                if (parsedParams.srcSet.length > 0) {
+                    document.getElementById("productMoreImages").style.display = "none"; // srcSet
+                    setSrcset(parsedParams.srcSet);
+                }
             }
             // document.getElementById("productPriceNegotiable").innerHTML = parsedParams.priceNegotiable === true ? " Negotiable" : " Not negotiable";
 
-            var seller = parsedParams.seller;
-            seller = seller.split(" ");
+            var firebaseSeller = parsedParams.seller;
+            seller = firebaseSeller.split(" ");
             const sellerAbbr = seller[0].split("")[0] + seller[1].split("")[0];
             document.getElementById("productSellerName").innerHTML = sellerAbbr;
 
-            if (parsedParams.features.length !== 0) {
-                setFeatures(parsedParams.features)
+            if (parsedParams.itemFeatures.length !== 0) {
+                setFeatures(parsedParams.itemFeatures)
             }
 
             // is this product a service or not?
-            if (parsedParams.category.toLowerCase() === "services") {
+            if (parsedParams.itemCategory.toLowerCase() === "service") {
                 document.getElementById("productItemPrice").style.display = "none";
                 document.getElementById("itemIsService").style.display = "block";
             }
@@ -62,7 +105,7 @@ const Product = () => {
                     <h3 id="productItemName">Name</h3>
                     <img id="productImg" src="" alt="" />
                     <div>
-                        <p><ImLocation2 /><span id="productSellerLocation">Kilimani</span></p>
+                        <p><ImLocation2 /><span id="region"></span>,&nbsp;<span id="productSellerLocation">Kilimani</span></p>
                         <p id="productMoreImages">No more images for this item were provided.</p>
                     </div>
 
@@ -107,7 +150,7 @@ const Product = () => {
 
                         <p id="itemIsService">Since this is a service, the prices are not fixed and you might need to contact the service provider for prices.</p>
 
-                        <Link to="" target="_blank" id="linkToSeller" className="linkToSeller"> <button type="button" className="callSeller"><span>Call <span id="productSellerName">John Sila</span></span></button></Link>
+                        <Link to="" target="_blank" id="linkToSeller" className="linkToSeller"> <button type="button" className="callSeller"><span>Call <span id="productSellerNameButton">John Sila</span></span></button></Link>
                     </div>
                     <div>
                         <h3>Precaution</h3>
