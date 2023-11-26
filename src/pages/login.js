@@ -15,6 +15,12 @@ const Login = () => {
 
 
     const handleLogin = () => {
+        const errorSpans = document.getElementById("loginModal").querySelectorAll(".errorSpans");
+        if (errorSpans) {
+            errorSpans.forEach( errorSpan => {
+                errorSpan.style.display = "";
+            })
+        }
         // event.preventDefault(); // Prevent the form from submitting
       
         const email = document.getElementById("loginEmail").value;
@@ -39,18 +45,29 @@ const Login = () => {
                 const errorMessage = error.message;
                 console.log(errorCode);
                 if (errorCode === "auth/invalid-login-credentials") {
-                    document.getElementById("invalidEmail").style.display = "";
                     document.getElementById("accountDoesNotExist").style.display = "block";
+                    document.getElementById("invalidEmail").style.display = "";
+                    document.getElementById("missingPassword").style.display = "";
+
                     document.getElementById("loginPassword").value = "";
                     document.getElementById("loginPassword").focus();
                 }
-                if (errorCode === "auth/invalid-email") {
+                else if (errorCode === "auth/invalid-email") {
                     document.getElementById("invalidEmail").style.display = "block";
+                    document.getElementById("missingPassword").style.display = "";
                     document.getElementById("accountDoesNotExist").style.display = "";
                 }
-                // if (errorCode === "auth/network-request-failed") {
-                    // this is a network issue
-                // }
+                // else if (errorCode === "auth/network-request-failed") {
+                    //     this is a network issue
+                    // }
+                    else if (errorCode === "auth/missing-password") {
+                        // no password entry
+                        document.getElementById("missingPassword").style.display = "block";
+                        document.getElementById("accountDoesNotExist").style.display = "";
+                        document.getElementById("invalidEmail").style.display = "";
+
+                    document.getElementById("loginPassword").focus();
+                }
                 // Display an error message to the user
             });
 
@@ -62,36 +79,37 @@ const Login = () => {
         <>
             <div className="loginModal" id="loginModal">
 
-            <form className="card-container" action="" method="post">
-                <div className="circle1"></div>
-                <div className="circle2"></div>
-                <div className="container">
-                    <div className="log-card">
-                        <p className="heading">Welcome Back</p>
+                <form className="card-container" action="" method="post">
+                    <div className="circle1"></div>
+                    <div className="circle2"></div>
+                    <div className="container">
+                        <div className="log-card">
+                            <p className="heading">Welcome Back</p>
 
-                        <div className="input-group">
-                            <label htmlFor="loginEmail" className="text">Email</label>
-                            <input className="input" type="email" name="loginEmail" id="loginEmail" placeholder="For Ex: jd411@gmail.com" autoFocus />
-                            <span id="invalidEmail">Provide a valid email.</span>
-                            <span id="accountDoesNotExist">This account does not exist.</span>
-                            <label htmlFor="loginPassword" className="text">Password</label>
-                            <input className="input" type="password" name="loginPassword" id="loginPassword" placeholder="Enter Password" />
-                        </div>
-
-                        <div className="password-group">
-                            <div className="checkbox-group">
-                                <input type="checkbox" name="rememberMe" id="rememberMe" />
-                                <label className="label" htmlFor="rememberMe" >Remember Me</label>
+                            <div className="input-group">
+                                <label htmlFor="loginEmail" className="text">Email</label>
+                                <input className="input" type="email" name="loginEmail" id="loginEmail" placeholder="For Ex: jd411@gmail.com" autoFocus />
+                                <span id="invalidEmail" className="errorSpans">Provide a valid email.</span>
+                                <span id="accountDoesNotExist" className="errorSpans">This account does not exist.</span>
+                                <label htmlFor="loginPassword" className="text">Password</label>
+                                <input className="input" type="password" name="loginPassword" id="loginPassword" placeholder="Enter Password" />
+                                <span id="missingPassword" className="errorSpans">Please enter a password.</span>
                             </div>
-                                <Link to="/forgot_password" className="forget-password">Forget Password</Link>
+
+                            <div className="password-group">
+                                <div className="checkbox-group">
+                                    <input type="checkbox" name="rememberMe" id="rememberMe" />
+                                    <label className="label" htmlFor="rememberMe" >Remember Me</label>
+                                </div>
+                                    <Link to="/forgot_password" className="forget-password">Forgot Password</Link>
+                            </div>
+
+                            <button type="button" onClick={handleLogin} className="btn">Sign In</button>
+
+                            <p className="no-account">Don't Have an Account?&nbsp;<Link to="/signup" className="link">Sign Up</Link></p>
                         </div>
-
-                        <button type="button" onClick={handleLogin} className="btn">Sign In</button>
-
-                        <p className="no-account">Don't Have an Account?<Link to="/signup" className="link"> Sign Up</Link></p>
                     </div>
-                </div>
-            </form>
+                </form>
 
 
 

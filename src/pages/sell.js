@@ -38,7 +38,7 @@ const Sell = () => {
         if (loading) {
             document.getElementById("loadingModal").style.display = "flex";
         } else {
-            document.getElementById("loadingModal").style.display = "";
+            document.getElementById("loadingModal").style.display = "none";
         }
     }, [loading])
 
@@ -237,6 +237,17 @@ const Sell = () => {
             document.getElementById("sellSellerName").focus();
             return false;
         }
+        const splitSellerName = sellSellerName.split("");
+        const unInclusive = ",./?;:'\"-_!`$%^&*)(><][}{\\+@~".split("");
+        for (let a = 0; a < splitSellerName.length; a++) {
+            for (let b = 0; b < unInclusive.length; b++) {
+                if (splitSellerName[a] === unInclusive[b]) {
+                    adPageHiddenDivs("reqSymbolsInName")
+                    return false;
+                }
+            }
+            
+        }
         
         // country
         const sellerCountry = document.getElementById("sellCountry");
@@ -267,7 +278,18 @@ const Sell = () => {
             adPageHiddenDivs("reqProductName");
             document.getElementById("sellProduct").focus();
             return false;
-        } 
+        }
+        const splitItemName = itemName.split("");
+        const unInclusiveHere = ",./?;:'\"_!`$%^&*)(><][}{\\+@~".split("");
+        for (let a = 0; a < splitItemName.length; a++) {
+            for (let b = 0; b < unInclusiveHere.length; b++) {
+                if (splitItemName[a] === unInclusiveHere[b]) {
+                    adPageHiddenDivs("reqSymbolsInItemName")
+                    return false;
+                }
+            }
+            
+        }
 
         // price
         // const itemPrice = document.getElementById("sellPrice")?.value;
@@ -511,6 +533,7 @@ const Sell = () => {
                         <label htmlFor="sellSellerName"><span>Your name:</span>
                             <input type="text" name="sellSellerName" id="sellSellerName" onInput={e => setEnteredSellerName(e.target.value)} placeholder="Eg. John Sila" required aria-required />
                             <span className="defaultHidden" id="reqSellerName">Please provide 2 names.</span>
+                            <span className="defaultHidden" id="reqSymbolsInName">Your name cannor contain symbols.</span>
                         </label>
 
                         {/* country */}
@@ -554,6 +577,7 @@ const Sell = () => {
                         <label htmlFor="sellProduct"><span>Item name:</span>
                             <input type="text" name="sellProduct" id="sellProduct" onBlur={e => setEnteredItemName(e.target.value)} placeholder="Eg. Leather Stitch Cardigans" required aria-required />
                             <span className="defaultHidden" id="reqProductName">Provide a valid item name.</span>
+                            <span className="defaultHidden" id="reqSymbolsInItemName">Item name must not contain symbols.</span>
                         </label>
 
                         {/* price */}

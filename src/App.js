@@ -3,33 +3,34 @@ import './App.css';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { initializeApp } from "firebase/app";
 import { getDatabase, ref, query, orderByChild, equalTo, limitToFirst, onValue, get } from "firebase/database";
-// import { firebaseConfigurationDetails } from "../external_functions";
 
 
 
-// pages
+// pages & functions
 import Layout from "./pages/layout";
 import Home from "./pages/home";
 import Login from "./pages/login";
 import SignUp from "./pages/signup";
 import NoPage from "./pages/nopage";
 import Product from "./pages/product";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Sell from "./pages/sell";
+import { firebaseConfigurationDetails } from "./external_functions";
+
 
 function App() {
 
+  const [loading, setLoading] = useState(false);
 
-  const firebaseConfigurationDetails = {
-    apiKey: "AIzaSyB-opll1P-81cOoc7oQUQ7G5QUSK5FhfrA",
-    authDomain: "retro-bf312.firebaseapp.com",
-    databaseURL: "https://retro-bf312-default-rtdb.firebaseio.com",
-    projectId: "retro-bf312",
-    storageBucket: "retro-bf312.appspot.com",
-    messagingSenderId: "319056909364",
-    appId: "1:319056909364:web:f2215ade4b825b8fe56661",
-    measurementId: "G-NT5D2WTQ8T"
-  }
+  // the loading state
+  useEffect( () => {
+    if (loading) {
+        document.getElementById("loadingModal").style.display = "flex";
+    } else {
+        document.getElementById("loadingModal").style.display = "none";
+    }
+}, [loading])
+
   const app = initializeApp(firebaseConfigurationDetails);
 
   const engageData = () => {

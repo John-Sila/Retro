@@ -13,9 +13,21 @@ const Layout = () => {
 
     useEffect( () => {
         const topNav = document.getElementById("topNav");
-        if (topNav) {
+        const hugePanel = document.getElementById("hugePanel");
+        const hasSearch = document.getElementById("hasSearch");
+        if (topNav && hugePanel && hasSearch) {
             let navHeight = topNav.clientHeight;
+            let panelHeight = hugePanel.clientHeight;
+            let hasSearchHeight = hasSearch.clientHeight;
             document.getElementById("loadingModal").style.top = `${navHeight}px`;
+            // document.getElementById("hasSearch").style.top = `${navHeight}px`;
+            document.getElementById("svgElements").style.height = `${panelHeight}px`;
+            // console.log(document.getElementById("mainAds"));
+            const aside = document.getElementById("mainAds");
+            if (aside) {
+                document.getElementById("mainAds").style.top = `${navHeight + hasSearchHeight}px`;
+                document.getElementById("mainAds").style.height = `calc(100vh - ${navHeight + hasSearchHeight}px)`;
+            }
         }
         
     }, [])

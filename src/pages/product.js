@@ -7,6 +7,7 @@ const Product = () => {
     const [mobileNumber, setMobileNumber] = useState("");
     const [features, setFeatures] = useState([]);
     const [srcset, setSrcset] = useState([]);
+    const [sellerName, setSellerName] = useState("");
     
     useEffect( () => {
         const Subject = localStorage.getItem("productParameters") === null ? "useFirebase" : "useDefault";
@@ -16,8 +17,8 @@ const Product = () => {
     }, [])
 
     useEffect( () => {
-        setMobileNumber(mobileNumber);
-    }, [mobileNumber])
+        document.getElementById("linkToSeller").setAttribute("href", `https://api.whatsapp.com/send?phone=${mobileNumber}&text=Hello%2C%20this%20is%20concerning%20your%20product%20at%20JS%26S%2E`);
+    }, [mobileNumber]);
     
     const setPage = (param) => {
         if (param === "useDefault") {
@@ -28,17 +29,15 @@ const Product = () => {
                 document.getElementById("productImg").setAttribute("src", parsedParams.link);
                 document.getElementById("productSellerLocation").innerHTML = parsedParams.location;
                 document.getElementById("productItemName").innerHTML = parsedParams.name;
-                document.getElementById("productSellerName").innerHTML = parsedParams.seller;
+                // document.getElementById("productSellerName").innerHTML = parsedParams.seller;
+                setSellerName(parsedParams.seller);
                 document.getElementById("productItemPrice").innerHTML = parsedParams.price;
                 setMobileNumber(parsedParams.mobile);
-                document.getElementById("linkToSeller").setAttribute("href", `https://api.whatsapp.com/send?phone=${mobileNumber}+254717405109&text=Hello%2C%20this%20is%20concerning%20your%20product%20at%20JS%26S%2E`)
-
+                
                 if (parsedParams.srcSet.length > 0) {
                     document.getElementById("productMoreImages").style.display = "none"; // srcSet
                     setSrcset(parsedParams.srcSet)
                 }
-                // document.getElementById("productPriceNegotiable").innerHTML = parsedParams.priceNegotiable === true ? " Negotiable" : " Not negotiable";
-
                 var seller = parsedParams.seller;
                 seller = seller.split(" ");
                 const sellerAbbr = seller[0].split("")[0] + seller[1].split("")[0];
@@ -63,20 +62,16 @@ const Product = () => {
             document.getElementById("productImg").setAttribute("src", parsedParams.singleURL);
             document.getElementById("productSellerLocation").innerHTML = parsedParams.country;
             document.getElementById("productItemName").innerHTML = parsedParams.itemName;
-            document.getElementById("productSellerName").innerHTML = parsedParams.seller;
-            document.getElementById("productSellerNameButton").innerHTML = parsedParams.seller;
             document.getElementById("productItemPrice").innerHTML = `KSh ${parsedParams.itemPrice}`;
             document.getElementById("region").innerHTML = parsedParams.region;
+            setSellerName(parsedParams.seller);
             setMobileNumber(parsedParams.phoneNumber);
-            document.getElementById("linkToSeller").setAttribute("href", `https://api.whatsapp.com/send?phone=${mobileNumber}+254717405109&text=Hello%2C%20this%20is%20concerning%20your%20product%20at%20JS%26S%2E`)
-
             if (parsedParams.srcSet.length) {
                 if (parsedParams.srcSet.length > 0) {
                     document.getElementById("productMoreImages").style.display = "none"; // srcSet
                     setSrcset(parsedParams.srcSet);
                 }
             }
-            // document.getElementById("productPriceNegotiable").innerHTML = parsedParams.priceNegotiable === true ? " Negotiable" : " Not negotiable";
 
             var firebaseSeller = parsedParams.seller;
             seller = firebaseSeller.split(" ");
@@ -84,7 +79,7 @@ const Product = () => {
             document.getElementById("productSellerName").innerHTML = sellerAbbr;
 
             if (parsedParams.itemFeatures.length !== 0) {
-                setFeatures(parsedParams.itemFeatures)
+                setFeatures(parsedParams.itemFeatures);
             }
 
             // is this product a service or not?
@@ -105,9 +100,23 @@ const Product = () => {
                     <h3 id="productItemName">Name</h3>
                     <img id="productImg" src="" alt="" />
                     <div>
-                        <p><ImLocation2 /><span id="region"></span>,&nbsp;<span id="productSellerLocation">Kilimani</span></p>
+                        <p><ImLocation2 /><span id="region"></span>&nbsp;<span id="productSellerLocation">Kilimani</span></p>
                         <p id="productMoreImages">No more images for this item were provided.</p>
                     </div>
+
+                    <div className="thisProfile">
+                        <div id="sellerProfile" className="profile"><span id="productSellerName"></span></div>
+                        <h3 id="productItemPrice"><span id="productPriceNegotiable">Yes</span></h3>
+
+                        <p id="itemIsService">Since this is a service, the prices are not fixed and you might need to contact the service provider for prices.</p>
+
+                        <Link to="" target="_blank" id="linkToSeller" className="linkToSeller"> <button type="button" className="WASeller"><span>Chat&nbsp;{sellerName}&nbsp;on WhatsApp</span></button></Link>
+                    </div>
+
+                    
+                </div>
+                
+                <div className="secondDiv" id="secondDiv">
 
                     <div className="additionalImages" id="additionalImages">
                         {
@@ -117,7 +126,7 @@ const Product = () => {
                         }
                     </div>
                     
-                    <div id="features">
+                    <div id="features" className="features">
                         <h3>Features:</h3>
                         <ul>
                             {/* --- */}
@@ -139,20 +148,10 @@ const Product = () => {
                             </svg>
                     </button>
 
-                    <button type="button" className="sendMessage">Message</button>
+                    <button type="button" className="sendMessage">Message {sellerName}</button>
 
-                </div>
-                
-                <div className="secondDiv" id="secondDiv">
-                    <div>
-                        <div id="sellerProfile" className="profile"><span id="productSellerName"></span></div>
-                        <h3 id="productItemPrice"><span id="productPriceNegotiable">Yes</span></h3>
-
-                        <p id="itemIsService">Since this is a service, the prices are not fixed and you might need to contact the service provider for prices.</p>
-
-                        <Link to="" target="_blank" id="linkToSeller" className="linkToSeller"> <button type="button" className="callSeller"><span>Call <span id="productSellerNameButton">John Sila</span></span></button></Link>
-                    </div>
-                    <div>
+                    
+                    <div className="precaution">
                         <h3>Precaution</h3>
                         <h4><b>JS & Siblings</b> wishes to announce the following:</h4>
                         <ul>

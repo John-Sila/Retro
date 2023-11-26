@@ -191,7 +191,7 @@ const SignUp = () => {
                         <span id="passwordMismatch">Passwords don't match.</span>
                     </label>
                     <button type="button" className="submit" onClick={checkPassword}>Submit</button>
-                    <p className="signin">Already have an acount? <Link to="/login">Login.</Link> </p>
+                    <p className="signin">Already have an acount? <Link to="/login">Login</Link>.</p>
                 </form>
 
 

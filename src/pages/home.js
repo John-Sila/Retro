@@ -1,14 +1,17 @@
 // import { Link } from "react-router-dom";
-import { FaTimes } from "react-icons/fa";
+import { FaTimes, FaSearch } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import { firebaseConfigurationDetails, windowOnclick } from "../external_functions";
 import { AiOutlineArrowLeft, AiOutlineArrowRight, AiFillStar } from "react-icons/ai";
 import PanelImages from "./panelimages";
+import { ReactComponent as TransportTruck } from "../svgs/undraw_delivery_truck_vt6p.svg";
+import { ReactComponent as Gardening } from "../svgs/undraw_gardening_re_e658.svg";
+import { ReactComponent as Computer } from "../svgs/undraw_online_test_re_kyfx.svg";
 
 // firebase
 import { initializeApp } from "firebase/app";
 import { getDatabase, get, ref } from "firebase/database";
-import { getFirestore, collection, getDocs } from 'firebase/firestore';
+// import { getFirestore, collection, getDocs } from 'firebase/firestore';
 import { getStorage, ref as storageRef, getDownloadURL, listAll, getMetadata } from 'firebase/storage';
 
 
@@ -21,6 +24,9 @@ const Home = () => {
     const [img, setImg] = useState([]);
     const [imgInfo, setImgInfo] = useState([]);
     const [addedImages, setAddedImages] = useState([]);
+    const [windowListen, setWindowListen] = useState(false);
+
+    const [searchVal, setSearchVal] = useState("");
 
     // firebase instance
     const app = initializeApp(firebaseConfigurationDetails);
@@ -32,7 +38,7 @@ const Home = () => {
         if (loading) {
             document.getElementById("loadingModal").style.display = "flex";
         } else {
-            document.getElementById("loadingModal").style.display = "";
+            document.getElementById("loadingModal").style.display = "none";
         }
     }, [loading])
 
@@ -43,7 +49,7 @@ const Home = () => {
     // when our page loads
     useEffect( () => {
         setLoading(true); // load
-        const intervalId = setInterval(styleHugePanel, 10000); // the slideshow
+        // const intervalId = setInterval(styleHugePanel, 10000); // the slideshow
 
         // get default products
         const reference = ref(db, "Products");
@@ -73,7 +79,8 @@ const Home = () => {
         }
 
             
-        return () => clearInterval(intervalId); // clean
+        // return () => clearInterval(intervalId); // clean
+        styleHugePanel();
 
     }, [])
 
@@ -203,9 +210,6 @@ const Home = () => {
             setImg(images);
             setImgInfo([...extrasInfo]);
             setAddedImages([...moreImages]);
-            console.log(moreImages.length);
-            
-              
         } else {
             setTimeout(() => {
                 HandleURLs(loopNumber);
@@ -220,21 +224,171 @@ const Home = () => {
     // the hero tab
     const styleHugePanel = () => {
         const hugePanel = document.querySelector("#hugePanel");
-        // get a random index
-        const index = Math.floor(Math.random() * (PanelImages.length - 1));
-        hugePanel.style.backgroundImage = `url(${PanelImages[index].src})`;
+        if (hugePanel) {
+            const svgs = hugePanel.querySelector("#svgElements");
+            if (svgs) {
+                const children = svgs.childNodes;
+                setInterval(() => {
+                    children.forEach( child => {
+                        child.style.display = "none";
+                    })
+                    const randInt = Math.floor( Math.random() * children.length );
+                    const child = children[randInt];
+                    child.style.display = "block";
+                    // setTimeout(() => {
+                    //     child.style.opacity = .5;
+                    // }, 500);
+                    setTimeout(() => {
+                        child.style.opacity = 1.0;
+                    }, 3000);
+                    setTimeout(() => {
+                        child.style.opacity = .0;
+                    }, 7000);
+                    // setTimeout(() => {
+                    //     child.style.opacity = 0;
+                    // }, 8000);
+                }, 10000);
+            }
+        } else return false;
     }
 
-    // onInput, know whether to display the "x"
-    const engageSearch = () => {
-        const searchBox = document.querySelector("#search");
-        document.getElementById("deleteInput").style.display = searchBox.value === "" ? "none" : "block";
+    // when mouse is over the search icon
+    const SearchIconClick = () => {
+        if (searchVal === "") { return false }
+        // this is supposed to execute when the user wants to search generally.
+        // like all mercedes benz cars in the site
+        const noSearchResults = document.getElementById("noSearchResults");
+        const imageDivs = document.querySelectorAll('.imageDiv');
+        if (noSearchResults === null) {
+            // there are results for searched content
+            // show the search results in their divs
+            
+            // first, then disappear all of the imageDivs
+            imageDivs.forEach(imageDiv => {
+                imageDiv.style.display = "none";
+            })
+            const searchedContent = document.getElementById("searchedContent");
+            const allPsHere = searchedContent.querySelectorAll("p");
+            // then loop again over all imageDivs and see if their search result is here
+            // then display them
+            // today we finish with that😓
+            imageDivs.forEach( imageDiv => {
+                const thisItemName = imageDiv.querySelector(".itemName").innerHTML;
+
+                for (let i = 0; i < allPsHere.length; i++) {
+                    if (thisItemName === allPsHere[i].innerHTML) {
+                        imageDiv.style.display = "";
+                        break;
+                    }
+                    
+                }
+
+            })
+
+            setSearchVal("");
+
+        } else {
+            // there are no results for searched content
+            // so just display everything
+            imageDivs.forEach(imageDiv => {
+                imageDiv.style.display = "";
+            })
+        };
+        
     }
+
+    // windowListen
+    window.onclick = event => {
+        setSearchVal("");
+    }
+
+    useEffect( () => {
+
+        // first, strip the search results bare
+        const searchedContentDiv = document.getElementById("searchedContent");
+        const children = searchedContentDiv.childNodes;
+        if (searchedContentDiv && children) {
+            for ( let i = children.length - 1; i >= 0; --i ){
+                searchedContentDiv.removeChild(children[i]);
+            }
+        }
+
+        // onInput, know whether to display the "x"
+        const xIcon = document.getElementById("deleteInput");
+        if (searchVal === "") {
+            xIcon.style.display = "";
+        } else {
+            // alert("here")
+            xIcon.style.display = "block"
+            // also, know if to intergrate the search results
+            // since the client is trying to search something.
+            const searchables = document.getElementsByClassName("searchable");
+
+            if (searchables) {
+                setWindowListen(true);
+                // we want to ensure the regexp wont have symbols
+                function cleanRegex(str) {
+                    return str.toLowerCase().replace(/[^a-zA-Z\s-]/g, ''); // Replace any character not in a-z or A-Z with an empty string
+                }
+
+                const regularExpression = new RegExp(cleanRegex(searchVal));
+                // alert(cleanRegex(searchVal))
+                for (let i = 0; i < searchables.length; i++) {
+                    const element = searchables[i].textContent.toString().toLowerCase();
+                    if (regularExpression.test(element)) {
+                        const pElement = document.createElement("p");
+                        // const pElementText = document.createTextNode(element);
+                        pElement.innerHTML = searchables[i].textContent;
+
+                        
+                        // when a searched item is clicked
+                        // make the page only contain that one item
+                        pElement.addEventListener( "click", event => {
+                            const imageDivs = document.querySelectorAll('.imageDiv');
+                            if (imageDivs) {
+                                imageDivs.forEach( imageDiv => {
+                                    if ( imageDiv.querySelectorAll(".itemName")[0].innerHTML === searchables[i].textContent ) {
+                                        imageDiv.style.display = "";
+                                        return;
+                                    } else {
+                                        imageDiv.style.display = "none";
+                                    }
+                                })
+                            }
+
+                            // remove this div's contents so it disappears
+                            setSearchVal("");
+
+                        })
+
+
+
+                        document.getElementById("searchedContent")?.appendChild(pElement);
+                    } 
+                }
+
+                // if input is not empty but we still dont have any results
+                // tell them that no results were found
+                if (document.getElementById("searchedContent")?.childNodes.length === 0) {
+                    const pElement = document.createElement("span");
+                    pElement.innerHTML = "No matches found!";
+                    pElement.id = "noSearchResults";
+                    document.getElementById("searchedContent")?.appendChild(pElement);
+                }
+            }
+
+            // only when we have content
+            // setWindowListen(true)
+
+        };
+
+    }, [searchVal])
     
     // delete search value
     const deleteInput = event => {
         document.querySelector("#search").value = "";
-        event.target.style.display = "none";
+        setSearchVal("");
+        document.querySelector("#search").focus();
     }
 
     // close menu
@@ -276,125 +430,90 @@ const Home = () => {
         // alert(addedImages.length);
         console.log(itemFeatures.length);
 
-
-
-        window.location.pathname = "/this_item"
+        window.location.pathname = "/this_item";
     }
 
     return (
         <>
             <div className="hugePanel" id="hugePanel">
 
-                <div className="hugePanelLeft">
-                    <span onClick={styleHugePanel}><AiOutlineArrowLeft /></span>
-                </div>
-
-                <div className="hasSearch">
-                    <input type="search" name="search" id="search" placeholder="I am looking for..." maxLength={12} minLength={3} onInput={engageSearch} />
-                    <FaTimes className="icon" id="deleteInput" onClick={deleteInput}/>
-                </div>
-
-                <div className="hugePanelRight">
-                    <span onClick={styleHugePanel}><AiOutlineArrowRight /></span>
+                <div className="svgElements" id="svgElements">
+                    <div className="TransportTruck" id="TransportTruck"><TransportTruck style={{height: "20vh", width: "100vw"}} /></div>
+                    <div className="Gardening" id="Gardening"><Gardening style={{height: "20vh", width: "100vw"}} /></div>
+                    <div className="Computer" id="Computer"><Computer style={{height: "20vh", width: "100vw"}} /></div>
                 </div>
 
             </div>
 
             <div className="homeContent">
-                <aside id="mainAds">
-                    <span className="closeMenu" id="closeMenu" onClick={closeMenu}><FaTimes /></span>
 
-                    <div>
-                        <div>
-                            <button type="button">Vehicles</button>
-                            <button type="button">Mobile Phones</button>
-                            <button type="button">Computer, PC & Camera</button>
-                            <button type="button">Services</button>
-                            <button type="button">Pets</button>
-                            <button type="button">Agriculture & Food</button>
-                            <button type="button">Fashion & Interior</button>
-                            <button type="button">Health & Beauty</button>
-                            <button type="button">Children & Babies</button>
-                            <button type="button">Sports & Extra Curricular</button>
-                            <button type="button">Furniture</button>
-                            <button type="button">Kitchenware</button>
-                            
-                            {/* <div className="snapOne">
-                                <Link to="/login" className="links guest">Login</Link>
-                                <Link to="/my_profile" className="links customer">Log out</Link>
-                            </div> */}
-                            
+                <div className="hasSearch" id="hasSearch">
+
+                    <div className="searchDiv" id="searchDiv">
+                        <input type="search" className="zoomClass" name="search" id="search" placeholder="Search market" maxLength={15} onInput={e => setSearchVal(e.target.value)} />
+                        
+                        <div className="makeRel">
+                            <div className="searchedContent" id="searchedContent">
+                                
+                            </div>
                         </div>
                     </div>
 
-                </aside>
+                    <span onClick={SearchIconClick}>
+                        <FaSearch className="searchIcon" id="searchIcon" onClick={SearchIconClick} />
+                    </span>
+                    <FaTimes className="icon" id="deleteInput" onClick={deleteInput}/>
 
-                <div className="homeRight" id="homeRight">
-                    {/* from our JSON */}
-                    {
-                        products.map((singleItem, index) => (
-                            <div className="imageDiv internal" key={index} >
+                </div>
 
-                                <img src={singleItem.link} alt={singleItem.name} onClick={() => imageClicked(
-                                    singleItem.link,
-                                    singleItem.srcSet,
-                                    singleItem.price,
-                                    singleItem.name,
-                                    singleItem.category,
-                                    singleItem.location,
-                                    singleItem.mobile,
-                                    singleItem.priceNegotiable,
-                                    singleItem.used,
-                                    singleItem.seller,
-                                    singleItem.features,
-                                    singleItem.additionalInfo,
-                                    )} />
-                                <span className="itemName">{singleItem.name}</span>
-                                <span className="price">{singleItem.price}</span>
-                                <div className="stars">
-                                    <span className="rateStars" onClick={() => RateProduct(index, 1)}><AiFillStar/></span>
-                                    <span className="rateStars" onClick={() => RateProduct(index, 2)}><AiFillStar/></span>
-                                    <span className="rateStars" onClick={() => RateProduct(index, 3)}><AiFillStar/></span>
-                                    <span className="rateStars" onClick={() => RateProduct(index, 4)}><AiFillStar/></span>
-                                    <span className="rateStars" onClick={() => RateProduct(index, 5)}><AiFillStar/></span>
-                                </div>
+                <div className="flexRow">
+                    <aside id="mainAds">
+                        <span className="closeMenu" id="closeMenu" onClick={closeMenu}><FaTimes /></span>
+
+                        <div>
+
+                            <div>
+                                <button type="button">Vehicles</button>
+                                <button type="button">Mobile Phones</button>
+                                <button type="button">Computer, PC & Camera</button>
+                                <button type="button">Services</button>
+                                <button type="button">Pets</button>
+                                <button type="button">Agriculture & Food</button>
+                                <button type="button">Fashion & Interior</button>
+                                <button type="button">Health & Beauty</button>
+                                <button type="button">Children & Babies</button>
+                                <button type="button">Sports & Extra Curricular</button>
+                                <button type="button">Furniture</button>
+                                <button type="button">Kitchenware</button>
                             </div>
-                        ))
-                    }
 
-                    {/* adsDivs */}
-                    {/* <div className="adDiv1">this</div> */}
+                        </div>
 
-                    {/* from firebase */}
-                    {
-                        img.map((singleURL, index) => (
-                            <div className="imageDiv internal" key={index}>
+                    </aside>
 
-                                {/* {addedImages && addedImages[index] && (
-                                    <> */}
-                                        <img src={singleURL} alt={imgInfo[index].itemName} onClick={() => fireBaseImgClicked(
-                                            index,
-                                            singleURL,
-                                            addedImages[index],
-                                            imgInfo[index].Country,
-                                            imgInfo[index].Region,
-                                            imgInfo[index].Seller,
-                                            imgInfo[index].itemCategory,
-                                            imgInfo[index].itemFeatures[0],
-                                            imgInfo[index].itemName,
-                                            imgInfo[index].itemPrice,
-                                            imgInfo[index].itemStatus,
-                                            imgInfo[index].phoneNumber,
-                                            imgInfo[index].priceNegotiable,
+                    <div className="homeRight" id="homeRight">
+                        {/* from our JSON */}
+                        {
+                            products.map((singleItem, index) => (
+                                <div className="imageDiv internal" key={index} >
+
+                                    <img src={singleItem.link} alt={singleItem.name} onClick={() => imageClicked(
+                                        singleItem.link,
+                                        singleItem.srcSet,
+                                        singleItem.price,
+                                        singleItem.name,
+                                        singleItem.category,
+                                        singleItem.location,
+                                        singleItem.mobile,
+                                        singleItem.priceNegotiable,
+                                        singleItem.used,
+                                        singleItem.seller,
+                                        singleItem.features,
+                                        singleItem.additionalInfo,
                                         )} />
-                                    {/* </>
-                                )} */}
-
-                                {imgInfo && imgInfo[index] && (
-                                    <>
-                                        <span className="itemName">{imgInfo[index].itemName}</span>
-                                        {/* Other content */}
-                                        <span className="price">{imgInfo[index].itemPrice === "null" ? "Service" : `KSh ${imgInfo[index].itemPrice}` }</span>
+                                    <span className="itemName searchable">{singleItem.name}</span>
+                                    <span className="price">{singleItem.price}</span>
+                                    <div className="hasStarsDiv">
                                         <div className="stars">
                                             <span className="rateStars" onClick={() => RateProduct(index, 1)}><AiFillStar/></span>
                                             <span className="rateStars" onClick={() => RateProduct(index, 2)}><AiFillStar/></span>
@@ -402,23 +521,57 @@ const Home = () => {
                                             <span className="rateStars" onClick={() => RateProduct(index, 4)}><AiFillStar/></span>
                                             <span className="rateStars" onClick={() => RateProduct(index, 5)}><AiFillStar/></span>
                                         </div>
+                                    </div>
+                                </div>
+                            ))
+                        }
 
-                                        {/* {
-                                            addedImages[index].map( feature => (
-                                                <p>{feature}</p>
-                                            ))
-                                        } */}
+                        {/* adsDivs */}
+                        {/* <div className="adDiv1">this</div> */}
+
+                        {/* from firebase */}
+                        {
+                            img.map((singleURL, index) => (
+                                <div className="imageDiv internal" key={index}>
+                                    <img src={singleURL} alt={imgInfo[index].itemName} onClick={() => fireBaseImgClicked(
+                                        index,
+                                        singleURL,
+                                        addedImages[index],
+                                        imgInfo[index].Country,
+                                        imgInfo[index].Region,
+                                        imgInfo[index].Seller,
+                                        imgInfo[index].itemCategory,
+                                        imgInfo[index].itemFeatures[0],
+                                        imgInfo[index].itemName,
+                                        imgInfo[index].itemPrice,
+                                        imgInfo[index].itemStatus,
+                                        imgInfo[index].phoneNumber,
+                                        imgInfo[index].priceNegotiable,
+                                    )} />
+
+                                    {imgInfo && imgInfo[index] && (
+                                        <>
+                                            <span className="itemName searchable">{imgInfo[index].itemName}</span>
+                                            {/* Other content */}
+                                            <span className="price">{imgInfo[index].itemPrice === "null" ? "Service" : `KSh ${imgInfo[index].itemPrice}` }</span>
+                                            <div className="hasStarsDiv">
+                                                <div className="stars">
+                                                    <span className="rateStars" onClick={() => RateProduct(index, 1)}><AiFillStar/></span>
+                                                    <span className="rateStars" onClick={() => RateProduct(index, 2)}><AiFillStar/></span>
+                                                    <span className="rateStars" onClick={() => RateProduct(index, 3)}><AiFillStar/></span>
+                                                    <span className="rateStars" onClick={() => RateProduct(index, 4)}><AiFillStar/></span>
+                                                    <span className="rateStars" onClick={() => RateProduct(index, 5)}><AiFillStar/></span>
+                                                </div>
+                                            </div>
+
+                                        </>
+                                    )}
+                                </div>
+                            ))
+                        }
 
 
-
-                                        
-                                    </>
-                                )}
-                            </div>
-                        ))
-                    }
-
-
+                    </div>
                 </div>
             </div>
         </>
