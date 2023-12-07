@@ -1,33 +1,47 @@
 import { Link } from "react-router-dom";
 import  { ImLocation2 } from "react-icons/im";
+import { MdMessage } from "react-icons/md";
+import { IoIosArrowDown } from "react-icons/io";
+import { IoSend } from "react-icons/io5";
 import { useEffect, useState } from "react";
+import { getStorage, ref as storageRef, getDownloadURL, listAll, getMetadata } from 'firebase/storage';
+import { firebaseConfigurationDetails } from "../external_functions";
+import { initializeApp } from "firebase/app";
+import { getDatabase, ref, query, orderByChild, equalTo, limitToFirst, onValue, get, set} from "firebase/database";
+import { Auth, getAuth, onAuthStateChanged } from "firebase/auth";
 
 const Product = () => {
 
     const [mobileNumber, setMobileNumber] = useState("");
     const [features, setFeatures] = useState([]);
-    const [srcset, setSrcset] = useState([]);
+    let [srcSet, setSrcSet] = useState([]);
     const [sellerName, setSellerName] = useState("");
+    const [typedMessage, setTypedMessage] = useState("");
+    const [recipient, setRecipient] = useState("");
+    const [sender, setSender] = useState("");
     
     useEffect( () => {
         const Subject = localStorage.getItem("productParameters") === null ? "useFirebase" : "useDefault";
-        console.log(Subject);
+        // console.log(Subject);
         setPage(Subject);
         // let there be no available pressLinks
     }, [])
 
+    // mobile number
     useEffect( () => {
-        document.getElementById("linkToSeller").setAttribute("href", `https://api.whatsapp.com/send?phone=${mobileNumber}&text=Hello%2C%20this%20is%20concerning%20your%20product%20at%20JS%26S%2E`);
+        document.getElementById("linkToSeller").setAttribute("href", `https://api.whatsapp.com/send?phone=${mobileNumber}&text=Hello%2C%20this%20is%20concerning%20your%20product%20at%20AfriCart%20Marketplace%2E`);
     }, [mobileNumber]);
     
     const setPage = (param) => {
         if (param === "useDefault") {
             // default
+            document.getElementById("thisComa").style.display = "none"
+            
             const storedProductParameterJSON = localStorage.getItem("productParameters");
             const parsedParams = JSON.parse(storedProductParameterJSON);
             if (parsedParams) {
                 document.getElementById("productImg").setAttribute("src", parsedParams.link);
-                document.getElementById("productSellerLocation").innerHTML = parsedParams.location;
+                document.getElementById("region").innerHTML = parsedParams.location;
                 document.getElementById("productItemName").innerHTML = parsedParams.name;
                 // document.getElementById("productSellerName").innerHTML = parsedParams.seller;
                 setSellerName(parsedParams.seller);
@@ -36,13 +50,16 @@ const Product = () => {
                 
                 if (parsedParams.srcSet.length > 0) {
                     document.getElementById("productMoreImages").style.display = "none"; // srcSet
-                    setSrcset(parsedParams.srcSet)
+                    setSrcSet(parsedParams.srcSet)
+                } else if (parsedParams.srcSet.length === 0) {
+                    document.getElementById("additionalImages").style.display = "none";
+                    document.getElementById("productMoreImages").style.display = "block";
                 }
                 var seller = parsedParams.seller;
                 seller = seller.split(" ");
                 const sellerAbbr = seller[0].split("")[0] + seller[1].split("")[0];
                 document.getElementById("productSellerName").innerHTML = sellerAbbr;
-
+                
                 if (parsedParams.features.length !== 0) {
                     setFeatures(parsedParams.features)
                 }
@@ -56,22 +73,79 @@ const Product = () => {
             } 
         } else if (param === "useFirebase") {
             // firebase
+            document.getElementById("thisComa").style.display = "inline"
+
             const storedProductParameterJSON = localStorage.getItem("fireBaseIncomingImage");
             const parsedParams = JSON.parse(storedProductParameterJSON);
             // return
             document.getElementById("productImg").setAttribute("src", parsedParams.singleURL);
             document.getElementById("productSellerLocation").innerHTML = parsedParams.country;
             document.getElementById("productItemName").innerHTML = parsedParams.itemName;
-            document.getElementById("productItemPrice").innerHTML = `KSh ${parsedParams.itemPrice}`;
+
+
+            const formatPrice = () => {
+                let price = parsedParams.itemPrice;
+                if (price.toString().split("").length < 4) {
+                    return price;
+                }
+
+                price = price.toString().split("").reverse();
+                let formattedPrice = "";
+                for (let i = 0; i < price.length; i++) {
+
+                    const element = price[i];
+                    formattedPrice += element;
+
+                    if ((i + 1) % 3 === 0 && i > 0 && i !== price.length - 1) {
+                        formattedPrice += ",";
+                    } 
+                }
+                return formattedPrice.split("").reverse().join("");
+
+            };
+
+
+
+
+            document.getElementById("productItemPrice").innerHTML = `KSh ${formatPrice()}`;
             document.getElementById("region").innerHTML = parsedParams.region;
             setSellerName(parsedParams.seller);
             setMobileNumber(parsedParams.phoneNumber);
-            if (parsedParams.srcSet.length) {
-                if (parsedParams.srcSet.length > 0) {
-                    document.getElementById("productMoreImages").style.display = "none"; // srcSet
-                    setSrcset(parsedParams.srcSet);
+
+            // get the additional images
+            const store = getStorage(initializeApp(firebaseConfigurationDetails));
+            const ref = storageRef(store, `customerUploads/${parsedParams.identity}/extraImages`);
+            listAll(ref).then((result) => {
+                const imageRefs = result.items.filter(async (item) => {
+                    try {
+                        const metadata = await getMetadata(item);
+                        return metadata.contentType?.startsWith('image/');
+
+                    } catch (error) {
+                        console.error('Error getting metadata:', error);
+                        return false;
+                    }
+                });
+
+                if (imageRefs.length === 0) {
+                    document.getElementById("productMoreImages").style.display = "block";
+                    return;
                 }
-            }
+
+                let links = [];
+                imageRefs.forEach( imageRef => {
+                    getDownloadURL(imageRef).then((url) => {
+                        links.push(url)
+                        if (links.length === imageRefs.length) {
+                            setSrcSet(links);
+                        }
+                    }).catch((err) => {
+                        console.log(`Error getting additional images: ${err}`);
+                    });
+                })
+
+            });
+
 
             var firebaseSeller = parsedParams.seller;
             seller = firebaseSeller.split(" ");
@@ -91,6 +165,221 @@ const Product = () => {
         }
     }
     
+    // engage messages
+    const engageMessages = () => {
+
+
+        // we want to make sure that the person logged in is not the seller
+        const auth = getAuth();
+        onAuthStateChanged( auth, user => {
+
+            if (user) {
+
+                const db = getDatabase(initializeApp(firebaseConfigurationDetails));
+                const reference = ref(db, "Customers");
+                // this query locates us
+                const theQuery = query(
+                    reference,
+                    orderByChild("trimmedEmail"),
+                    equalTo(window.localStorage.getItem("trimmedEmail")),
+                    limitToFirst(1),
+                );
+                onValue(theQuery, (querySnapshot) => {
+                    const data = querySnapshot.val();
+                    // console.log(data);
+                    if (data === null) {
+                        // then the number 
+                        return false;
+                    } else {
+                        // we have data
+                        const thisEntry = Object.entries(data);
+                        const thisNum = thisEntry[0][1].phoneNumber;
+
+                        // sender
+                        setSender(thisEntry[0][0]);
+                        // console.log(thisEntry[0][0]);
+                        
+                        if (thisNum === mobileNumber) {
+                            // the poster is the one writing the message
+                            document.getElementById("ownChat").style.display = "inline";
+                            document.getElementById("chatEncrypt").style.display = "none";
+                            document.getElementById("chatToDelete").style.display = "none";
+                            
+                            // disable input
+                            const subjectInput = document.getElementById("writeMessage");
+                            subjectInput.value = "";
+                            subjectInput.style.cursor = "not-allowed";
+                            subjectInput.ariaDisabled = true;
+                            subjectInput.disabled = true;
+                            
+                        } else {
+                            // the poster is not the one writing the message
+                            document.getElementById("chatEncrypt").style.display = "";
+                            document.getElementById("chatToDelete").style.display = "";
+                            
+                            // disable input
+                            const subjectInput = document.getElementById("writeMessage");
+                            // subjectInput.value = "";
+                            subjectInput.style.cursor = "";
+                            subjectInput.ariaDisabled = false;
+                            subjectInput.disabled = false;
+                        }
+                    }
+                })
+                    
+            } else {
+                // user is logged out
+                document.getElementById("ownChat").style.display = "";
+                document.getElementById("loginNeeded").style.display = "inline";
+
+                // disable input
+                const subjectInput = document.getElementById("writeMessage");
+                subjectInput.value = "";
+                subjectInput.style.cursor = "not-allowed";
+                subjectInput.ariaDisabled = true;
+                subjectInput.disabled = true;
+                                
+            }
+        })
+
+        const chatBox = document.getElementById("chatBox");
+        if (chatBox) {
+            chatBox.style.display = "flex";
+
+            // for the cancel button
+            const chatBoxWidth = chatBox.clientWidth;
+            if (chatBoxWidth) {
+                document.getElementById("cancelMessagesDiv").style.width = `${chatBoxWidth}px`;
+            }
+
+            const chatBoxHeight = chatBox.clientHeight;
+            const firstSpanHeight = document.getElementById("messagesFirstSpan").clientHeight;
+            if (chatBoxHeight && firstSpanHeight) {
+                try {
+                    const messagesBox = document.getElementById("theMessagesDiv");
+                    if (messagesBox) {
+                        messagesBox.style.height = `${chatBoxHeight - (firstSpanHeight * 2.75)}px`;
+                    }
+                } catch (error) {
+                    console.error("Error styling chatBox: ", error);
+                }
+            }
+        }
+    }
+
+    // disappear messageBox
+    const chatBoxDisappear = () => {
+        // alert(subject)
+        document.getElementById("chatBox").style.display = "";
+    }
+
+    // writing message
+    const writingMessage = text => {
+        if (text === "") {
+            const sendButton = document.getElementById("sendText");
+            sendButton.style.opacity = "";
+            sendButton.style.cursor = "";
+            return false;
+        } else {
+            setTypedMessage(text);
+            const sendButton = document.getElementById("sendText");
+            try {
+                sendButton.style.opacity = 1;
+                sendButton.style.cursor = "pointer";
+            } catch (error) {
+                console.error("Couldn't respond to message input to enable send! ", error);
+            }
+        }
+    }
+
+    // sendMessage
+    const sendMessageToSeller = event => {
+        const styling = window.getComputedStyle(event.currentTarget).getPropertyValue("opacity");
+        if (!styling === 1) {
+            console.log(styling);
+        } else {
+            document.getElementById("writeMessage").value = "";
+            // we have text to send
+            // let's know their path
+            const db = getDatabase(initializeApp(firebaseConfigurationDetails));
+            const reference = ref(db, "Customers");
+            try {
+                const theQuery = query(
+                    reference,
+                    orderByChild("phoneNumber"),
+                    equalTo(mobileNumber),
+                    limitToFirst(1),
+                );
+                onValue(theQuery, (querySnapshot) => {
+                    const data = querySnapshot.val();
+                    if (data === null) {
+                        return false;
+                    } else {
+                        const Obj = Object.entries(data);
+                        const thisSender = Obj[0][0];
+                        setRecipient(thisSender);
+
+                        // we have both sender and receiver now
+                        CloudMessage();
+                    }
+                })
+            } catch (error) {
+                console.log(`Error getting your email credential: ${error}`);
+            }
+        }
+    }
+
+    // send message to cloud
+    const CloudMessage = () => {
+        if (sender === "" || recipient === "") {
+            console.log("Difficulty getting paths to send this message.");
+            setTimeout(() => {
+                // CloudMessage();
+                document.getElementById("sendText").click();
+            }, 200);
+            return false;
+        } else {
+            console.log("We have paths", sender, " " , recipient);
+            if (sender === recipient) {
+                // the poster is the one writing the message
+                document.getElementById("ownChat").style.display = "inline";
+                document.getElementById("chatEncrypt").style.display = "none";
+                document.getElementById("chatToDelete").style.display = "none";
+                
+                // disable input
+                const subjectInput = document.getElementById("writeMessage");
+                subjectInput.value = "";
+                subjectInput.style.cursor = "not-allowed";
+                subjectInput.ariaDisabled = true;
+                subjectInput.disabled = true;
+            } else {
+                // we should be good now
+                // get to sender first
+                if (typedMessage === "") {
+                    return false;
+                }
+
+                const db = getDatabase(initializeApp(firebaseConfigurationDetails));
+
+                // post to sender
+                const thisRef = ref(db, `Customers/${sender}/Messages/${recipient}`);
+                set(thisRef, `S:${typedMessage}`).then((result) => {
+                    console.log("Message posted to sender.");
+                }).catch((err) => {
+                    console.log("Couldn't post message to sender's Database Account");
+                });
+
+                // post to the recipient
+                const anotherRef = ref(db, `Customers/${recipient}/Messages/${sender}`);
+                set(anotherRef, `R:${typedMessage}`).then((result) => {
+                    console.log("Message posted to receiver.");
+                }).catch((err) => {
+                    console.log("Couldn't post message to recipient's Database Account");
+                });
+            }
+        }
+    }
+    
 
     return (
         <>
@@ -100,7 +389,7 @@ const Product = () => {
                     <h3 id="productItemName">Name</h3>
                     <img id="productImg" src="" alt="" />
                     <div>
-                        <p><ImLocation2 /><span id="region"></span>&nbsp;<span id="productSellerLocation">Kilimani</span></p>
+                        <p><ImLocation2 /><span id="region"></span><span id="thisComa">,</span>&nbsp;<span id="productSellerLocation"></span></p>
                         <p id="productMoreImages">No more images for this item were provided.</p>
                     </div>
 
@@ -120,7 +409,7 @@ const Product = () => {
 
                     <div className="additionalImages" id="additionalImages">
                         {
-                            srcset.map( (imgurl, index) => (
+                            srcSet.map( (imgurl, index) => (
                                 <img src={imgurl} key={index} alt="img.png" />
                             ))
                         }
@@ -148,22 +437,44 @@ const Product = () => {
                             </svg>
                     </button>
 
-                    <button type="button" className="sendMessage">Message {sellerName}</button>
+                    <button type="button" className="sendMessage" onClick={engageMessages}>Message {sellerName}</button>
 
                     
                     <div className="precaution">
                         <h3>Precaution</h3>
-                        <h4><b>JS & Siblings</b> wishes to announce the following:</h4>
+                        <h4><b>AfriCart</b> wishes to announce the following:</h4>
                         <ul>
                             <li>We advice you don't pay for items before delivery especially when dealing with sellers that you've never interacted with before.</li>
-                            <li><b>JS & Siblings</b> is only responsible for damages when goods were bought from the <b>JS & Siblings</b> official shop and records for the transactions effectively made.</li>
-                            <li><Link to="/"><b>JS & Siblings</b></Link> is the only official shop for <b>JS & Siblings.</b></li>
-                            <li>Otherwise, in accordance to the <Link to="/privacy_policy" className="links">privacy policy</Link>, <b>JS & Siblings</b> will not be responsible, in any way, for any damage or infidelity that may occur between you and the seller.</li>
-                            <li>However, <b>JS & Siblings</b> is responsible for ensuring the security of its customers and in case of mishandling, you can report abuse.</li>
+                            <li><b>AfriCart</b> is only responsible for damages when goods were bought from the <b>AfriCart</b> official shop and records for the transactions effectively made.</li>
+                            <li><Link to="/"><b>AfriCart</b></Link> is the only official shop for <b>AfriCart.</b></li>
+                            <li>Otherwise, in accordance to the <Link to="/privacy_policy" className="links">privacy policy</Link>, <b>AfriCart</b> will not be responsible, in any way, for any damage or infidelity that may occur between you and the seller.</li>
+                            <li>However, <b>AfriCart</b> is responsible for ensuring the security of its customers and in case of mishandling, you can report abuse.</li>
                             <li><b>NB.</b> This report is <b>not</b> anonymous due to reasons mentioned in our <Link to="/privacy_policy">privacy policy.</Link></li>
-                            <Link to="report_abuse" className="r_abuse">Report Abuse!</Link>
+                            <Link to="/report_abuse" className="r_abuse">Report Abuse!</Link>
                         </ul>
                     </div>
+                </div>
+
+                <div className="chatBox zoomClass" id="chatBox">
+                    <span id="messagesFirstSpan"><MdMessage /> <span>Texting with {sellerName}</span></span>
+                    <div className="theMessagesDiv" id="theMessagesDiv">
+                        <span id="chatEncrypt">
+                            This chat is not encrypted but it's also never used anywhere by anyone. <br />
+                            Its only here to make your work easier. <hr />
+                            However, for confidentiality, consider texting {sellerName} through WhatsApp.
+                        </span>
+                        <hr />
+                        <span id="chatToDelete">Unless you have saved this chat, a message will disappear 24 hrs after {sellerName} has received it.</span>
+                        <span id="ownChat">You posted this item. You cannot send messages to yourself.</span>
+                        <span id="loginNeeded">Consider signing in first.</span>
+                        <hr />
+
+                    </div>
+                    <div id="hasInput" className="hasInput">
+                        <input type="text" name="writeMessage" id="writeMessage" placeholder="Write text message" onInput={ event => writingMessage(event.target.value) } disabled />
+                        <span id="sendText" onClick={sendMessageToSeller}><IoSend /></span>
+                    </div>
+                    <span id="cancelMessagesDiv" onClick={() => chatBoxDisappear()}><IoIosArrowDown /> <span>Cancel</span></span>
                 </div>
             </div>
         </>

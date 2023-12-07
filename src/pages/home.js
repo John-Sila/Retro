@@ -3,16 +3,17 @@ import { FaTimes, FaSearch } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import { firebaseConfigurationDetails, windowOnclick } from "../external_functions";
 import { AiOutlineArrowLeft, AiOutlineArrowRight, AiFillStar } from "react-icons/ai";
-import PanelImages from "./panelimages";
+// import PanelImages from "./panelimages";
 import { ReactComponent as TransportTruck } from "../svgs/undraw_delivery_truck_vt6p.svg";
 import { ReactComponent as Gardening } from "../svgs/undraw_gardening_re_e658.svg";
 import { ReactComponent as Computer } from "../svgs/undraw_online_test_re_kyfx.svg";
 
 // firebase
 import { initializeApp } from "firebase/app";
-import { getDatabase, get, ref } from "firebase/database";
+import { getDatabase, get, ref, query, orderByChild, equalTo, limitToFirst, onValue, set } from "firebase/database";
 // import { getFirestore, collection, getDocs } from 'firebase/firestore';
 import { getStorage, ref as storageRef, getDownloadURL, listAll, getMetadata } from 'firebase/storage';
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 
 const Home = () => {
@@ -25,6 +26,8 @@ const Home = () => {
     const [imgInfo, setImgInfo] = useState([]);
     const [addedImages, setAddedImages] = useState([]);
     const [windowListen, setWindowListen] = useState(false);
+    const [counter, setCounter] = useState(0);
+    // const [filterContent, setFilterContent] = useState(true);
 
     const [searchVal, setSearchVal] = useState("");
 
@@ -37,11 +40,20 @@ const Home = () => {
     useEffect( () => {
         if (loading) {
             document.getElementById("loadingModal").style.display = "flex";
+            setCounter(() => counter + 1);
         } else {
+            setCounter(0);
             document.getElementById("loadingModal").style.display = "none";
         }
     }, [loading])
 
+    // the loading counter
+    useEffect( () => {
+        console.log(counter);
+        if (counter > 10) {
+            window.location.reload();
+        }
+    }, [counter])
 
 
     
@@ -81,10 +93,107 @@ const Home = () => {
             
         // return () => clearInterval(intervalId); // clean
         styleHugePanel();
+        getRatings();
 
-    }, [])
+    }, []);
 
-    // log dirnames
+
+    // get item ratings
+    const getRatings = () => {
+        const thisRef = ref(db, "Products");
+        get(thisRef).then((result) => {
+            const data = result.val();
+            for (let i = 0; i <= data.length; i++) {
+                const element = data[i];
+                if (element === undefined || element.rating === null || element.rating === undefined) {
+                    continue;
+                } else {
+                    const ratings = Object.values(element.rating);
+                    const ratingLen = Object.keys(element.rating).length;
+                    const addedStars = ratings.reduce( (a, b) => b + a);
+                    const rate = Math.round(addedStars / parseFloat(ratingLen));
+                    const thisDiv = document.getElementById(element.id);
+                    const starsDiv = thisDiv.querySelectorAll(".stars")[0];
+                    const stars = starsDiv.childNodes;
+                    try {
+                        for (let i = 0; i < rate; i++) {
+                            const main = stars[i];
+                            main.classList.add("checked");
+                            
+                        }
+                    } catch (error) {
+                        console.log(`Stars for this item (${element.id}) couldn't be located.`);
+                    }
+                }
+
+
+                
+            }
+        }).catch((err) => {
+            console.log("Couldn't access database for ratings!", err);
+        });
+
+        // perform another get for customerUploads
+        const customerUploadsRef = ref(db, `customerUploads`);
+        get(customerUploadsRef).then((result) => {
+            const data = result.val();
+            const Keys = Object.keys(data);
+            const length = Keys.length;
+
+            const thisObj = Object.entries(data);
+            // console.log(thisObj);
+
+
+            // return
+            for (let i = 0; i < length; i++) {
+                const element = thisObj[i][1];
+                if (element === undefined || element.rating === null || element.rating === undefined) {
+                    continue;
+                } else {
+                    const ratings = Object.values(element.rating);
+                    // console.log(ratings);
+                    // return
+                    const ratingLen = Object.keys(element.rating).length;
+                    const addedStars = ratings.reduce( (a, b) => b + a);
+                    const rate = Math.round(addedStars / parseFloat(ratingLen));
+                    // console.log(rate);
+
+                    (function abolishNull () {
+                        const thisDiv = document.getElementById(element.identity);
+                        while (thisDiv === null) {
+                            setTimeout(() => {
+                                abolishNull();
+                            }, 200);
+                            return false;
+                        }
+
+                        // thisDiv is not null
+                        // return
+                        if (thisDiv) {
+                            const starsDiv = thisDiv.querySelectorAll(".stars")[0];
+                            if (starsDiv) {
+                                const stars = starsDiv.childNodes;
+                                if (stars) {
+                                    try {
+                                        for (let i = 0; i < rate; i++) {
+                                            const main = stars[i];
+                                            main.classList.add("checked");
+                                        }
+                                    } catch (error) {
+                                        console.log(`Stars for this item (${element.identity}) couldn't be located.`);
+                                    }
+                                } else console.log("stars unavailable");
+                            } else console.log("This starsDiv could not be found.");
+                        } else console.log("This particular imageDiv is unavailable");
+                    })();
+                } 
+            }
+        }).catch((err) => {
+            console.log("Couldn't access database for ratings on customerUploads!", err);
+        });
+    };
+
+    // log dirnames...and images, their adds and imgInfo
     let images = [], extrasInfo = [], moreImages = [];
     useEffect( () => {
         // console.log("and here", dirNames);
@@ -98,14 +207,14 @@ const Home = () => {
                 listAll(pathRef)
                 .then((result) => {
                     const imageRefs = result.items.filter(async (item) => {
-                    try {
-                        const metadata = await getMetadata(item);
-                        return metadata.contentType?.startsWith('image/');
+                        try {
+                            const metadata = await getMetadata(item);
+                            return metadata.contentType?.startsWith('image/');
 
-                    } catch (error) {
-                        console.error('Error getting metadata:', error);
-                        return false;
-                    }
+                        } catch (error) {
+                            console.error('Error getting metadata:', error);
+                            return false;
+                        }
                     });
 
 
@@ -217,10 +326,6 @@ const Home = () => {
         }
     }
 
-    // while (moreImages.length === 0) {
-    //     setLoading(true);
-    // }
-
     // the hero tab
     const styleHugePanel = () => {
         const hugePanel = document.querySelector("#hugePanel");
@@ -228,6 +333,26 @@ const Home = () => {
             const svgs = hugePanel.querySelector("#svgElements");
             if (svgs) {
                 const children = svgs.childNodes;
+
+                // this is just for the first show
+                setTimeout(() => {
+                    children.forEach( child => {
+                        child.style.display = "none";
+                    })
+                    const randInt = Math.floor( Math.random() * children.length );
+                    const child = children[randInt];
+                    child.style.display = "block";
+                    setTimeout(() => {
+                        child.style.opacity = 1.0;
+                    }, 3000);
+                    setTimeout(() => {
+                        child.style.opacity = .0;
+                    }, 7000);
+                }, 0);
+
+
+
+
                 setInterval(() => {
                     children.forEach( child => {
                         child.style.display = "none";
@@ -235,18 +360,12 @@ const Home = () => {
                     const randInt = Math.floor( Math.random() * children.length );
                     const child = children[randInt];
                     child.style.display = "block";
-                    // setTimeout(() => {
-                    //     child.style.opacity = .5;
-                    // }, 500);
                     setTimeout(() => {
                         child.style.opacity = 1.0;
                     }, 3000);
                     setTimeout(() => {
                         child.style.opacity = .0;
                     }, 7000);
-                    // setTimeout(() => {
-                    //     child.style.opacity = 0;
-                    // }, 8000);
                 }, 10000);
             }
         } else return false;
@@ -302,8 +421,8 @@ const Home = () => {
         setSearchVal("");
     }
 
+    // searching
     useEffect( () => {
-
         // first, strip the search results bare
         const searchedContentDiv = document.getElementById("searchedContent");
         const children = searchedContentDiv.childNodes;
@@ -361,8 +480,6 @@ const Home = () => {
 
                         })
 
-
-
                         document.getElementById("searchedContent")?.appendChild(pElement);
                     } 
                 }
@@ -391,6 +508,201 @@ const Home = () => {
         document.querySelector("#search").focus();
     }
 
+    // for filtering from aside
+    const filterFromAside = event => {
+        const innerHtml = event.target.textContent.toLowerCase().replace(/[\s,]+/g, '');
+        const imageDivs = document.querySelectorAll(".imageDiv");
+
+        if (innerHtml !== "allProducts") {
+            imageDivs.forEach( imageDiv => { imageDiv.style.display = "none" } );
+        }
+
+        switch (innerHtml) {
+            case "allproducts":
+                imageDivs.forEach( imageDiv => { imageDiv.style.display = "" } );
+                break;
+            case "vehicles":
+                {
+                    imageDivs.forEach( imageDiv => {
+                        const thisCategory = imageDiv.querySelectorAll(".itemCategorySpan")[0]?.textContent.toLowerCase().replace(/[\s,]+/g, '');
+                        // alert(thisCategory);
+                        if (thisCategory === "vehicles") {
+                            imageDiv.style.display = "";
+                        }
+                    })
+                    break;
+                }
+
+            case "mobilephones":
+                {
+                    imageDivs.forEach( imageDiv => {
+                        const thisCategory = imageDiv.querySelectorAll(".itemCategorySpan")[0]?.textContent.toLowerCase().replace(/[\s,]+/g, '');
+                        // alert(thisCategory);
+                        if (thisCategory === "mobilephones") {
+                            imageDiv.style.display = "";
+                        }
+                    })
+                    break;
+                }
+
+            case "computerpccamera":
+                {
+                    imageDivs.forEach( imageDiv => {
+                        const thisCategory = imageDiv.querySelectorAll(".itemCategorySpan")[0]?.textContent.toLowerCase().replace(/[\s,]+/g, '');
+                        // alert(thisCategory);
+                        if (thisCategory === "computerpccamera") {
+                            imageDiv.style.display = "";
+                        }
+                    })
+                    break;
+                }
+
+            case "generalelectronics":
+                {
+                    imageDivs.forEach( imageDiv => {
+                        const thisCategory = imageDiv.querySelectorAll(".itemCategorySpan")[0]?.textContent.toLowerCase().replace(/[\s,]+/g, '');
+                        // alert(thisCategory);
+                        if (thisCategory === "generalelectronics") {
+                            imageDiv.style.display = "";
+                        }
+                    })
+                    break;
+                }
+
+            case "services":
+                {
+                    imageDivs.forEach( imageDiv => {
+                        const thisCategory = imageDiv.querySelectorAll(".itemCategorySpan")[0]?.textContent.toLowerCase().replace(/[\s,]+/g, '');
+                        // alert(thisCategory);
+                        if (thisCategory === "services") {
+                            imageDiv.style.display = "";
+                        }
+                    })
+                    break;
+                }
+
+            case "pets":
+                {
+                    imageDivs.forEach( imageDiv => {
+                        const thisCategory = imageDiv.querySelectorAll(".itemCategorySpan")[0]?.textContent.toLowerCase().replace(/[\s,]+/g, '');
+                        // alert(thisCategory);
+                        if (thisCategory === "pets") {
+                            imageDiv.style.display = "";
+                        }
+                    })
+                    break;
+                }
+
+            case "foodagriculture":
+                {
+                    imageDivs.forEach( imageDiv => {
+                        const thisCategory = imageDiv.querySelectorAll(".itemCategorySpan")[0]?.textContent.toLowerCase().replace(/[\s,]+/g, '');
+                        // alert(thisCategory);
+                        if (thisCategory === "foodagriculture") {
+                            imageDiv.style.display = "";
+                        }
+                    })
+                    break;
+                }
+
+            case "fashioninteriordesign":
+                {
+                    imageDivs.forEach( imageDiv => {
+                        const thisCategory = imageDiv.querySelectorAll(".itemCategorySpan")[0]?.textContent.toLowerCase().replace(/[\s,]+/g, '');
+                        // alert(thisCategory);
+                        if (thisCategory === "fashioninteriordesign") {
+                            imageDiv.style.display = "";
+                        }
+                    })
+                    break;
+                }
+            
+
+            case "healthbeauty":
+                {
+                    imageDivs.forEach( imageDiv => {
+                        const thisCategory = imageDiv.querySelectorAll(".itemCategorySpan")[0]?.textContent.toLowerCase().replace(/[\s,]+/g, '');
+                        // alert(thisCategory);
+                        if (thisCategory === "healthbeauty") {
+                            imageDiv.style.display = "";
+                        }
+                    })
+                    break;
+                }
+            
+
+            case "childrenbabies":
+                {
+                    imageDivs.forEach( imageDiv => {
+                        const thisCategory = imageDiv.querySelectorAll(".itemCategorySpan")[0]?.textContent.toLowerCase().replace(/[\s,]+/g, '');
+                        // alert(thisCategory);
+                        if (thisCategory === "childrenbabies") {
+                            imageDiv.style.display = "";
+                        }
+                    })
+                    break;
+                }
+            
+
+            case "sportsextracurricular":
+                {
+                    imageDivs.forEach( imageDiv => {
+                        const thisCategory = imageDiv.querySelectorAll(".itemCategorySpan")[0]?.textContent.toLowerCase().replace(/[\s,]+/g, '');
+                        // alert(thisCategory);
+                        if (thisCategory === "sportsextracurricular") {
+                            imageDiv.style.display = "";
+                        }
+                    })
+                    break;
+                }
+            
+
+            case "furniture":
+                {
+                    imageDivs.forEach( imageDiv => {
+                        const thisCategory = imageDiv.querySelectorAll(".itemCategorySpan")[0]?.textContent.toLowerCase().replace(/[\s,]+/g, '');
+                        // alert(thisCategory);
+                        if (thisCategory === "furniture") {
+                            imageDiv.style.display = "";
+                        }
+                    })
+                    break;
+                }
+            
+
+            case "kitchenware":
+                {
+                    imageDivs.forEach( imageDiv => {
+                        const thisCategory = imageDiv.querySelectorAll(".itemCategorySpan")[0]?.textContent.toLowerCase().replace(/[\s,]+/g, '');
+                        // alert(thisCategory);
+                        if (thisCategory === "kitchenware") {
+                            imageDiv.style.display = "";
+                        }
+                    })
+                    break;
+                }
+            
+                
+            default:
+                imageDivs.forEach( imageDiv => { imageDiv.style.display = "" } );
+                break;
+        }
+
+        // check whether there are any of the divs available
+        // if false, inform the user then the filter couldn't find any items in that category
+        const imageDivsArray = Array.from(imageDivs);
+        const availableAsideFiltrationResults = imageDivsArray.filter(imageDiv => {
+            const display = window.getComputedStyle(imageDiv).getPropertyValue("display");
+            return display !== "none";
+        });
+        if (availableAsideFiltrationResults.length === 0) {
+            document.getElementById("filteredEventTarget").innerHTML = event.target.textContent;
+            document.getElementById("noFiltrationResults").style.display = "flex";
+        } else {
+            document.getElementById("noFiltrationResults").style.display = "";
+        }
+    }
+
     // close menu
     const closeMenu = event => {
         document.getElementsByTagName("aside")[0].style.left = "-200vw";
@@ -407,20 +719,98 @@ const Home = () => {
         window.location.pathname = "/this_item";
     }
 
+    // imageContextMenu
+    const imageContextMenu = () => {
+        // alert(true)
+    }
+
     // rate product
-    const RateProduct = ( index, starNumber ) => {
-        const subjectDiv = document.getElementsByClassName("imageDiv")[index - 1];
-        const stars = subjectDiv.querySelectorAll(".rateStars");
-        stars.forEach( star => {star.classList.remove("checked")}); // remove any current checkings
-        for (let i = 0; i < starNumber; i++) {
-            stars[i].classList.add("checked");
+    const RateProduct = ( identity, starNumber, source ) => {
+
+        // this action requires the user to be logged in
+        const auth = getAuth();
+        // check the user login state
+        // Set up an observer to watch for changes in the user's authentication state
+        onAuthStateChanged(auth, user => {
+            if (!user) {
+                // User is signed out
+                document.getElementById("loginFirst").style.display = "grid";
+                return false;
+            } else {
+                // User is signed in
+                const subjectDiv = document.getElementById(identity);
+                const stars = subjectDiv.querySelectorAll(".rateStars");
+                stars.forEach( star => {star.classList.remove("checked")}); // remove any current checkings
+                for (let i = 0; i < starNumber; i++) {
+                    stars[i].classList.add("checked");
+                    stars[i].classList.add("starPulseOut");
+                }
+        
+                // now edit database
+                if (source === "defaults") {
+                    // access database
+                    const app = initializeApp(firebaseConfigurationDetails);
+                    const database = getDatabase(app);
+                    const reference = ref(database, "Products");
+                    const theQuery = query(
+                        reference,
+                        orderByChild("id"),
+                        equalTo(identity),
+                        limitToFirst(1)
+                    )
+                    onValue(theQuery, (snapshot) => {
+                        const data = snapshot.val();
+                        if (data === null) {
+                            return false;
+                        } else {
+                            const parsed = Object.keys(data)[0];
+                            // now you can have the path
+                            const postRef = ref(database, `Products/${parsed}/rating/${window.localStorage.getItem("trimmedEmail")}`);
+                            set(postRef, starNumber).then(() => {
+                                // rating has been made successfully
+                            }).catch((err) => {
+                                // rating couldn't be posted to db
+                                stars.forEach( star => {star.classList.remove("checked")});
+                            });
+
+                        }
+
+                    })
+  
+                } else if (source === "customerUploads") {
+                    // go to database
+                    const thisRef = ref(db, `customerUploads/${identity}/rating/${window.localStorage.getItem("trimmedEmail")}`)
+                    set(thisRef, starNumber).then(() => {
+                        // rate has been put to database
+                    }).catch((err) => {
+                        console.log(`Error updating product's rating.${err}`);
+                        stars.forEach( star => {star.classList.remove("checked")}); 
+                    });
+                }
+
+            }
+
+        });
+
+
+
+    }
+
+    // when rate star animation ends
+    const starAnimationEnded = () => {
+        // alert("animatonEnded=true")
+        const stars = document.querySelectorAll(".rateStars");
+        if (stars) {
+            stars.forEach( star => {
+                star.classList.remove("starPulseOut");
+            })
         }
     }
 
     // for firebase images onclick
-    const fireBaseImgClicked = ( i, singleURL, srcSet, country, region, seller, itemCategory, itemFeatures, itemName, itemPrice, itemStatus, phoneNumber, priceNegotiable ) => {
+    const fireBaseImgClicked = ( singleURL, identity, country, region, seller, itemCategory, itemFeatures, itemName, itemPrice, itemStatus, phoneNumber, priceNegotiable ) => {
         // create the JSON
-        const fireBaseImageString = { singleURL, srcSet, country, region, seller, itemCategory, itemFeatures, itemName, itemPrice, itemStatus, phoneNumber, priceNegotiable }
+        const fireBaseImageString = { singleURL, identity, country, region, seller, itemCategory, itemFeatures, itemName, itemPrice, itemStatus, phoneNumber, priceNegotiable }
         console.log(fireBaseImageString);
         const fireBaseImageJSON = JSON.stringify(fireBaseImageString);
         localStorage.setItem("fireBaseIncomingImage", fireBaseImageJSON);
@@ -432,6 +822,29 @@ const Home = () => {
 
         window.location.pathname = "/this_item";
     }
+
+
+    // format price
+    const formatPrice = param => {
+        let price = param;
+        if (price.toString().split("").length < 4) {
+            return price;
+        }
+
+        price = price.toString().split("").reverse();
+        let formattedPrice = "";
+        for (let i = 0; i < price.length; i++) {
+
+            const element = price[i];
+            formattedPrice += element;
+
+            if ((i + 1) % 3 === 0 && i > 0 && i !== price.length - 1) {
+                formattedPrice += ",";
+            } 
+        }
+        return formattedPrice.split("").reverse().join("");
+
+    };
 
     return (
         <>
@@ -473,18 +886,20 @@ const Home = () => {
                         <div>
 
                             <div>
-                                <button type="button">Vehicles</button>
-                                <button type="button">Mobile Phones</button>
-                                <button type="button">Computer, PC & Camera</button>
-                                <button type="button">Services</button>
-                                <button type="button">Pets</button>
-                                <button type="button">Agriculture & Food</button>
-                                <button type="button">Fashion & Interior</button>
-                                <button type="button">Health & Beauty</button>
-                                <button type="button">Children & Babies</button>
-                                <button type="button">Sports & Extra Curricular</button>
-                                <button type="button">Furniture</button>
-                                <button type="button">Kitchenware</button>
+                                <button type="button" onClick={filterFromAside}>All Products</button>
+                                <button type="button" onClick={filterFromAside}>Vehicles</button>
+                                <button type="button" onClick={filterFromAside}>Mobile Phones</button>
+                                <button type="button" onClick={filterFromAside}>Computer, PC, Camera</button>
+                                <button type="button" onClick={filterFromAside}>General Electronics</button>
+                                <button type="button" onClick={filterFromAside}>Services</button>
+                                <button type="button" onClick={filterFromAside}>Pets</button>
+                                <button type="button" onClick={filterFromAside}>Food, Agriculture</button>
+                                <button type="button" onClick={filterFromAside}>Fashion, Interior Design</button>
+                                <button type="button" onClick={filterFromAside}>Health, Beauty</button>
+                                <button type="button" onClick={filterFromAside}>Children, Babies</button>
+                                <button type="button" onClick={filterFromAside}>Sports, Extra Curricular</button>
+                                <button type="button" onClick={filterFromAside}>Furniture</button>
+                                <button type="button" onClick={filterFromAside}>Kitchenware</button>
                             </div>
 
                         </div>
@@ -492,12 +907,22 @@ const Home = () => {
                     </aside>
 
                     <div className="homeRight" id="homeRight">
+
+
+                        {/* when filtration didnt work */}
+                        <div className="noFiltrationResults" id="noFiltrationResults">
+                            <p>Results for <span id="filteredEventTarget"></span> could not be found!</p>
+                            <p id="rotateThis90">: (</p>
+                        </div>
+
+
+
                         {/* from our JSON */}
                         {
                             products.map((singleItem, index) => (
-                                <div className="imageDiv internal" key={index} >
+                                <div className="imageDiv internal" key={index} id={singleItem.id} >
 
-                                    <img src={singleItem.link} alt={singleItem.name} onClick={() => imageClicked(
+                                    <img src={singleItem.link} alt={singleItem.name} onContextMenu={imageContextMenu} onClick={() => imageClicked(
                                         singleItem.link,
                                         singleItem.srcSet,
                                         singleItem.price,
@@ -510,33 +935,32 @@ const Home = () => {
                                         singleItem.seller,
                                         singleItem.features,
                                         singleItem.additionalInfo,
-                                        )} />
+                                        )}
+                                    />
+
                                     <span className="itemName searchable">{singleItem.name}</span>
                                     <span className="price">{singleItem.price}</span>
+                                    <span className="itemCategorySpan"><i>{singleItem.category}</i></span>
                                     <div className="hasStarsDiv">
                                         <div className="stars">
-                                            <span className="rateStars" onClick={() => RateProduct(index, 1)}><AiFillStar/></span>
-                                            <span className="rateStars" onClick={() => RateProduct(index, 2)}><AiFillStar/></span>
-                                            <span className="rateStars" onClick={() => RateProduct(index, 3)}><AiFillStar/></span>
-                                            <span className="rateStars" onClick={() => RateProduct(index, 4)}><AiFillStar/></span>
-                                            <span className="rateStars" onClick={() => RateProduct(index, 5)}><AiFillStar/></span>
+                                            <span className="rateStars" onAnimationEnd={starAnimationEnded} onClick={() => RateProduct(singleItem.id, 1, "defaults")}><AiFillStar/></span>
+                                            <span className="rateStars" onAnimationEnd={starAnimationEnded} onClick={() => RateProduct(singleItem.id, 2, "defaults")}><AiFillStar/></span>
+                                            <span className="rateStars" onAnimationEnd={starAnimationEnded} onClick={() => RateProduct(singleItem.id, 3, "defaults")}><AiFillStar/></span>
+                                            <span className="rateStars" onAnimationEnd={starAnimationEnded} onClick={() => RateProduct(singleItem.id, 4, "defaults")}><AiFillStar/></span>
+                                            <span className="rateStars" onAnimationEnd={starAnimationEnded} onClick={() => RateProduct(singleItem.id, 5, "defaults")}><AiFillStar/></span>
                                         </div>
                                     </div>
                                 </div>
                             ))
                         }
-
-                        {/* adsDivs */}
-                        {/* <div className="adDiv1">this</div> */}
-
+                        
                         {/* from firebase */}
                         {
                             img.map((singleURL, index) => (
-                                <div className="imageDiv internal" key={index}>
+                                <div className="imageDiv internal" key={index} id={imgInfo[index].identity}>
                                     <img src={singleURL} alt={imgInfo[index].itemName} onClick={() => fireBaseImgClicked(
-                                        index,
                                         singleURL,
-                                        addedImages[index],
+                                        imgInfo[index].identity,
                                         imgInfo[index].Country,
                                         imgInfo[index].Region,
                                         imgInfo[index].Seller,
@@ -552,25 +976,24 @@ const Home = () => {
                                     {imgInfo && imgInfo[index] && (
                                         <>
                                             <span className="itemName searchable">{imgInfo[index].itemName}</span>
+                                            {/* <span>Identity: {imgInfo[index].identity}</span> */}
                                             {/* Other content */}
-                                            <span className="price">{imgInfo[index].itemPrice === "null" ? "Service" : `KSh ${imgInfo[index].itemPrice}` }</span>
+                                            <span className="price">{imgInfo[index].itemPrice === "null" ? "Service" : `KSh ${formatPrice(imgInfo[index].itemPrice)}` }</span>
+                                            <span className="itemCategorySpan"><i>{imgInfo[index].itemCategory}</i></span>
                                             <div className="hasStarsDiv">
                                                 <div className="stars">
-                                                    <span className="rateStars" onClick={() => RateProduct(index, 1)}><AiFillStar/></span>
-                                                    <span className="rateStars" onClick={() => RateProduct(index, 2)}><AiFillStar/></span>
-                                                    <span className="rateStars" onClick={() => RateProduct(index, 3)}><AiFillStar/></span>
-                                                    <span className="rateStars" onClick={() => RateProduct(index, 4)}><AiFillStar/></span>
-                                                    <span className="rateStars" onClick={() => RateProduct(index, 5)}><AiFillStar/></span>
+                                                    <span className="rateStars" onAnimationEnd={starAnimationEnded} onClick={() => RateProduct(imgInfo[index].identity, 1, "customerUploads")}><AiFillStar/></span>
+                                                    <span className="rateStars" onAnimationEnd={starAnimationEnded} onClick={() => RateProduct(imgInfo[index].identity, 2, "customerUploads")}><AiFillStar/></span>
+                                                    <span className="rateStars" onAnimationEnd={starAnimationEnded} onClick={() => RateProduct(imgInfo[index].identity, 3, "customerUploads")}><AiFillStar/></span>
+                                                    <span className="rateStars" onAnimationEnd={starAnimationEnded} onClick={() => RateProduct(imgInfo[index].identity, 4, "customerUploads")}><AiFillStar/></span>
+                                                    <span className="rateStars" onAnimationEnd={starAnimationEnded} onClick={() => RateProduct(imgInfo[index].identity, 5, "customerUploads")}><AiFillStar/></span>
                                                 </div>
                                             </div>
-
                                         </>
                                     )}
                                 </div>
                             ))
                         }
-
-
                     </div>
                 </div>
             </div>

@@ -5,7 +5,7 @@ import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { set, get, getDatabase, ref } from "firebase/database";
-import { firebaseConfigurationDetails } from "../external_functions";
+import { adPageHiddenDivs, firebaseConfigurationDetails } from "../external_functions";
 
 const SignUp = () => {
 
@@ -18,28 +18,68 @@ const SignUp = () => {
     const auth = getAuth();
     const db = getDatabase(app);
     const dbReference = ref(db, "Customers");
+
+    // validate
+    const checkFormValidity = () => {
+        // let signupDefaultHidden defaultHidden = document.getElementsByClassName("signupDefaultHidden defaultHidden");
+        // signupDefaultHidden defaultHidden = Array.from(signupDefaultHidden defaultHidden);
+        // signupDefaultHidden defaultHidden.forEach( singleDiv => { alert(true) } );
+
+        // this determines whether we will submit the document or not.
+        const password = document.getElementById("signupPassword").value.toString(); // Get the password input value
+        const confirmationPassword = document.getElementById("confirmSignupPassword").value.toString(); // Get the password input value
+        const phoneNumber = document.getElementById("signupPhoneNumber").value.toString();
+        const fullName = document.getElementById("fullName").value.toString().trim();
+        const unInclusive = ",./?;:'\"-_!`$%^&*)(][}{\\+@~".split("");
+        const splitName = fullName.split("");
+        for (let a = 0; a < splitName.length; a++) {
+            for (let b = 0; b < unInclusive.length; b++) {
+                if (splitName[a] === unInclusive[b]) {
+                    adPageHiddenDivs("signUpNoSymbols")
+                    document.getElementById("fullName").focus();
+                    return false;
+                }
+            }
+            
+        }
+        
+        const User = fullName.split(" ");
+        if (User.length !== 2) {
+            adPageHiddenDivs("signUpBadName")
+            document.getElementById("fullName").focus();
+            return false;
+        } else if (password.length < 7) {
+            adPageHiddenDivs("signUpShortPassword")
+            document.getElementById("signupPassword").focus();
+            return false;
+        } else if (password !== confirmationPassword) {
+            adPageHiddenDivs("signUpPasswordMismatch")
+            document.getElementById("confirmSignupPassword").focus();
+            return false;
+        } else if (phoneNumber.length !== 12) {
+            adPageHiddenDivs("signUpInvalidPhoneNumber");
+            document.getElementById("signupPhoneNumber").focus();
+            return false;
+        } else HandleSubmission();
+    }
     
+    // after validation, submit
     const HandleSubmission = () => {
 
         const email = document.getElementById("signupEmail").value.toString(); // Get the email input value
         const password = document.getElementById("signupPassword").value.toString(); // Get the password input value
         let fullName = document.getElementById("fullName").value.toString().trim();
-        // const firstNameFragment = fullName.split(" ")[0].split("");
-        // const secondNameFragment = fullName.split(" ")[0].split("");
-
+        const phoneNumber = "+" + document.getElementById("signupPhoneNumber").value.toString();
 
         const JSONdata = {
-            stars: {
-                unrealIdentity: 0,
-            },
             basket: 0,
             email: email,
             password: password,
             userName: fullName,
             trimmedEmail: email.slice(0, email.indexOf("@")),
             adminPrivilege: false,
+            phoneNumber: phoneNumber,
         }
-        
         
         createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
@@ -70,6 +110,7 @@ const SignUp = () => {
 
                     // set username in localstorage/// this also happens in login
                     window.localStorage.setItem("trimmedEmail", email.toString().slice(0, email.indexOf("@")));
+                    window.localStorage.setItem("phoneNumber", phoneNumber);
 
                     // we are in, account created and data written
                     // const user = userCredential.user;
@@ -84,77 +125,22 @@ const SignUp = () => {
         }).catch((error) => {
             // Handle registration errors (e.g., invalid password, weak password, etc.)
             const errorCode = error.code;
-            const errorMessage = error.message;
+            // const errorMessage = error.message;
             if (errorCode === "auth/email-already-in-use") {
-                console.log("This email already exists.");
-                document.getElementById("emailAlreadyInUse").style.display = "block";
-                document.getElementById("checkEmail").style.display = "";
-                document.getElementById("shortPassword").style.display = "";
-                document.getElementById("passwordMismatch").style.display = "";
+                adPageHiddenDivs("signUpEmailAlreadyInUse");
                 document.getElementById("signupEmail").focus();
             }
             if (errorCode === "auth/invalid-email"){
-                document.getElementById("checkEmail").style.display = "block";
-                document.getElementById("emailAlreadyInUse").style.display = "";
-                document.getElementById("shortPassword").style.display = "";
-                document.getElementById("passwordMismatch").style.display = "";
+                adPageHiddenDivs("signUpCheckEmail")
                 document.getElementById("signupEmail").focus();
-                }
+            }
         });
     }
-    
-    const checkPassword = () => {
-        // this determines whether we will submit the document or not.
-        const password = document.getElementById("signupPassword").value.toString(); // Get the password input value
-        const confirmationPassword = document.getElementById("confirmSignupPassword").value.toString(); // Get the password input value
-        const fullName = document.getElementById("fullName").value.toString().trim();
-        const User = fullName.split(" ");
-        const unInclusive = ",./?;:'\"-_!`$%^&*)(][}{\\+@~".split("");
-        const splitName = fullName.split("");
-        for (let a = 0; a < splitName.length; a++) {
-            for (let b = 0; b < unInclusive.length; b++) {
-                if (splitName[a] === unInclusive[b]) {
-                    document.getElementById("noSymbols").style.display = "block";
-                    document.getElementById("badName").style.display = "";
-                    document.getElementById("shortPassword").style.display = "";
-                    document.getElementById("checkEmail").style.display = "";
-                    document.getElementById("emailAlreadyInUse").style.display = "";
-                    document.getElementById("passwordMismatch").style.display = "";
-                    document.getElementById("fullName").focus();
-                    return false;
-                }
-            }
-            
-        }
-        
-        if (User.length !== 2) {
-            document.getElementById("badName").style.display = "block"
-            document.getElementById("shortPassword").style.display = "";
-            document.getElementById("checkEmail").style.display = "";
-            document.getElementById("emailAlreadyInUse").style.display = "";
-            document.getElementById("passwordMismatch").style.display = "";
-            document.getElementById("noSymbols").style.display = "";
-            document.getElementById("fullName").focus();
-            return false;
-        } else if (password.length < 7) {
-            document.getElementById("badName").style.display = ""
-            document.getElementById("shortPassword").style.display = "block";
-            document.getElementById("checkEmail").style.display = "";
-            document.getElementById("emailAlreadyInUse").style.display = "";
-            document.getElementById("passwordMismatch").style.display = "";
-            document.getElementById("noSymbols").style.display = "";
-            document.getElementById("signupPassword").focus();
-            return false;
-        } else if (password !== confirmationPassword) {
-            document.getElementById("badName").style.display = ""
-            document.getElementById("passwordMismatch").style.display = "block";
-            document.getElementById("shortPassword").style.display = "";
-            document.getElementById("checkEmail").style.display = "";
-            document.getElementById("emailAlreadyInUse").style.display = "";
-            document.getElementById("noSymbols").style.display = "";
-            document.getElementById("confirmSignupPassword").focus();
-            return false;
-        } else HandleSubmission();
+
+    // mouse wheel listen
+    // stop the number change on scroll at phone number & price
+    const Listen = event => {
+        event.preventDefault();
     }
     
     return (
@@ -168,36 +154,37 @@ const SignUp = () => {
                         <div className="flex"></div>  
                     <label>
                         <input className="input" type="text" name="fullName" id="fullName" placeholder="" required aria-required autoFocus />
-                        <span>Full Name</span>
-                        <span id="badName">Full Name can only contain 2 names.</span>
-                        <span id="noSymbols">You can't use symbols in your name.</span>
+                        <span className="signupFormLabels">Full Name</span>
+                        <span id="signUpBadName" className="signupDefaultHidden defaultHidden">Full Name can only contain 2 names.</span>
+                        <span id="signUpNoSymbols" className="signupDefaultHidden defaultHidden">You can't use symbols in your name.</span>
                     </label>
 
                     <label>
                         <input className="input" type="text" name="signupEmail" id="signupEmail" placeholder="" required aria-required />
-                        <span>Email</span>
-                        <span id="emailAlreadyInUse">This email is already in use.</span>
-                        <span id="checkEmail">Email is invalid.</span>
+                        <span className="signupFormLabels">Email</span>
+                        <span id="signUpEmailAlreadyInUse" className="signupDefaultHidden defaultHidden">This email is already in use.</span>
+                        <span id="signUpCheckEmail" className="signupDefaultHidden defaultHidden">Email is invalid.</span>
                     </label> 
+
+                    <label>
+                        <input className="input" type="number" name="signupPhoneNumber" id="signupPhoneNumber" placeholder="" onFocus={e => e.target.addEventListener("wheel", Listen)} onBlur={e => e.target.removeEventListener("wheel", Listen)} required aria-required />
+                        <span className="signupFormLabels">Phone Number(Eg. 254717405109)</span>
+                        <span id="signUpInvalidPhoneNumber" className="signupDefaultHidden defaultHidden">Phone number is invalid.</span>
+                    </label>
                         
                     <label>
                         <input className="input" type="password" name="signupPassword" id="signupPassword" placeholder="" required />
-                        <span>Password</span>
-                        <span id="shortPassword">Lengthen password to 7 characters or more.</span>
+                        <span className="signupFormLabels">Password</span>
+                        <span id="signUpShortPassword" className="signupDefaultHidden defaultHidden">Lengthen password to 7 characters or more.</span>
                     </label>
                     <label>
                         <input className="input" type="password" name="confirmSignupPassword" id="confirmSignupPassword" placeholder="" required />
-                        <span>Confirm password</span>
-                        <span id="passwordMismatch">Passwords don't match.</span>
+                        <span className="signupFormLabels">Confirm password</span>
+                        <span id="signUpPasswordMismatch" className="signupDefaultHidden defaultHidden">Passwords don't match.</span>
                     </label>
-                    <button type="button" className="submit" onClick={checkPassword}>Submit</button>
+                    <button type="button" className="submit" onClick={checkFormValidity}>Submit</button>
                     <p className="signin">Already have an acount? <Link to="/login">Login</Link>.</p>
                 </form>
-
-
-
-
-
 
             </div>
         </>

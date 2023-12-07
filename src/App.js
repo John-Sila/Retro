@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import './App.css';
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import { initializeApp } from "firebase/app";
 import { getDatabase, ref, query, orderByChild, equalTo, limitToFirst, onValue, get } from "firebase/database";
 
@@ -20,24 +20,12 @@ import { firebaseConfigurationDetails } from "./external_functions";
 
 function App() {
 
-  const [loading, setLoading] = useState(false);
-
-  // the loading state
-  useEffect( () => {
-    if (loading) {
-        document.getElementById("loadingModal").style.display = "flex";
-    } else {
-        document.getElementById("loadingModal").style.display = "none";
-    }
-}, [loading])
-
   const app = initializeApp(firebaseConfigurationDetails);
+
 
   const engageData = () => {
     // get username
-
     const db = getDatabase(app);
-
     // Reference to "Customers" node
     const reference = ref(db, "Customers");
 
@@ -46,7 +34,7 @@ function App() {
       reference,
       orderByChild("trimmedEmail"),
       equalTo(window.localStorage.getItem("trimmedEmail")),
-      limitToFirst(1)
+      limitToFirst(1),
     );
 
     // Attach a listener to the query
@@ -93,6 +81,13 @@ function App() {
         }).catch((err) => {
           // execute this if the get(ref2) function brough an error
           console.log("An error occurred while trying to get your username: ", err)
+          // log out
+          const auth = getAuth()
+          signOut(auth).then((snap) => {
+            console.log("You have been logged out.");
+          }).catch((err) => {
+            console.log("We also couln't log you out, unfortunately. This compromises your account.");
+          });
         });
 
 

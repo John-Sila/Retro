@@ -5,8 +5,10 @@ import { firebaseConfigurationDetails } from "../external_functions";
 import { initializeApp } from "firebase/app";
 import { getStorage, ref as storeRefModule, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { getDatabase, set, ref as dbRefModule } from "firebase/database";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const Sell = () => {
+
     // loading state
     const [loading, setLoading] = useState(false);
 
@@ -21,9 +23,8 @@ const Sell = () => {
     const [noOfImages, setNoOfImages] = useState(0);
     const [oneExtraImage, setOneExtraImage] = useState(false);
     const [enteredSellerName, setEnteredSellerName] = useState("");
-    // const [enteredCountry, setEnteredCountry] = useState("");
     const [enteredPhoneNumber, setEnteredPhoneNumber] = useState("");
-    const [enteredRegion, setEnteredRegion] = useState("Nairobi");
+    const [enteredRegion, setEnteredRegion] = useState("Baringo");
     const [enteredItemName, setEnteredItemName] = useState("");
     const [enteredItemPrice, setEnteredItemPrice] = useState(0);
     const [enteredCategory, setEnteredCategory] = useState("Vehicles");
@@ -33,6 +34,18 @@ const Sell = () => {
 
     const [editedPhoneNumber, setEditedPhoneNumber] = useState(null);
 
+    useEffect( () => {
+        const auth = getAuth();
+        onAuthStateChanged(auth, user => {
+            if (user) {
+              // User is logged in
+              return true;
+            } else {
+              // User is not logged in, show the login page
+              document.getElementById("youCantPostThis").style.display = "inline";
+            }
+        });
+    }, [])
 
     useEffect( () => {
         if (loading) {
@@ -42,22 +55,30 @@ const Sell = () => {
         }
     }, [loading])
 
-
-
-
     // change counties with country onChange
     useEffect( () => {
         if (currentCountry) {
             if (currentCountry === "Kenya") {
                 setCounties(Counties[0]);
                 setCountryCode("+254");
-            } else if (currentCountry === "Uganda") {
+            }
+            else if (currentCountry === "Uganda") {
                 setCounties(Counties[1]);
                 setCountryCode("+256");
-            } else if (currentCountry === "Tanzania") {
+            }
+            else if (currentCountry === "Tanzania") {
                 setCounties(Counties[2]);
                 setCountryCode("+255");
-            } else setCounties("");
+            }
+            else if (currentCountry === "Rwanda") {
+                setCounties(Counties[3]);
+                setCountryCode("+250");
+            }
+            else if (currentCountry === "Burundi") {
+                setCounties(Counties[4]);
+                setCountryCode("+257");
+            }
+            else setCounties("");
         }
 
         setTimeout(() => { setEnteredRegion(document.getElementById("sellCounty").value); }, 0);
@@ -187,166 +208,146 @@ const Sell = () => {
         }
     }
 
-
-
-
-
-
-
-
-
-
     // when the user clicks post
     const GenerateStoreVariable = () => {
-        // get all inputs
-
-        // main image
-        const mainImage = document.getElementById("mainImage")?.files[0];
-        if ( mainImage === undefined ) {
-            adPageHiddenDivs("reqMainImage");
-            window.scrollTo( {
-                top: 0,
-                behavior: "smooth",
-            } )
-            document.getElementById("mainImageClickable").click();
-            return false;
-        }
-
-        // extra images
-        // let extraImages = document.getElementById("additionalImages")?.files;
-        // if( extraImages && extraImages.length !== 0 ) {
-        //     for(let i=0; i < extraImages.length; i++) {
-        //         // setEnteredExtraSellerImages( enteredExtraSellerImages += extraImages[i] )
-        //     }
-        // }
-        if (enteredExtraSellerImages.length < 2) {
-            window.scrollTo( {
-                top: 0,
-                behavior: "smooth",
-            } )
-            adPageHiddenDivs("reqExtraImages");
-            return false;
-        }
-        
-        
-        // seller's name
-        const sellSellerName = document.getElementById("sellSellerName")?.value.trim();
-        if ( sellSellerName.indexOf(" ") === -1 || sellSellerName.indexOf(" ") !== sellSellerName.lastIndexOf(" ")) {
-            // this person did not give 2 names
-            adPageHiddenDivs("reqSellerName");
-            document.getElementById("sellSellerName").focus();
-            return false;
-        }
-        const splitSellerName = sellSellerName.split("");
-        const unInclusive = ",./?;:'\"-_!`$%^&*)(><][}{\\+@~".split("");
-        for (let a = 0; a < splitSellerName.length; a++) {
-            for (let b = 0; b < unInclusive.length; b++) {
-                if (splitSellerName[a] === unInclusive[b]) {
-                    adPageHiddenDivs("reqSymbolsInName")
-                    return false;
-                }
-            }
-            
-        }
-        
-        // country
-        const sellerCountry = document.getElementById("sellCountry");
-        if (sellerCountry) {
-            // setEnteredCountry(sellerCountry.value);
-        }
-
-        // phone number
-        const inputNumber = document.getElementById("sellSellerContact")?.value;
-        if (inputNumber.length !== 9) {
-            adPageHiddenDivs("reqPhoneNumber");
-            document.getElementById("sellSellerContact").focus();
-            document.getElementById("sellSellerContact").focus();
-            return false
-        } else {
-            setEnteredPhoneNumber(inputNumber);
-        }
-
-        // county/region
-        // const regionInput = document.getElementById("sellCounty");
-        // if (regionInput) {
-        //     // setEnteredRegion(regionInput.value);
-        // }
-
-        // item Name
-        const itemName = document.getElementById("sellProduct")?.value;
-        if (itemName === "" || itemName.length < 3) {
-            adPageHiddenDivs("reqProductName");
-            document.getElementById("sellProduct").focus();
-            return false;
-        }
-        const splitItemName = itemName.split("");
-        const unInclusiveHere = ",./?;:'\"_!`$%^&*)(><][}{\\+@~".split("");
-        for (let a = 0; a < splitItemName.length; a++) {
-            for (let b = 0; b < unInclusiveHere.length; b++) {
-                if (splitItemName[a] === unInclusiveHere[b]) {
-                    adPageHiddenDivs("reqSymbolsInItemName")
-                    return false;
-                }
-            }
-            
-        }
-
-        // price
-        // const itemPrice = document.getElementById("sellPrice")?.value;
-        if (enteredCategory.toLowerCase() !== "service") {
-            if (!enteredItemPrice > 0) {
-                adPageHiddenDivs("reqPrice");
-                document.getElementById("sellPrice").focus();
-                return false;
-            }
-        }
-
-        // category
-        // const category = document.getElementById("sellCategory").value;
-        // if (!category) {
-        //     adPageHiddenDivs("reqCatagory");
-        //     return false;
-        // } else setEnteredCategory(category);
-
-        // item price negotiable
-        if (enteredCategory.toLowerCase() !== "service") {
-            const priceNegotiableDiv = document.getElementById("priceNegotiableDiv");
-            if (priceNegotiableDiv) {
-                if (enteredPriceNegotiable === null) {
-                    adPageHiddenDivs("reqPriceNegotiable");
-                    priceNegotiableDiv.querySelectorAll("input")[0].focus();
-                    return false;
-                }
-            }
-        }
-
-        // item used
-        const itemNewOrOldDiv = document.getElementById("newOrOldItemDiv");
-        if (enteredCategory.toLowerCase !== "service") {
-            if (itemNewOrOldDiv) {
-                if (enteredItemStatus === null) {
-                    adPageHiddenDivs("reqItemStatus");
-                    itemNewOrOldDiv.querySelectorAll("input")[0].click();
-                    alert("You didn't specify item status so the system chose 'used'.");
-                }
-            }
-        }
-
-        // features
-        const sellerItemFeatures = document.getElementById("sellerItemFeatures");
-        if (sellerItemFeatures) {
-            const featuresList = sellerItemFeatures.querySelector("#featuresList");
-            const lis = featuresList.querySelectorAll("li");
-            if (lis && lis.length === 0) {
-                // no feaures were added
-                adPageHiddenDivs("reqFeatures");
-                document.getElementById("typeProductFeature").focus();
-                return false;
+        const auth = getAuth();
+        onAuthStateChanged( auth, user => {
+            if (!user) {
+                alert("Please login First.");
             } else {
-                UploadImages();
+
+
+                // main image
+                const mainImage = document.getElementById("mainImage")?.files[0];
+                if ( mainImage === undefined ) {
+                    adPageHiddenDivs("reqMainImage");
+                    window.scrollTo( {
+                        top: 0,
+                        behavior: "smooth",
+                    } )
+                    document.getElementById("mainImageClickable").click();
+                    return false;
+                }
+        
+                // extra images
+                if (enteredExtraSellerImages.length < 2) {
+                    window.scrollTo( {
+                        top: 0,
+                        behavior: "smooth",
+                    } )
+                    adPageHiddenDivs("reqExtraImages");
+                    return false;
+                }
                 
+                // seller's name
+                const sellSellerName = document.getElementById("sellSellerName")?.value.trim();
+                if ( sellSellerName.indexOf(" ") === -1 || sellSellerName.indexOf(" ") !== sellSellerName.lastIndexOf(" ")) {
+                    // this person did not give 2 names
+                    adPageHiddenDivs("reqSellerName");
+                    document.getElementById("sellSellerName").focus();
+                    return false;
+                }
+                const splitSellerName = sellSellerName.split("");
+                const unInclusive = ",./?;:'\"-_!`$%^&*)(><][}{\\+@~".split("");
+                for (let a = 0; a < splitSellerName.length; a++) {
+                    for (let b = 0; b < unInclusive.length; b++) {
+                        if (splitSellerName[a] === unInclusive[b]) {
+                            // this person has symbols in their name
+                            adPageHiddenDivs("reqSymbolsInName")
+                            return false;
+                        }
+                    }
+                    
+                }
+                
+                // country
+                const sellerCountry = document.getElementById("sellCountry");
+                if (sellerCountry) {
+                    // setEnteredCountry(sellerCountry.value);
+                }
+        
+                // phone number
+                const inputNumber = document.getElementById("sellSellerContact")?.value;
+                if (inputNumber.length !== 9) {
+                    adPageHiddenDivs("reqPhoneNumber");
+                    document.getElementById("sellSellerContact").focus();
+                    document.getElementById("sellSellerContact").focus();
+                    return false
+                } else {
+                    setEnteredPhoneNumber(inputNumber);
+                }
+        
+                setEnteredCategory( document.getElementById("sellCounty").value )
+        
+                // item Name
+                const itemName = document.getElementById("sellProduct")?.value;
+                if (itemName === "" || itemName.length < 3) {
+                    adPageHiddenDivs("reqProductName");
+                    document.getElementById("sellProduct").focus();
+                    return false;
+                }
+                const splitItemName = itemName.split("");
+                const unInclusiveHere = ",./?;:'\"_!`$%^&*)(><][}{\\+@~".split("");
+                for (let a = 0; a < splitItemName.length; a++) {
+                    for (let b = 0; b < unInclusiveHere.length; b++) {
+                        if (splitItemName[a] === unInclusiveHere[b]) {
+                            adPageHiddenDivs("reqSymbolsInItemName")
+                            return false;
+                        }
+                    }
+                    
+                }
+        
+                // price
+                if (enteredCategory.toLowerCase() !== "service") {
+                    if (!enteredItemPrice > 0) {
+                        adPageHiddenDivs("reqPrice");
+                        document.getElementById("sellPrice").focus();
+                        return false;
+                    }
+                }
+        
+                // item price negotiable
+                if (enteredCategory.toLowerCase() !== "service") {
+                    const priceNegotiableDiv = document.getElementById("priceNegotiableDiv");
+                    if (priceNegotiableDiv) {
+                        if (enteredPriceNegotiable === null) {
+                            adPageHiddenDivs("reqPriceNegotiable");
+                            priceNegotiableDiv.querySelectorAll("input")[0].focus();
+                            return false;
+                        }
+                    }
+                }
+        
+                // item used
+                const itemNewOrOldDiv = document.getElementById("newOrOldItemDiv");
+                if (enteredCategory.toLowerCase !== "service") {
+                    if (itemNewOrOldDiv) {
+                        if (enteredItemStatus === null) {
+                            adPageHiddenDivs("reqItemStatus");
+                            itemNewOrOldDiv.querySelectorAll("input")[0].click();
+                            alert("You didn't specify item status so the system chose 'used'.");
+                        }
+                    }
+                }
+        
+                // features
+                const sellerItemFeatures = document.getElementById("sellerItemFeatures");
+                if (sellerItemFeatures) {
+                    const featuresList = sellerItemFeatures.querySelector("#featuresList");
+                    const lis = featuresList.querySelectorAll("li");
+                    if (lis && lis.length === 0) {
+                        // no features were added
+                        adPageHiddenDivs("reqFeatures");
+                        document.getElementById("typeProductFeature").focus();
+                        return false;
+                    } else {
+                        UploadImages();
+                    }
+                }
             }
-        }
+        })
+
 
 
     }
@@ -389,6 +390,7 @@ const Sell = () => {
                 "priceNegotiable": enteredPriceNegotiable,
                 "itemStatus": enteredItemStatus,
                 "itemFeatures": [enteredItemFeatures],
+                "identity": customID,
             }
             const referenceTwo = dbRefModule(db, `customerUploads/${customID}`);
             set(referenceTwo, additionalImageInformation)
@@ -425,28 +427,20 @@ const Sell = () => {
                         console.log(`Extra Image ${k + 1} uploaded.`);
                         if (k === loop - 1) {
                             setLoading(false);
+                            window.location.pathname = "/";
                         }
                     }
                     );
                 }
                 // we are good now.
                 // go to homepage
-                window.pathname.location = "/";
             } catch (error) {
                 console.log("A slight error occurred: ", error);
             }
         };
     };
     
-    
-
-
-
-
-    
-
-
-    // stop the number change on scroll at phone number
+    // stop the number change on scroll at phone number & price
     const listen = event => {
         event.preventDefault();
     }
@@ -466,8 +460,9 @@ const Sell = () => {
 
     return(
         <>
-            <div className="sellerDocumentContainer">
+            <div className="sellerDocumentContainer" id="sellerDocumentContainer">
                 <div className="leftContainer">
+                    <p id="youCantPostThis">To post, you will need to be logged in. We recommend you sign in first the come back and sell.</p>
                     <h3>Images</h3>
 
                     <ul>
@@ -513,19 +508,12 @@ const Sell = () => {
                             </label> 
 
                             <p className="additionalImagesNames" id="additionalImage1">Selected <span id="numberOfFiles">{noOfImages}</span> file{oneExtraImage ? "" : "s"}</p> 
-                            {/* <p className="additionalImagesNames" id="additionalImage2">Not selected file</p> 
-                            <p className="additionalImagesNames" id="additionalImage3">Not selected file</p>  */}
                             <input id="additionalImages" name="additionalImages" type="file" onChange={HandleAdditionalImages}  accept="image/*" multiple aria-multiline /> 
                         </div>
 
                     </div>
-                    
-
-
-
-
-
                 </div>
+
                 <div className="rightContainer">
                     <form action="">
 
@@ -553,25 +541,25 @@ const Sell = () => {
 
                         {/* seller's phoneNumber */}
                         <label htmlFor="sellSellerContact"><span>Active phone number:</span>
-                            <input type="number" name="sellSellerContact" onInput={e => setEnteredPhoneNumber(e.target.value)} id="sellSellerContact" placeholder="Eg. 717405109" onFocus={ event => event.target.addEventListener("wheel", listen) } onBlur={event => event.target.removeEventListener("wheel", listen)} required aria-required />
+                            <input type="number" name="sellSellerContact" maxLength={9} onInput={e => setEnteredPhoneNumber(e.target.value)} id="sellSellerContact" placeholder="Eg. 717405109" onFocus={ event => event.target.addEventListener("wheel", listen) } onBlur={event => event.target.removeEventListener("wheel", listen)} required aria-required />
                             <span id="intlNumCode">{countryCode}</span>
                             <span className="defaultHidden" id="reqPhoneNumber">Provide a valid phone number.</span>
+                            <span id="ensurePhoneNumberWorks">This phone number will enable customers to chat with you both in the App and WhatsApp.</span>
                         </label>
 
-                        {/* county/region */}
+                        {/* county/region/province */}
                         <label htmlFor="sellCounty">
-                            <span>County/Region:</span>
+                            <span>County/Region/Province:</span>
                             <select name="sellCounty" id="sellCounty" onChange={e => setEnteredRegion(e.target.value)}>
                                 <optgroup>
                                 {
-                                    counties.map( (county, index) => (
+                                    counties.sort().map( (county, index) => (
                                         <option value={county} key={index}>{county}</option>
                                     ))
                                 }
                                 </optgroup>
                             </select>
                         </label>
-
 
                         {/* product name */}
                         <label htmlFor="sellProduct"><span>Item name:</span>
@@ -645,8 +633,6 @@ const Sell = () => {
                             </div>
                         </div>
 
-
-
                         <div className="btn-container">
                             <Link className="btn-content" to="#" onClick={GenerateStoreVariable}>
                                 <span className="btn-title">Post</span>
@@ -661,8 +647,6 @@ const Sell = () => {
                                 </span> 
                             </Link>
                         </div>
-
-
                     </form>
                 </div>
             </div>

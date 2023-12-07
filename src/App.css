@@ -7,17 +7,34 @@
   --redColor: rgb(228, 0, 0);
   --redColor2:rgb(217, 0, 0);
   --standardShadow: 2px 2px 10px 2px rgb(237, 237, 237);
-  --anotherShadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  --anotherShadow: 5px 5px 15px #bcbcbc4b;
   --accentColor: #47a525;
   --anotherAccent: #f37e10;
   --blue: #2879f3;
   --someDullWhite: rgb(154, 154, 154);
+  --lessDullWhite: rgba(237, 237, 237, 0.505);
+  --justBlack: rgb(0, 0, 0);
+  --someBrownishColor: rgb(235, 235, 235);
+  --lightGrayish: rgb(235, 235, 235);
   overflow-x: hidden;
-  background-color: rgb(0, 0, 0);
+  background-color: #ffffff;
+}
+
+::selection{
+  background-color: var(--anotherAccent);
+  color: var(--darkColor);
+}
+::-moz-selection{
+  background-color: var(--anotherAccent);
+  color: var(--darkColor);
+}
+::-webkit-selection{
+  background-color: var(--anotherAccent);
+  color: var(--darkColor);
 }
 
 *{
-  font-family: 'Jost', Times, serif;
+  font-family: "Nunito", 'Roboto Mono', monospace;
 }
 
 ::-webkit-scrollbar{
@@ -45,20 +62,17 @@
   position: sticky;
   top: 0;
   z-index: 2;
-  /* box-shadow: 5px 5px 20px 2px rgb(237, 237, 237); */
-  /* box-shadow: 0 0 20px 2px rgb(5, 5, 5); */
-  /* box-shadow: var(--anotherShadow); */
   justify-content: space-between;
   width: 100vw !important;
   box-sizing: border-box;
   overflow-x: hidden;
-  background-color: rgb(0, 0, 0);
-  color: var(--someDullWhite);
+  background-color: var(--whiteColor);
+  color: var(--darkColor);
 }
 .topNav .links{
   text-decoration: none;
   /* color: var(--darkColor); */
-  color: var(--someDullWhite);
+  color: var(--darkColor);
   margin: 0 25px;
   white-space: nowrap;
 }
@@ -68,7 +82,7 @@
   align-items: center;
 }
 .topNav .topLeft .menuButton{
-  background-color: rgb(0, 0, 0);
+  background-color: var(--whiteColor);
   /* color: var(--darkColor); */
   place-items: center;
   border: none;
@@ -78,7 +92,7 @@
   padding: 11.5px;
   font-size: 1.2em;
   display: none;
-  color: var(--someDullWhite);
+  color: var(--darkColor);
 }
 
 
@@ -88,7 +102,7 @@
   border-radius: 5px;
   height: 40px;
   /* aspect-ratio: 1500 / 935; */
-  aspect-ratio: 1242 / 644;
+  aspect-ratio: 1500 / 385;
   /* background-color: blue; */
   top: 3.5px;
 }
@@ -181,8 +195,8 @@
 }
 
 .topNav .topRight .paste-button button.button {
-  background-color: var(--someDullWhite);
-  color: rgb(0, 0, 0);
+  background-color: var(--whiteColor);
+  /* color: var(--whiteColor); */
   padding: 10px 15px;
   font-size: 15px;
   font-weight: bold;
@@ -194,6 +208,7 @@
   justify-content: center;
   width: 100%;
   transition: .25s all ease-in-out;
+  box-shadow: var(--anotherShadow);
 }
 .topNav .topRight .paste-button button.button:is(:hover, :active){
   transform: scaleY(1.25);
@@ -207,7 +222,7 @@
   float: right;
   right: 0;
   width: max-content;
-  background-color: rgb(0, 0, 0);
+  background-color: var(--whiteColor);
   border: none;
   border-radius: 15px;
   box-shadow: var(--anotherShadow);
@@ -215,7 +230,7 @@
 }
 
 .topNav .topRight .paste-button .dropdown-content .links {
-  color: var(--someDullWhite);
+  color: var(--darkColor);
   padding: 8px 10px;
   text-decoration: none;
   display: list-item;
@@ -243,7 +258,7 @@
 
 .hugePanel{
   display: flex;
-  background-color: rgb(0, 0, 0);
+  background-color: var(--whiteColor);
   justify-content: space-between;
   background-repeat: no-repeat;
   background-size: contain;
@@ -317,14 +332,14 @@
 .homeContent .hasSearch{
   position: -webkit-sticky;
   position: sticky;
-  top: 70px;
-  /* background-color: rgba(0, 0, 0, 0.731); */
-  background-color: rgba(0, 0, 0, 0.8);
+  /* top: 70px; */
   width: 100%;
   display: flex;
   justify-content: end;
   z-index: 1;
   margin-bottom: 15px;
+  align-items: center;
+  background-color: var(--whiteColor);
 }
 .homeContent .hasSearch .searchDiv{
   display: flex;
@@ -340,8 +355,8 @@
   position: absolute;
   top: 0;
   left: 0;
-  background-color: rgb(0, 0, 0);
-  color: var(--someDullWhite);
+  background-color: var(--whiteColor);
+  color: var(--darkColor);
   height: max-content;
   width: max-content;
   padding: 10px 0;
@@ -357,7 +372,7 @@
 }
 .homeContent .hasSearch .searchDiv .searchedContent p:hover{
   background-color: var(--anotherAccent);
-  color: rgb(0, 0, 0);
+  color: var(--whiteColor);
   display: block;
 }
 .homeContent .hasSearch .searchIcon{
@@ -417,13 +432,13 @@
   overflow-y: auto;
   overflow-x: hidden;
   box-shadow: var(--anotherShadow);
-  background-color: rgb(0, 0, 0);
+  background-color: var(--whiteColor);
 }
 .homeContent aside > div{
   width: 100%;
   height: max-content;
   margin-top: 25%;
-  background-color: rgb(0, 0, 0);
+  background-color: var(--whiteColor);
 }
 .homeContent aside div div button{
   position: relative;
@@ -431,12 +446,12 @@
   padding: 15px;
   border: none;
   outline: none;
-  background-color: rgb(0, 0, 0);
-  color: var(--someDullWhite);
+  background-color: var(--whiteColor);
+  color: var(--darkColor);
 }
 .homeContent aside div div button:hover{
   background-color: var(--anotherAccent);
-  color: rgb(0, 0, 0);
+  color: var(--whiteColor);
 }
 .homeContent aside .closeMenu{
   transition: .1s ease-in-out;
@@ -455,10 +470,27 @@
   flex-grow: 1;
   justify-content: center;
   margin-bottom: 100px;
-  /* background-color: var(--whiteColor); */
-  background-color: rgb(0, 0, 0);
+  background-color: var(--whiteColor);
 }
 
+.homeContent .homeRight .noFiltrationResults{
+  width: 100%;
+  background-color: var(--whiteColor);
+  display: none;
+  flex-direction: column;
+  align-items: center;
+}
+.homeContent .homeRight .noFiltrationResults #rotateThis90{
+  transform: rotate(90deg);
+  font-size: 40px;
+  font-weight: bolder;
+}
+.homeContent .homeRight .noFiltrationResults p{
+  color: var(--darkColor);
+}
+.homeContent .homeRight .noFiltrationResults p span{
+  color: var(--accentColor);
+}
 .homeContent .homeRight .imageDiv{
   position: relative;
   /* width: 12.5em; */
@@ -475,14 +507,15 @@
   padding: 2px;
   margin: .25em !important;
   margin-bottom: 2em !important;
-  background-color: rgb(37, 37, 37);
+  background-color: inherit;
   max-width: 600px;
 }
 
 .homeContent .homeRight .imageDiv img{
   transition: .625s all ease;
+  mix-blend-mode: darken;
 }
-.homeContent .homeRight .imageDiv :where(.itemName){
+.homeContent .homeRight .imageDiv :where(.itemName, .itemCategorySpan){
   color: var(--accentColor);
   position: relative;
   white-space: nowrap;
@@ -493,6 +526,15 @@
   pointer-events: none;
   font-size: .875em;
   margin-top: .75em;
+}
+.homeContent .homeRight .imageDiv :where(.itemCategorySpan){
+  /* text-transform: ; */
+  color: var(--darkColor);
+  pointer-events: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 .homeContent .homeRight .imageDiv :where(.price){
   font-size: .8875em;
@@ -513,12 +555,48 @@
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
-  margin-top: 0;
+  margin-top: 20px;
   width: 70%;
   max-width: 200px;
-  color: rgb(163, 163, 163);
-  /* background-color: red; */
+  color: var(--someDullWhite);
+  /* color: red; */
 }
+.starPulseOut{
+  -webkit-animation: starPulseOut 1s linear;
+  animation: starPulseOut 1s linear;
+}
+@keyframes starPulseOut {
+  0% {
+    transform: scale(1);
+  }
+  20% {
+    transform: scale(1.3);
+  }
+  80% {
+    transform: scale(1.3);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@-webkit-keyframes starPulseOut {
+  0% {
+    -webkit-transform: scale(1);
+  }
+  20% {
+    -webkit-transform: scale(1.3);
+  }
+  80% {
+    -webkit-transform: scale(1.3);
+  }
+  100% {
+    -webkit-transform: scale(1);
+  }
+}
+
+
+
+
 .checked{
   color: var(--anotherAccent);
 }
@@ -528,11 +606,12 @@
 
 .homeContent .homeRight .imageDiv:hover{
   box-shadow: none;
-  /* transform: translateY(12.5px); */
+  outline: 2px solid var(--anotherAccent);
 }
 .homeContent .homeRight .imageDiv:hover > img{
-  transform: scale(1.05);
-  /* transform: translateY(12.5px); */
+  /* transform: scaleY(1.05); */
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
 }
 .homeContent .homeRight .imageDiv img{
   position: relative;
@@ -573,8 +652,8 @@
   left: 0;
   height: 150dvh;
   width:  100vw;
-  background-color: rgb(0, 0, 0);
-  display: flex;
+  background-color: var(--whiteColor);
+  display: none;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -662,7 +741,7 @@
 .cookieCard {
   width: 300px;
   height: max-content;
-  background-color: rgb(0, 0, 0);
+  background-color: var(--whiteColor);
   border-radius: 8px;
   display: none;
   flex-direction: column;
@@ -692,7 +771,7 @@
 .cookieCard .cookieHeading {
   font-size: 1.2em;
   font-weight: 800;
-  color: var(--someDullWhite);
+  color: var(--darkColor);
 }
 
 .cookieCard .cookieDescription {
@@ -846,6 +925,61 @@
 }
 
 
+/* login first */
+.loginFirst{
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  background-color: #1a1a1ac9;
+  display: none;
+  place-items: center;
+  z-index: 2;
+}
+.loginFirst .theDiv{
+  background-color: var(--whiteColor);
+  padding: 1em;
+  border-radius: 1em;
+  /* outline: .25em solid var(--anotherAccent); */
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  position: relative;
+  max-width: 90vw;
+}
+.loginFirst .theDiv p{
+  color: var(--anotherAccent);
+  font-weight: bolder;
+}
+.loginFirst .theDiv .theButtons{
+  position: relative;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
+  /* background-color: red; */
+  place-items: center;
+}
+.loginFirst .theDiv button {
+  background-color: var(--darkColor);
+  box-shadow: var(--anotherShadow);
+  color: var(--anotherAccent);
+  border: none;
+  outline: none;
+  padding: 1em 3em;
+  border-radius: 1em;
+  transition: all .2s ease-in;
+  margin-top: 2em;
+  max-width: max-content;
+}
+.loginFirst .theDiv button:hover{
+  transform: translateY(.25em);
+  /* box-shadow: none; */
+}
+  
+
 
 
 
@@ -859,7 +993,7 @@
   align-items: center;
   overflow: auto;
   padding: 50px 0;
-  background-color: rgb(0, 0, 0);
+  background-color: var(--whiteColor);
 }
 
 .loginModal .card-container {
@@ -928,7 +1062,7 @@
   margin-bottom: 0;
   font-size: 14px;
   font-weight: 600;
-  color: var(--someDullWhite);
+  color: var(--darkColor);
   display: flex;
   margin: 20px auto;
   justify-content: left;
@@ -957,7 +1091,7 @@
   border: none;
   padding: 15px;
   background-color: transparent;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+  /* box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4); */
   border-radius: 0;
   font-weight: 600;
   border-bottom: 2px solid var(--blue);
@@ -967,11 +1101,6 @@
 }
 .loginModal .input:focus{
   border-bottom: 2px solid var(--anotherAccent);
-}
-
-.loginModal .input:hover {
-  color: #2879f3;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
 }
 
 .loginModal .password-group {
@@ -1024,7 +1153,7 @@
 .loginModal .no-account {
   font-size: 16px;
   font-weight: 400;
-  color: var(--someDullWhite);
+  color: var(--darkColor);
 }
 
 .loginModal .link {
@@ -1049,7 +1178,7 @@
   width: 100vw;
   box-sizing: border-box;
   place-items: center;
-  background-color: rgb(0, 0, 0);
+  background-color: var(--whiteColor);
 }
 
 .signup .form {
@@ -1102,7 +1231,7 @@
 .signup .message, .signin {
   color: rgba(88, 87, 87, 0.822);
   font-size: 14px;
-  color: var(--someDullWhite);
+  color: var(--darkColor);
 }
 
 .signup .signin {
@@ -1135,13 +1264,19 @@
   border: 1px solid rgba(105, 105, 105, 0.397);
   margin: 10px 0;
   box-sizing: border-box;
-  background-color: rgb(0, 0, 0);
+  background-color: var(--whiteColor);
   border: none;
   outline: none;
   border-bottom: 2px solid var(--blue);
   border-radius: 0;
   caret-color: var(--anotherAccent);
 }
+.signup .form label .input[type="number"]::-webkit-inner-spin-button {
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
 .signup .form label input[type="password"]{
   -moz-user-select: none;
   -webkit-user-select: none;
@@ -1149,7 +1284,7 @@
   user-select: none;
 }
 
-.signup .form label .input + span {
+.signup .form label .input + span.signupFormLabels {
   position: absolute;
   left: 10px;
   margin-top: 8.625px;
@@ -1159,7 +1294,7 @@
   transition: 0.3s ease;
 }
 
-.signup .form label .input:placeholder-shown + span {
+.signup .form label .input:placeholder-shown + span.signupFormLabels {
   top: 15px;
   font-size: 0.9em;
 }
@@ -1167,27 +1302,23 @@
 .signup .form label .input:focus{
   border-bottom: 2px solid var(--anotherAccent);
 }
-.signup .form label .input:focus + span,.form label .input:valid + span {
-  top: -20px;
+.signup .form label .input:focus + span.signupFormLabels,
+.signup .form label .input:valid + span.signupFormLabels {
+  top: -15px;
   font-size: 0.85em;
   font-weight: 600;
   color: var(--anotherAccent);
 }
 
-.signup .form label .input:valid + span {
-  color: green;
+.signup .form label .input:valid + span.signupFormLabels {
+  color: var(--accentColor);
 }
 .signup .form p a {
   color: var(--anotherAccent);
   text-decoration: none;
 }
 
-.signup form #emailAlreadyInUse,
-.signup form #checkEmail,
-.signup form #shortPassword,
-.signup form #badName,
-.signup form #noSymbols,
-.signup form #passwordMismatch{
+.signup form .signupDefaultHidden{
   font-weight: bold;
   color: red;
   font-size: .875em;
@@ -1257,10 +1388,17 @@
   border-radius: 10px;
   border-top-right-radius: 0;
   border-top-left-radius: 0;
+  transition: .5s all ease;
+}
+.productDiv .firstDiv > img:is(:hover, :focus){
+  transform: scale(1.025);
 }
 .productDiv .firstDiv div{
   margin: 5% auto;
   width: 90%;
+}
+.productDiv .firstDiv div #productMoreImages{
+  display: none;
 }
 .productDiv .firstDiv div:first-of-type{
   /* location */
@@ -1277,19 +1415,19 @@
   flex-direction: column;
   align-items: center;
   height: max-content;
-  box-shadow: 0 0 10px 5px rgb(222, 222, 222);
+  box-shadow: 0 0 15px 0px rgba(202, 202, 202, 0.347);
   padding: 20px;
   width: 90%;
   border-radius: 10px;
-  background-color: rgb(0, 0, 0);
-  color: var(--someDullWhite);
+  background-color: var(--whiteColor);
+  color: var(--darkColor);
 }
 .productDiv .firstDiv .thisProfile .profile{
   width: 100px;
   height: 100px;
   border-radius: 50%;
   background-color: inherit;
-  box-shadow: 0 0 20px 1px rgb(215, 215, 215);
+  box-shadow: var(--anotherShadow);
   display: grid;
   place-items: center;
   font-size: 30px;
@@ -1299,7 +1437,7 @@
 }
 .productDiv .firstDiv .thisProfile .profile:hover{
   transform: scale(.97);
-  box-shadow: 0 0 5px 1px rgb(215, 215, 215);
+  box-shadow: none;
 }
 .productDiv .firstDiv .thisProfile #itemIsService{
   position: relative;
@@ -1351,11 +1489,6 @@
   transform: translateY(0);
  }
 
-
-
-
-
-
 .productDiv .secondDiv{
   position: relative;
   display: flex;
@@ -1377,7 +1510,7 @@
   flex-direction: row;
   overflow-x: auto;
   position: relative;
-  box-shadow: 0 0 10px 5px rgb(222, 222, 222);
+  box-shadow: 0 0 10px 5px rgba(222, 222, 222, 0.509);
   border-radius: 10px;
   scroll-snap-type: x mandatory;
   overflow-y: hidden;
@@ -1399,9 +1532,9 @@
   margin-right: 0;
 }
 .productDiv .secondDiv .features{
-  background-color: rgb(0, 0, 0);
+  background-color: var(--whiteColor);
   padding: 1em;
-  color: var(--someDullWhite);
+  color: var(--darkColor);
   border-radius: 10px;
 }
 .productDiv .secondDiv button.cartBtn {
@@ -1449,12 +1582,12 @@
 
 @keyframes slide-in-top {
   0% {
-    transform: translate(85px, -30px);
+    transform: translate(37.5px, -30px);
     opacity: 1;
   }
 
   100% {
-    transform: translate(70px, .5px) rotate(-90deg);
+    transform: translate(37.5px, .5px) rotate(-90deg);
     opacity: 1;
   }
 }
@@ -1476,68 +1609,61 @@
 }
 
 .productDiv .secondDiv button.sendMessage {
-  appearance: none;
-  background-color: transparent;
-  border: 0.125em solid #1A1A1A;
-  /* border-radius: 0.9375em; */
-  border-radius: 0;
-  box-sizing: border-box;
-  color: var(--darkColor);
-  cursor: pointer;
-  display: inline-block;
-  /* font-family: Roobert,-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol"; */
-  font-size: 16px;
-  font-weight: 600;
-  line-height: normal;
-  margin: 25px 0;
-  min-height: 3.75em;
-  min-width: 0;
-  outline: none;
-  padding: 1em 2.3em;
-  text-align: center;
-  text-decoration: none;
-  transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
-  -webkit-user-select: none;
-  user-select: none;
-  touch-action: manipulation;
-  will-change: transform;
- }
+appearance: none;
+background-color: transparent;
+border: 0.125em solid #1A1A1A;
+/* border-radius: 0.9375em; */
+border-radius: 0;
+box-sizing: border-box;
+color: var(--darkColor);
+cursor: pointer;
+display: inline-block;
+/* font-family: Roobert,-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol"; */
+font-size: 16px;
+font-weight: 600;
+line-height: normal;
+margin: 25px 0;
+min-height: 3.75em;
+min-width: 0;
+outline: none;
+padding: 1em 2.3em;
+text-align: center;
+text-decoration: none;
+transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
+-webkit-user-select: none;
+user-select: none;
+touch-action: manipulation;
+will-change: transform;
+}
+
+.productDiv .secondDiv button.sendMessage:disabled {
+pointer-events: none;
+}
  
- .productDiv .secondDiv button.sendMessage:disabled {
-  pointer-events: none;
- }
- 
- .productDiv .secondDiv button.sendMessage:hover {
-  color: var(--whiteColor);
-  background-color: #1A1A1A;
-  box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
-  transform: translateY(-2px);
- }
- 
- .productDiv .secondDiv button.sendMessage:active {
-  box-shadow: none;
-  transform: translateY(0);
- }
+.productDiv .secondDiv button.sendMessage:hover {
+color: var(--whiteColor);
+background-color: #1A1A1A;
+box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+transform: translateY(-2px);
+}
 
-
-
-
-
-
-
+.productDiv .secondDiv button.sendMessage:active {
+box-shadow: none;
+transform: translateY(0);
+}
 
 .productDiv .secondDiv div.precaution{
   display: flex;
   flex-direction: column;
   align-items: center;
   height: max-content;
-  box-shadow: 0 0 10px 5px rgb(222, 222, 222);
+  box-shadow: var(--anotherShadow);
   padding: 20px;
   width: 90%;
   border-radius: 10px;
   height: max-content;
-  background-color: rgb(0, 0, 0);
-  color: var(--someDullWhite);
+  background-color: var(--whiteColor);
+  color: var(--darkColor);
 }
 
 .productDiv .secondDiv div.precaution ul .r_abuse {
@@ -1564,6 +1690,149 @@
   left: 0;
 }
 
+.productDiv > div.chatBox{
+  background-color: var(--whiteColor);
+  position: fixed;
+  float: right;
+  bottom: 0;
+  right: 0;
+  padding: .375rem;
+  border-top-left-radius: 10px;
+  height: 80vh;
+  width: 90vw;
+  max-width: 300px;
+  z-index: 2;
+  display: none;
+  flex-direction: column;
+  box-shadow: var(--anotherShadow);
+}
+.productDiv > div.chatBox > span:first-child{
+  /* background-color:; */
+  display: flex;
+  align-items: center;
+  padding: 1em;
+  font-weight: bolder;
+  justify-content: space-evenly;
+  box-shadow: var(--anotherShadow);
+  border-radius: 10px;
+  -ms-user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+.productDiv > div.chatBox > div.theMessagesDiv{
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  border-radius: 10px;
+  width: 100%;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+.productDiv > div.chatBox > div.theMessagesDiv > div{
+  background-color: transparent;
+  color: var(--darkColor);
+  padding: 5px;
+  display: flex;
+  flex-direction: row;
+  position: relative;
+}
+.productDiv > div.chatBox > div.theMessagesDiv hr{
+  margin: 1em;
+  color: var(--lessDullWhite);
+  /* width: 100%; */
+  position: relative;
+}
+
+.productDiv > div.chatBox > div.theMessagesDiv > #chatEncrypt,
+.productDiv > div.chatBox > div.theMessagesDiv > #chatToDelete{
+  color: var(--someDullWhite);
+  display: grid;
+  place-items: center;
+  font-size: smaller;
+  -ms-user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  pointer-events: none;
+  text-align: center;
+}
+.productDiv > div.chatBox > div.theMessagesDiv > #chatToDelete{
+  margin-bottom: 2em;
+}
+
+.productDiv > div.chatBox > div.theMessagesDiv > #ownChat,
+.productDiv > div.chatBox > div.theMessagesDiv > #loginNeeded{
+  color: var(--someDullWhite);
+  display: none;
+  place-items: center;
+  font-size: smaller;
+  -ms-user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  pointer-events: none;
+  text-align: center;
+}
+.productDiv > div.chatBox > div.theMessagesDiv > div.singleMessage{
+  margin-top: 15px;
+}
+.productDiv > div.chatBox > div.theMessagesDiv > div.singleMessage > span{
+  background-color: var(--lessDullWhite);
+  padding: .7rem;
+  border-radius: 10px;
+  position: inherit;
+  max-width: 67.5%;
+  display: flex;
+  flex-wrap: wrap;
+  word-break: break-all;
+  font-size: .9rem;
+}
+
+
+
+.productDiv > div.chatBox div.hasInput{
+  display: flex;
+  flex-direction: row;
+  justify-content: baseline;
+  align-items: center;
+  margin-top: .5em;
+}
+.productDiv > div.chatBox div.hasInput > input[type="text"]{
+  color: var(--accentColor);
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  width: 100%;
+  box-shadow: var(--anotherShadow);
+  /* font-size: 1em; */
+}
+.productDiv > div.chatBox div.hasInput > span{
+  padding: 0 10px;
+  font-size: 1.5em;
+  display: flex;
+  align-items: center;
+}
+.productDiv > div.chatBox div.hasInput > #sendText{
+  cursor: not-allowed;
+  opacity: .3;
+  color: var(--accentColor);
+}
+.productDiv > div.chatBox > span:last-child{
+  /* background-color:; */
+  display: flex;
+  align-items: center;
+  font-size: 1em;
+  font-weight: bolder;
+  justify-content: space-evenly;
+  box-shadow: var(--anotherShadow);
+  position: fixed;
+  bottom: 0;
+  color: var(--redColor);
+  cursor: pointer;
+}
 
 
 
@@ -1574,7 +1843,7 @@
   grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
   width: 100vw;
   box-sizing: border-box;
-  background-color: rgb(0, 0, 0);
+  background-color: var(--whiteColor);
   /* overflow: hidden; */
 }
 .sellerDocumentContainer .leftContainer,
@@ -1590,14 +1859,18 @@
   align-items: center;
   box-sizing: border-box;
   top: 0px;
-  color: var(--someDullWhite);
+  color: var(--darkColor);
 }
 .sellerDocumentContainer .leftContainer h3{
   color: var(--anotherAccent);
   text-transform: uppercase;
 }
-.sellerDocumentContainer .rightContainer{
-  /* background-color: red; */
+.sellerDocumentContainer .leftContainer #youCantPostThis{
+  color: var(--redColor);
+  font-weight: bolder;
+  font-size: .875em;
+  display: none;
+  /* color: var(--accentColor); */
 }
 
 .sellerDocumentContainer .leftContainer .mainImgDiv{
@@ -1639,7 +1912,7 @@
 
 .sellerDocumentContainer .leftContainer .container .header p {
   text-align: center;
-  color: var(--someDullWhite);
+  color: var(--darkColor);
 }
 
 .sellerDocumentContainer .leftContainer .container .footer {
@@ -1652,7 +1925,7 @@
   display: flex;
   align-items: center;
   justify-content: space-around;
-  color: rgb(0, 0, 0);
+  color: var(--whiteColor);
   border: none;
 }
 
@@ -1687,7 +1960,6 @@
   display: flex;
   flex-direction: column;
   justify-content: baseline;
-  /* box-shadow: 0 2px 30px rgba(0, 0, 0, 0.205); */
 }
 .sellerDocumentContainer .rightContainer form label,
 .sellerDocumentContainer .rightContainer form div{
@@ -1698,21 +1970,26 @@
   box-sizing: border-box;
   position: relative;
 }
+.sellerDocumentContainer .rightContainer form label span#ensurePhoneNumberWorks{
+  color: var(--accentColor);
+  font-weight: 800;
+  font-size: .875em;
+}
 .sellerDocumentContainer .rightContainer form label span:not(.defaultHidden),
 .sellerDocumentContainer .rightContainer form div span:not(.defaultHidden){
-  color: var(--someDullWhite);
+  color: var(--darkColor);
   padding: .5em 1em;
 }
-.sellerDocumentContainer .rightContainer form label > input,
-.sellerDocumentContainer .rightContainer form div > input{
+/* .sellerDocumentContainer .rightContainer form label > input, */
+.sellerDocumentContainer .rightContainer form input{
   box-sizing: border-box;
   border: none;
   border-radius: 0;
   outline: none;
   padding: 12.5px;
   font-size: 1em;
-  background-color: rgb(0, 0, 0);
-  border-bottom: 2px solid var(--someDullWhite);
+  background-color: var(--whiteColor);
+  border-bottom: 2px solid var(--darkColor);
   caret-color: var(--anotherAccent);
   color: var(--anotherAccent);
 }
@@ -1720,7 +1997,11 @@
 .sellerDocumentContainer .rightContainer form label select:focus{
   border-bottom: 2px solid var(--anotherAccent);
 }
-.sellerDocumentContainer .rightContainer form optgroup option:hover{
+.sellerDocumentContainer .rightContainer form label select optgroup{
+  background-color: var(--whiteColor);
+  color: var(--darkColor);
+}
+.sellerDocumentContainer .rightContainer form label select optgroup option:hover{
   color: red;
 }
 .sellerDocumentContainer .rightContainer form label > input#sellSellerContact{
@@ -1758,10 +2039,13 @@
   border-radius: 0;
   padding: 12.5px;
   font-size: 1em;
-  background-color: rgb(0, 0, 0);
+  background-color: var(--whiteColor);
   outline: none;
-  border-bottom: 2px solid var(--someDullWhite);
+  border-bottom: 2px solid var(--darkColor);
   color: var(--anotherAccent);
+}
+.sellerDocumentContainer .rightContainer form input[type="number"]#sellSellerContact::-webkit-inner-spin-button{
+  appearance: none;
 }
 
 .sellerDocumentContainer .rightContainer form > div.sellFeatures button {
@@ -1787,6 +2071,9 @@
   width: max-content;
   float: right;
   right: 0;
+}
+.sellerDocumentContainer .rightContainer form > div.sellFeatures input.sellProductFeatures:focus{
+  border-bottom: 2px solid var(--anotherAccent);;
 }
 
 .sellerDocumentContainer .rightContainer form > div.sellFeatures .hasAddButton{
@@ -1841,7 +2128,7 @@
   text-transform: uppercase;
 }
 .sellerDocumentContainer .rightContainer form .btn-content .btn-title{
-  color: rgb(0, 0, 0);
+  color: var(--whiteColor);
 }
 
 .sellerDocumentContainer .rightContainer form .btn-content:hover, .btn-content:focus {
@@ -1960,7 +2247,7 @@
     float: left;
     left: -200vw;
     top: 0px;
-    background-color: rgb(0, 0, 0);
+    background-color: var(--whiteColor);
     z-index: 2;
     border-radius: 15px;
     height: 90vh;
@@ -1983,7 +2270,7 @@
     z-index: 3;
     top: 5%;
     transition: .375s all ease;
-    background-color: rgb(0, 0, 0);
+    background-color: var(--whiteColor);
     padding: 5px;
     border-radius: 50%;
   }

@@ -30,10 +30,11 @@ const Login = () => {
             .then((userCredential) => {
                 // User successfully logged in
                 const user = userCredential.user;
-                console.log(user);
+                // console.log(user);
 
                 // set a username here
                 window.localStorage.setItem("trimmedEmail", email.toString().slice(0, email.indexOf("@")));
+                // window.localStorage.setItem("phoneNumber", email);
 
                 // go home
                 window.location.pathname = "/";

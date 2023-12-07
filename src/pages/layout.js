@@ -1,9 +1,9 @@
-import { getAuth, signOut } from "firebase/auth";
+import { getAuth, signOut, onAuthStateChanged } from "firebase/auth";
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 
 import { Outlet, Link } from "react-router-dom";
-import logo from "../logo/js&s.png";
+import logo from "../logo/AfriCart.png";
 import { RiMenu4Line, RiAccountCircleFill } from "react-icons/ri";
 import { GrDescend } from "react-icons/gr";
 import { windowOnclick, createCookie, deleteCookie, firebaseConfigurationDetails } from "../external_functions";
@@ -17,6 +17,7 @@ const Layout = () => {
         const hasSearch = document.getElementById("hasSearch");
         if (topNav && hugePanel && hasSearch) {
             let navHeight = topNav.clientHeight;
+            hasSearch.style.top = `${navHeight}px`
             let panelHeight = hugePanel.clientHeight;
             let hasSearchHeight = hasSearch.clientHeight;
             document.getElementById("loadingModal").style.top = `${navHeight}px`;
@@ -96,6 +97,17 @@ const Layout = () => {
         }
     }
 
+    // when loginFirst ic clicked
+    const loginFirstClicked = event => {
+        if (event.target.id === "loginFirst" || event.target.textContent === "Cancel") {
+            document.getElementById(event.currentTarget.id).style.display = "";
+        } else if (event.target.textContent === "Login") {
+            window.location.pathname = "/login";
+            document.getElementById(event.currentTarget.id).style.display = "";
+        }
+        
+    }
+
     // delete user account
     const DeleteAccount = () => {}
 
@@ -106,7 +118,7 @@ const Layout = () => {
                 <div className="topLeft">
                     <button type="button" className="menuButton" onClick={bringMenu}><RiMenu4Line /></button>
                     <Link to="/"><img src={ logo } alt="Company Logo" className="companyLogo" id="companyLogo" /></Link>
-                    <Link to="/" className="links companyName">JS&Siblings</Link>
+                    {/* <Link to="/" className="links companyName">EastAfriCart</Link> */}
                 </div>
 
 
@@ -135,6 +147,20 @@ const Layout = () => {
             <div className="loadingModal" id="loadingModal">
                 <div className="loader"></div>
                 <div className="zeroOpacity"></div>
+            </div>
+
+            {/* this action wants you to login */}
+            <div className="loginFirst" id="loginFirst" onClick={loginFirstClicked}>
+                <div className="theDiv zoomClass">
+                    <p>This action couldn't be completed because you are not logged in.</p>
+                    <div className="theButtons">
+                        <Link id="loginFromLoginFirst">
+                            <button type="button">Login</button>
+                        </Link>
+
+                        <button type="button" id="cancelLoginFirst">Cancel</button>
+                    </div>
+                </div>
             </div>
 
 
