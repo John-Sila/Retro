@@ -3,7 +3,8 @@ import { FaTimes, FaSearch } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import { firebaseConfigurationDetails, windowOnclick } from "../external_functions";
 import { AiOutlineArrowLeft, AiOutlineArrowRight, AiFillStar } from "react-icons/ai";
-// import PanelImages from "./panelimages";
+
+// hugepanel stuff;
 import { ReactComponent as TransportTruck } from "../svgs/undraw_delivery_truck_vt6p.svg";
 import { ReactComponent as Gardening } from "../svgs/undraw_gardening_re_e658.svg";
 import { ReactComponent as Computer } from "../svgs/undraw_online_test_re_kyfx.svg";
@@ -513,6 +514,8 @@ const Home = () => {
         const innerHtml = event.target.textContent.toLowerCase().replace(/[\s,]+/g, '');
         const imageDivs = document.querySelectorAll(".imageDiv");
 
+        document.getElementById("mainAds").style.left = "";
+
         if (innerHtml !== "allProducts") {
             imageDivs.forEach( imageDiv => { imageDiv.style.display = "none" } );
         }
@@ -719,11 +722,6 @@ const Home = () => {
         window.location.pathname = "/this_item";
     }
 
-    // imageContextMenu
-    const imageContextMenu = () => {
-        // alert(true)
-    }
-
     // rate product
     const RateProduct = ( identity, starNumber, source ) => {
 
@@ -791,9 +789,6 @@ const Home = () => {
             }
 
         });
-
-
-
     }
 
     // when rate star animation ends
@@ -922,7 +917,7 @@ const Home = () => {
                             products.map((singleItem, index) => (
                                 <div className="imageDiv internal" key={index} id={singleItem.id} >
 
-                                    <img src={singleItem.link} alt={singleItem.name} onContextMenu={imageContextMenu} onClick={() => imageClicked(
+                                    <img src={singleItem.link} alt={singleItem.name} onClick={() => imageClicked(
                                         singleItem.link,
                                         singleItem.srcSet,
                                         singleItem.price,

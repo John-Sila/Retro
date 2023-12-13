@@ -8,9 +8,13 @@ import { getStorage, ref as storageRef, getDownloadURL, listAll, getMetadata } f
 import { firebaseConfigurationDetails } from "../external_functions";
 import { initializeApp } from "firebase/app";
 import { getDatabase, ref, query, orderByChild, equalTo, limitToFirst, onValue, get, set} from "firebase/database";
-import { Auth, getAuth, onAuthStateChanged } from "firebase/auth";
+import {  getAuth, onAuthStateChanged } from "firebase/auth";
+// import { getMessaging, isSupported } from "firebase-messaging";
 
 const Product = () => {
+
+    // initialize messaging
+    // const Messaging = getMessaging(initializeApp(firebaseConfigurationDetails));
 
     const [mobileNumber, setMobileNumber] = useState("");
     const [features, setFeatures] = useState([]);
@@ -19,6 +23,14 @@ const Product = () => {
     const [typedMessage, setTypedMessage] = useState("");
     const [recipient, setRecipient] = useState("");
     const [sender, setSender] = useState("");
+    let [index, setIndex] = useState(0);
+    const [canSend, setCanSend] = useState(false);
+    const [text, setText] = useState(0);
+    const [messageProgress, setMessageProgress] = useState(null)
+    const [modifiedName, setModifiedName] = useState(null);
+
+    const [mainImage, setMainImage] = useState("");
+    const [productName, setProductName] = useState("");
     
     useEffect( () => {
         const Subject = localStorage.getItem("productParameters") === null ? "useFirebase" : "useDefault";
@@ -41,8 +53,10 @@ const Product = () => {
             const parsedParams = JSON.parse(storedProductParameterJSON);
             if (parsedParams) {
                 document.getElementById("productImg").setAttribute("src", parsedParams.link);
+                setMainImage(parsedParams.link);
                 document.getElementById("region").innerHTML = parsedParams.location;
                 document.getElementById("productItemName").innerHTML = parsedParams.name;
+                setProductName(parsedParams.name);
                 // document.getElementById("productSellerName").innerHTML = parsedParams.seller;
                 setSellerName(parsedParams.seller);
                 document.getElementById("productItemPrice").innerHTML = parsedParams.price;
@@ -79,8 +93,10 @@ const Product = () => {
             const parsedParams = JSON.parse(storedProductParameterJSON);
             // return
             document.getElementById("productImg").setAttribute("src", parsedParams.singleURL);
+            setMainImage(parsedParams.singleURL)
             document.getElementById("productSellerLocation").innerHTML = parsedParams.country;
             document.getElementById("productItemName").innerHTML = parsedParams.itemName;
+            setProductName(parsedParams.name);
 
 
             const formatPrice = () => {
@@ -168,7 +184,6 @@ const Product = () => {
     // engage messages
     const engageMessages = () => {
 
-
         // we want to make sure that the person logged in is not the seller
         const auth = getAuth();
         onAuthStateChanged( auth, user => {
@@ -195,7 +210,7 @@ const Product = () => {
                         const thisEntry = Object.entries(data);
                         const thisNum = thisEntry[0][1].phoneNumber;
 
-                        // sender
+                        // sender (this)
                         setSender(thisEntry[0][0]);
                         // console.log(thisEntry[0][0]);
                         
@@ -295,9 +310,8 @@ const Product = () => {
     // sendMessage
     const sendMessageToSeller = event => {
         const styling = window.getComputedStyle(event.currentTarget).getPropertyValue("opacity");
-        if (!styling === 1) {
-            console.log(styling);
-        } else {
+        if (parseInt(styling) === 1) {
+            event.currentTarget.style.opacity = .3;
             document.getElementById("writeMessage").value = "";
             // we have text to send
             // let's know their path
@@ -313,34 +327,39 @@ const Product = () => {
                 onValue(theQuery, (querySnapshot) => {
                     const data = querySnapshot.val();
                     if (data === null) {
+                        console.log("We don't have this recipient somewhere.");
                         return false;
                     } else {
                         const Obj = Object.entries(data);
-                        const thisSender = Obj[0][0];
-                        setRecipient(thisSender);
+                        const thisReceiver = Obj[0][0];
+                        setRecipient(thisReceiver);
+                        setCanSend(true);
 
-                        // we have both sender and receiver now
-                        CloudMessage();
+                        MessageFunc(sender, thisReceiver, typedMessage);
+
+
                     }
                 })
             } catch (error) {
                 console.log(`Error getting your email credential: ${error}`);
             }
+        } else {
+            console.log(styling);
+            return false;
         }
     }
 
-    // send message to cloud
-    const CloudMessage = () => {
-        if (sender === "" || recipient === "") {
-            console.log("Difficulty getting paths to send this message.");
-            setTimeout(() => {
-                // CloudMessage();
-                document.getElementById("sendText").click();
-            }, 200);
-            return false;
-        } else {
-            console.log("We have paths", sender, " " , recipient);
-            if (sender === recipient) {
+
+    const MessageFunc = (sending, receiving, message) => {
+
+        // console.log(true);
+        
+        // console.log(sending, receiving, message);
+        // return
+        
+        try {
+            // console.log(`We have paths ${sender}, & ${recipient}`);
+            if (sending === receiving) {
                 // the poster is the one writing the message
                 document.getElementById("ownChat").style.display = "inline";
                 document.getElementById("chatEncrypt").style.display = "none";
@@ -353,32 +372,111 @@ const Product = () => {
                 subjectInput.ariaDisabled = true;
                 subjectInput.disabled = true;
             } else {
+                setRecipient(receiving);
+                setSender(sending);
+                setText(message);
+                
+
+                // console.log("es");
                 // we should be good now
-                // get to sender first
-                if (typedMessage === "") {
+                if (message === "") {
                     return false;
                 }
-
+ 
+                // know how far the messages have gone
                 const db = getDatabase(initializeApp(firebaseConfigurationDetails));
+                let ourItemName = productName.replace(/[^a-zA-Z0-9]+/g, "");
+                setModifiedName(ourItemName);
+                
+                const howFar = ref(db, `Customers/${sending}/Messages/${receiving}/${ourItemName}`);
+                
+                // let lastPos = "";
+                function posFunc () {
+
+                    get(howFar).then((x) => {
+                        const tVal = x.val();
+    
+                        let lastPos = tVal === null || tVal === undefined ? 0 : underFunc();
+                        
+                        function underFunc () {
+                            const result = Object.keys(x.val());
+                            const pos = result[result.length - 1];
+                            let position = parseInt(pos) + 1;
+                            
+                            return position;
+                        }
+                        
+                        setMessageProgress(lastPos);
+
+                        if (index === 1) {
+                            setIndex(0);
+                            console.log(`index: ${index}`);
+                            console.log(`done`);
+                        }
+
+                        FoundPosition(lastPos);
+                        
+                    }).catch((err) => {
+                        console.log(err);
+                    });
+                    
+                }
+
+                posFunc();
+
+
+                const FoundPosition = (pos) => {
+
+                    const check = () => {
+                            setIndex(1);
+                    }
+
+                    check();
+                    return;
+
+                }
+
+
+                return;
+
 
                 // post to sender
-                const thisRef = ref(db, `Customers/${sender}/Messages/${recipient}`);
-                set(thisRef, `S:${typedMessage}`).then((result) => {
-                    console.log("Message posted to sender.");
-                }).catch((err) => {
-                    console.log("Couldn't post message to sender's Database Account");
-                });
 
-                // post to the recipient
-                const anotherRef = ref(db, `Customers/${recipient}/Messages/${sender}`);
-                set(anotherRef, `R:${typedMessage}`).then((result) => {
-                    console.log("Message posted to receiver.");
-                }).catch((err) => {
-                    console.log("Couldn't post message to recipient's Database Account");
-                });
+
             }
+            
+        } catch (error) {
+            console.log(`Error sending message: ${error}`);
         }
+
     }
+
+    useEffect( () => {
+        if (index && index === 1) {
+            // console.log("Here");
+            // setIndex(() => 0);
+
+            console.table(sender, recipient, text);
+            const db = getDatabase(initializeApp(firebaseConfigurationDetails));
+            const thisRef = ref(db, `Customers/${sender}/Messages/${recipient}/${modifiedName}/${messageProgress}`);
+            set(thisRef, `S:${text}`).then((result) => {
+                console.log("Message posted to sender.");
+            }).catch((err) => {
+                console.log("Couldn't post message to sender's Database Account: ", err);
+            });
+    
+            // post to the recipient
+            const anotherRef = ref(db, `Customers/${recipient}/Messages/${sender}/${modifiedName}/${messageProgress}`);
+            set(anotherRef, `R:${text}`).then((result) => {
+                console.log("Message posted to receiver.");
+            }).catch((err) => {
+                console.log("Couldn't post message to recipient's Database Account");
+            });
+
+        }
+
+    }, [index])
+
     
 
     return (
@@ -471,7 +569,7 @@ const Product = () => {
 
                     </div>
                     <div id="hasInput" className="hasInput">
-                        <input type="text" name="writeMessage" id="writeMessage" placeholder="Write text message" onInput={ event => writingMessage(event.target.value) } disabled />
+                        <input type="text" name="writeMessage" id="writeMessage" placeholder="Write text message" onInput={ event => writingMessage(event.target.value) } disabled autoFocus />
                         <span id="sendText" onClick={sendMessageToSeller}><IoSend /></span>
                     </div>
                     <span id="cancelMessagesDiv" onClick={() => chatBoxDisappear()}><IoIosArrowDown /> <span>Cancel</span></span>

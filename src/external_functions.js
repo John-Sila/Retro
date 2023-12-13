@@ -390,3 +390,5 @@ export const adPageHiddenDivs = desiredID => {
     }
     document.getElementById( desiredID ).style.display = "inline";
 }
+
+export const VAPID_KEY = "BOrMn0qr1bE_vZkFcBUvl3-BgGKWNp_YZyL07dAGi7rRRZylFwsVga2G4Av8Ze73_6heTOmxDB_LdSp8sBD9OUs";
