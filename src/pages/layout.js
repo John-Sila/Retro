@@ -6,6 +6,7 @@ import { Outlet, Link } from "react-router-dom";
 import logo from "../logo/AfriCart.png";
 import { RiMenu4Line, RiAccountCircleFill } from "react-icons/ri";
 import { GrDescend } from "react-icons/gr";
+import { IoIosNotifications } from "react-icons/io";
 import { windowOnclick, createCookie, deleteCookie, firebaseConfigurationDetails } from "../external_functions";
 import { useEffect } from "react";
 
@@ -125,6 +126,7 @@ const Layout = () => {
                 {/* <button type="button" onClick={Post}>Post</button> */}
                 
                 <div className="topRight">
+                    <Link to="/mymessages" title="Mesages"><span id="notificationsButton" className="notificationsButton"><IoIosNotifications /></span></Link>
                     <Link to="/sell"><button type="button" className="sellButton">Sell</button></Link>
                     <Link to="/login" className="links guest login"><RiAccountCircleFill /></Link>
                     <div className="paste-button customer">

@@ -185,7 +185,6 @@ const SignUp = () => {
                     <button type="button" className="submit" onClick={checkFormValidity}>Submit</button>
                     <p className="signin">Already have an acount? <Link to="/login">Login</Link>.</p>
                 </form>
-
             </div>
         </>
     )

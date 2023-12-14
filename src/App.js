@@ -10,6 +10,7 @@ import { getDatabase, ref, query, orderByChild, equalTo, limitToFirst, onValue, 
 import Layout from "./pages/layout";
 import Home from "./pages/home";
 import Login from "./pages/login";
+import Messages from "./pages/messages";
 import SignUp from "./pages/signup";
 import NoPage from "./pages/nopage";
 import Product from "./pages/product";
@@ -109,7 +110,7 @@ function App() {
     onAuthStateChanged(auth, user => {
       if (user) {
         // User is signed in
-        console.log("User is logged in:", user);
+        // console.log("User is logged in:", user);
         // call the function that checks whether we  can access the user's data
         engageData();
         // You can access user properties, like user.uid, user.displayName, etc.
@@ -136,8 +137,9 @@ function App() {
           <Route index element={ <Home /> } />
           <Route path="login" element={ <Login /> } />
           <Route path="signup" element={ <SignUp /> } />
-          <Route path="this_item" element={ <Product /> } />
+          <Route path="mymessages" element={ <Messages /> } />
           <Route path="sell" element={ <Sell /> } />
+          <Route path="this_item" element={ <Product /> } />
           <Route path="*" element={ <NoPage /> } />
         </Route>
       </Routes>

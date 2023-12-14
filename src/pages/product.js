@@ -96,7 +96,8 @@ const Product = () => {
             setMainImage(parsedParams.singleURL)
             document.getElementById("productSellerLocation").innerHTML = parsedParams.country;
             document.getElementById("productItemName").innerHTML = parsedParams.itemName;
-            setProductName(parsedParams.name);
+            setProductName(parsedParams.itemName);
+            // console.log(`paramName: ${parsedParams.itemName}`);
 
 
             const formatPrice = () => {
@@ -232,7 +233,7 @@ const Product = () => {
                             document.getElementById("chatEncrypt").style.display = "";
                             document.getElementById("chatToDelete").style.display = "";
                             
-                            // disable input
+                            // enable input
                             const subjectInput = document.getElementById("writeMessage");
                             // subjectInput.value = "";
                             subjectInput.style.cursor = "";
@@ -245,6 +246,8 @@ const Product = () => {
             } else {
                 // user is logged out
                 document.getElementById("ownChat").style.display = "";
+                document.getElementById("chatEncrypt").style.display = "none";
+                document.getElementById("chatToDelete").style.display = "none";
                 document.getElementById("loginNeeded").style.display = "inline";
 
                 // disable input
@@ -349,9 +352,9 @@ const Product = () => {
         }
     }
 
-
+    
     const MessageFunc = (sending, receiving, message) => {
-
+        
         // console.log(true);
         
         // console.log(sending, receiving, message);
@@ -375,17 +378,15 @@ const Product = () => {
                 setRecipient(receiving);
                 setSender(sending);
                 setText(message);
-                
 
-                // console.log("es");
-                // we should be good now
                 if (message === "") {
                     return false;
                 }
  
                 // know how far the messages have gone
                 const db = getDatabase(initializeApp(firebaseConfigurationDetails));
-                let ourItemName = productName.replace(/[^a-zA-Z0-9]+/g, "");
+                // console.log(`productName: ${productName}`);
+                let ourItemName = productName;
                 setModifiedName(ourItemName);
                 
                 const howFar = ref(db, `Customers/${sending}/Messages/${receiving}/${ourItemName}`);
@@ -405,14 +406,7 @@ const Product = () => {
                             
                             return position;
                         }
-                        
                         setMessageProgress(lastPos);
-
-                        if (index === 1) {
-                            setIndex(0);
-                            console.log(`index: ${index}`);
-                            console.log(`done`);
-                        }
 
                         FoundPosition(lastPos);
                         
@@ -421,28 +415,18 @@ const Product = () => {
                     });
                     
                 }
-
                 posFunc();
 
-
                 const FoundPosition = (pos) => {
-
                     const check = () => {
                             setIndex(1);
+                            // setIndex(0);
                     }
-
+                    // console.log("Here3");
                     check();
                     return;
-
                 }
-
-
                 return;
-
-
-                // post to sender
-
-
             }
             
         } catch (error) {
@@ -452,14 +436,31 @@ const Product = () => {
     }
 
     useEffect( () => {
+        console.log(`index: ${index}`);
         if (index && index === 1) {
             // console.log("Here");
-            // setIndex(() => 0);
+            const date = new Date();
+            const switchDay = (theDay, theArr) =>  theArr[theDay];
+            const switchMonth = (theMonth, theArr) =>  theArr[theMonth];
+            let day = switchDay(date.getDay() - 1, ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", ", Saturday", "Sunday"]);
+            let month = switchMonth(date.getMonth(), ["Jan", "Feb", "March", "April", "May", ", June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"]);
+
+            const year = date.getFullYear();
+            const hours = date.getHours().toString().padStart(2, "0");
+            const minutes = date.getMinutes().toString().padStart(2, "0");
+
+            // console.log(`day: ${day}`);
+            // console.log(`month: ${month}`);
+            // console.log(`year: ${year}`);
+            // console.log(`hours: ${hours}`);
+            // console.log(`minutes: ${minutes}`);
+
+            // return;
 
             console.table(sender, recipient, text);
             const db = getDatabase(initializeApp(firebaseConfigurationDetails));
             const thisRef = ref(db, `Customers/${sender}/Messages/${recipient}/${modifiedName}/${messageProgress}`);
-            set(thisRef, `S:${text}`).then((result) => {
+            set(thisRef, `S:${hours}:${minutes}:${day}:${month}:${year}:${text}`).then((result) => {
                 console.log("Message posted to sender.");
             }).catch((err) => {
                 console.log("Couldn't post message to sender's Database Account: ", err);
@@ -467,15 +468,23 @@ const Product = () => {
     
             // post to the recipient
             const anotherRef = ref(db, `Customers/${recipient}/Messages/${sender}/${modifiedName}/${messageProgress}`);
-            set(anotherRef, `R:${text}`).then((result) => {
+            set(anotherRef, `R:${hours}:${minutes}:${day}:${month}:${year}:${text}`).then((result) => {
                 console.log("Message posted to receiver.");
             }).catch((err) => {
                 console.log("Couldn't post message to recipient's Database Account");
             });
 
-        }
+            setTimeout(() => {
+                const revertIndex = () => {
+                    setIndex(0);
+                }
+                revertIndex();
+            }, 200);
 
-    }, [index])
+        } else console.log(`Index still ${index}`);
+
+    }, [index]);
+
 
     
 
@@ -566,6 +575,20 @@ const Product = () => {
                         <span id="ownChat">You posted this item. You cannot send messages to yourself.</span>
                         <span id="loginNeeded">Consider signing in first.</span>
                         <hr />
+
+                        <div className="singleMessage incoming">
+                            <div>
+                                <span>Coming</span>
+                                <div className="messageDates">12:06</div>
+                            </div>
+                        </div>
+
+                        <div className="singleMessage ongoing">
+                            <div>
+                                <span>Going</span>
+                                <div className="messageDates">14:57</div>
+                            </div>
+                        </div>
 
                     </div>
                     <div id="hasInput" className="hasInput">

@@ -50,7 +50,7 @@ const Home = () => {
 
     // the loading counter
     useEffect( () => {
-        console.log(counter);
+        // console.log(counter);
         if (counter > 10) {
             window.location.reload();
         }
@@ -952,7 +952,8 @@ const Home = () => {
                         {/* from firebase */}
                         {
                             img.map((singleURL, index) => (
-                                <div className="imageDiv internal" key={index} id={imgInfo[index].identity}>
+
+                                <div className="imageDiv internal" key={index} id={imgInfo[index].identity ? imgInfo[index].identity : null}>
                                     <img src={singleURL} alt={imgInfo[index].itemName} onClick={() => fireBaseImgClicked(
                                         singleURL,
                                         imgInfo[index].identity,
